@@ -33,18 +33,18 @@ inline void log() { getLogger() << '\n'; }
 
 #define LOGINFO(...) \
 	{ \
-		log("[INFO]  ", getTimestamp(), __VA_ARGS__, '\n'); \
+		log("[INFO]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n'); \
 	}
 
 #define LOGERROR(...) \
 	{ \
-		log("[ERROR]  ", getTimestamp(), __VA_ARGS__, '\n'); \
+		log("[ERROR]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n'); \
 	}
 
 #ifdef _DEBUG
 #define LOGDEBUG(...) \
 	{ \
-		log("[DEBUG]  ", getTimestamp(), __VA_ARGS__, '\n'); \
+		log("[DEBUG]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n'); \
 	}
 #else 
 #define LOGDEBUG(...) ;
