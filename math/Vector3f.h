@@ -55,6 +55,15 @@ public:
 		const float c = 1.f / sqrtf(dot(*this, *this));
 		*this *= c;
 	}
+
+	float lengthSqr() const {
+		return dot(*this, *this);
+	}
+
+	float length() const {
+		return sqrtf(this->lengthSqr());
+	}
+
 private:
 	__m128 vec;
 };
