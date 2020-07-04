@@ -10,6 +10,8 @@ public:
 
 	template<typename T>
 	friend Logger& operator<<(Logger& logger, const T& val);
+
+	void flush() { this->file.flush(); }
 private:
 	std::ofstream file;
 };
@@ -34,17 +36,20 @@ inline void log() { getLogger() << '\n'; }
 #define LOGINFO(...) \
 	{ \
 		log("[INFO]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n', '\n'); \
+		getLogger().flush(); \
 	}
 
 #define LOGERROR(...) \
 	{ \
 		log("[ERROR]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n', '\n'); \
+		getLogger().flush(); \
 	}
 
 #ifdef _DEBUG
 #define LOGDEBUG(...) \
 	{ \
 		log("[DEBUG]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n', '\n'); \
+		getLogger().flush(); \
 	}
 #else 
 #define LOGDEBUG(...) ;

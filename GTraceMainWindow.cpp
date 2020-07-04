@@ -5,6 +5,7 @@
 #include "Logger.h"
 #include "Events.h"
 #include "renderer/Renderer.h"
+#include "scene/Parser.h"
 
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 600
@@ -21,6 +22,9 @@ GTraceMainWindow::GTraceMainWindow()
 	this->renderSurface->Bind(wxEVT_PAINT, &GTraceMainWindow::OnPaint, this);
 	this->renderSurface->Bind(GTRACE_RENDERED_ELEMENT, &GTraceMainWindow::OnElementRendered, this);
 	LOGINFO("GTrace Main Window created.");
+
+	SceneParser parser = getParser();
+	parser.parseFile("simple.sc");
 
 	Renderer renderer(this->renderSurface, this->output);
 	renderer.render();

@@ -1,13 +1,16 @@
 #include "World.h"
 
 #include "../geometry/Triangle.h"
-World::World() {
-	Triangle* tr = new Triangle(Vector3f(0, 0, 0), Vector3f(200, 0, 0), Vector3f(0, 200, 0), Vector3f(1, 0, 0));
-	this->add(tr);
-}
+World::World() {}
 
 World::~World() {
 	for (Shape* shape : this->shapes) delete shape;
+}
+
+void World::addElemenet(SceneElement* el) {
+	if (Shape* x = dynamic_cast<Shape*>(el)) {
+		this->add(x);
+	}
 }
 
 void World::add(Shape* shape) {

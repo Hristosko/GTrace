@@ -1,5 +1,13 @@
 #include "Triangle.h"
 
+void Triangle::parse(std::unordered_map<std::string, std::string>& map) {
+	SceneParser& parser = getParser();
+	parser.parseVector3fAndStore(map, "a", this->a);
+	parser.parseVector3fAndStore(map, "b", this->b);
+	parser.parseVector3fAndStore(map, "c", this->c);
+	parser.parseVector3fAndStore(map, "color", this->color);
+}
+
 bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecort& rec) const {
 	float tval;
 
