@@ -56,8 +56,8 @@ Vector3f Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 }
 
 void Renderer::ThreadedRenderer::run(unsigned threadIdx, unsigned numThreads) {
-	const uint32_t bucketWidth = 200;
-	const uint32_t bucketHeight = 200;
+	const uint32_t bucketWidth = 50;
+	const uint32_t bucketHeight = 50;
 
 	uint32_t pos = 0;
 	for (uint32_t curx = 0; curx < getWorld().getSettings().width; curx += bucketWidth) {

@@ -1,6 +1,7 @@
 #include "GTraceApp.h"
 
 #include "wx/rawbmp.h"
+#include <thread>
 
 #include "Logger.h"
 #include "Events.h"
@@ -51,6 +52,12 @@ void GTraceMainWindow::OnElementRendered(wxCommandEvent& event) {
 	this->rebuildBufferAndRefresh();
 }
 
+static void renderNewScene(wxWindow* renderSurface, RendererOutput* output) {
+		output->init();
+		Renderer renderer(renderSurface, *output);
+		renderer.render();
+}
+
 void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 	wxFileDialog* openDialog = new wxFileDialog(
 		this,	_("Choose a scene to load"),
@@ -63,9 +70,8 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 		SceneParser parser = getParser();
 		parser.parseFile(path.c_str());
 
-		this->output.init();
-		Renderer renderer(this->renderSurface, this->output);
-		renderer.render();
+		std::thread th(renderNewScene, this->renderSurface, &this->output);
+		th.detach();
 	}
 }
 
