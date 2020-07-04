@@ -11,9 +11,13 @@ public:
 
 private:
 	void OnPaint(wxPaintEvent& event);
+	void OnElementRendered(wxCommandEvent& event);
+
+	void rebuildBufferAndRefresh();
 
 private:
 	wxWindow* renderSurface;
+	wxBitmap bitmap;
 	RendererOutput output;
 	RendererDisplay display;
 };

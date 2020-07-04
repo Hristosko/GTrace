@@ -1,7 +1,10 @@
 #include "GTraceMainWindow.h"
 
-#include "Logger.h"
 #include "wx/rawbmp.h"
+
+#include "Logger.h"
+#include "Events.h"
+#include "renderer/Renderer.h"
 
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 600
@@ -14,18 +17,34 @@ GTraceMainWindow::GTraceMainWindow()
 {
 	this->renderSurface = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 	this->renderSurface->SetBackgroundStyle(wxBG_STYLE_PAINT);
+	
 	this->renderSurface->Bind(wxEVT_PAINT, &GTraceMainWindow::OnPaint, this);
-	LOGINFO("GTrace Main Window created.")
+	this->renderSurface->Bind(GTRACE_RENDERED_ELEMENT, &GTraceMainWindow::OnElementRendered, this);
+	LOGINFO("GTrace Main Window created.");
+
+	Renderer renderer(this->renderSurface, this->output);
+	renderer.render();
 }
 
 void GTraceMainWindow::OnPaint(wxPaintEvent& event) {
+	wxPaintDC dc(this->renderSurface);
+	if (this->bitmap.IsOk()) {
+		dc.DrawBitmap(this->bitmap, wxPoint(0, 0));
+	}
+}
+
+void GTraceMainWindow::OnElementRendered(wxCommandEvent& event) {
+	this->rebuildBufferAndRefresh();
+}
+
+void GTraceMainWindow::rebuildBufferAndRefresh() {
 	char* pixelData = this->display.getPixels();
 	wxBitmap b(DEFAULT_WIDTH, DEFAULT_HEIGHT, 24);
 	wxNativePixelData data(b);
 
 	if (!data) {
 		LOGERROR("Failed to initialize wxNativePixelData.")
-		return;
+			return;
 	}
 
 	wxNativePixelData::Iterator p(data);
@@ -43,6 +62,7 @@ void GTraceMainWindow::OnPaint(wxPaintEvent& event) {
 		p = rowStart;
 		p.OffsetY(data, 1);
 	}
-	wxPaintDC dc(this->renderSurface);
-	dc.DrawBitmap(b, wxPoint(0, 0));
+	this->bitmap = b;
+	this->renderSurface->Refresh();
+	this->renderSurface->Update();
 }
