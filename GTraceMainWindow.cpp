@@ -24,6 +24,7 @@ void GTraceMainWindow::OnPaint(wxPaintEvent& event) {
 	wxNativePixelData data(b);
 
 	if (!data) {
+		LOGERROR("Failed to initialize wxNativePixelData.")
 		return;
 	}
 
@@ -43,5 +44,5 @@ void GTraceMainWindow::OnPaint(wxPaintEvent& event) {
 		p.OffsetY(data, 1);
 	}
 	wxPaintDC dc(this->renderSurface);
-	dc.DrawBitmap(b, wxPoint(0, 0), 24);
+	dc.DrawBitmap(b, wxPoint(0, 0));
 }

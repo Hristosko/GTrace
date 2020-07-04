@@ -7,7 +7,7 @@ class DataBuffer {
 public:
 	DataBuffer() : typeSize(0), bufferSize(0), buffer(nullptr) {}
 	DataBuffer(uint16_t typeS, uint64_t bufferS)
-		: typeSize(typeS), bufferSize(bufferS), buffer(new char[bufferS * typeS]) {}
+		: typeSize(typeS), bufferSize(bufferS), buffer(new char[std::size_t(bufferS * typeS)]) {}
 
 	void* getBuffer() { return this->buffer.get(); }
 	void* ptrByIdx(uint64_t idx) {
@@ -20,7 +20,7 @@ public:
 	void init(uint16_t typeS, uint64_t bufferS) {
 		this->typeSize = typeS;
 		this->bufferSize = bufferS;
-		this->buffer = std::unique_ptr<char>(new char[bufferS * typeS]);
+		this->buffer = std::unique_ptr<char>(new char[std::size_t(bufferS * typeS)]);
 	}
 
 	template<typename T>
