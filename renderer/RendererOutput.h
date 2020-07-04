@@ -13,10 +13,10 @@ enum RendererOutputType : uint16_t {
 
 class RendererOutput {
 public:
-	RendererOutput(uint32_t width, uint32_t height);
 	DataBuffer& getOutput(RendererOutputType type) {
 		return this->outputs[type];
 	}
+	void init(uint32_t width, uint32_t height);
 
 	uint32_t getWidth() { return this->width; }
 	uint32_t getHeight() { return this->height; }

@@ -1,8 +1,9 @@
 #include "RendererOutput.h"
 
-RendererOutput::RendererOutput(uint32_t width, uint32_t height)
-	: width(width), height(height)
-{
+
+void RendererOutput::init(uint32_t width, uint32_t height) {
+	this->width = width;
+	this->height = height;
 	this->initImageOutput();
 }
 
