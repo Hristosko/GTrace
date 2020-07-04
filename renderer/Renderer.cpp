@@ -9,36 +9,66 @@
 #include<iostream>
 void Renderer::render() {
 	LOGINFO("Start rendering.");
-	World& w = getWorld();
 	
-	DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
-	const SceneSettings& settings = w.getSettings();
-	uint32_t height = settings.height;
-	uint32_t width = settings.width;
-	std::cout << height << " " << width << std::endl;
-	char* pixelData = reinterpret_cast<char*>(buffer.getBuffer());
-	for (uint32_t y = 0; y < height; ++y)
-	{
-		for (uint32_t x = 0; x < width; ++x)
-		{
-			Ray ray;
-			ray.origin = Vector3f(x, y, -10);
-			ray.direction = Vector3f(0, 0, 1);
+	ThreadedRenderer tr(*this);
+	ThreadManager tman(std::thread::hardware_concurrency());
+	tman.run(&tr);
 
-			HitRecort rec;
-			rec.color = settings.background;
-			rec.t = 1000000.f;
-			for (Shape* shape : w.getShapes()) {
-				shape->hit(ray, 0.f, rec.t, 0, rec);
-			}
-			pixelData[3 * y * width + 3 * x] = (char)(255*rec.color.x());
-			pixelData[3 * y * width + 3 * x + 1] = (char)(255 * rec.color.y());
-			pixelData[3 * y * width + 3 * x + 2] = (char)(255 * rec.color.z());
+	LOGINFO("Finish rendering.");
+	this->updateRenderSurface();
+}
+
+void Renderer::renderBucket(uint32_t offsetx, uint32_t offsety, uint32_t bucketWidth, uint32_t bucketHeight) {
+	DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
+	for (uint32_t iy = 0; iy < bucketHeight; ++iy) {
+		const uint32_t realiy = iy + offsety;
+		for (uint32_t ix = 0; ix < bucketWidth; ++ix) {
+			const uint32_t realix = ix + offsetx;
+			const Vector3f col = this->rayTrace(realix, realiy);
+
+			//char* ptr = reinterpret_cast<char*>(buffer.ptrByIdx(UINT64_C(3) * realiy * getWorld().getSettings().width + UINT64_C(3) * realix));
+			char* ptr = reinterpret_cast<char*>(buffer.getBuffer());
+			uint32_t width = getWorld().getSettings().width;
+			ptr[3 * realiy * width + 3 * realix] = static_cast<char>(255.f * col.x());
+			ptr[3 * realiy * width + 3 * realix + 1] = static_cast<char>(255.f * col.y());
+			ptr[3 * realiy * width + 3 * realix + 2] = static_cast<char>(255.f * col.z());
 		}
 	}
+}
 
-	LOGINFO("Finish rendering.")
+void Renderer::updateRenderSurface() {
+	wxCommandEvent* event = new wxCommandEvent(GTRACE_RENDERED_ELEMENT);
+	wxQueueEvent(this->renderSurface, event);
+}
 
-	wxCommandEvent event(GTRACE_RENDERED_ELEMENT);
-	wxPostEvent(this->renderSurface, event);
+Vector3f Renderer::rayTrace(uint32_t ix, uint32_t iy) {
+	Ray ray;
+	ray.origin = Vector3f(ix, iy, -10);
+	ray.direction = Vector3f(0, 0, 1);
+
+	HitRecort rec;
+	rec.color = getWorld().getSettings().background;
+	rec.t = 1000000.f;
+	for (Shape* shape : getWorld().getShapes()) {
+		shape->hit(ray, 0.f, rec.t, 0, rec);
+	}
+	return rec.color;
+}
+
+void Renderer::ThreadedRenderer::run(unsigned threadIdx, unsigned numThreads) {
+	const uint32_t bucketWidth = 200;
+	const uint32_t bucketHeight = 200;
+
+	uint32_t pos = 0;
+	for (uint32_t curx = 0; curx < getWorld().getSettings().width; curx += bucketWidth) {
+		for (uint32_t cury = 0; cury < getWorld().getSettings().height; cury += bucketHeight) {
+			++pos;
+			if ((pos - 1) % numThreads != threadIdx) continue;
+
+			const uint32_t curWidth = std::min(getWorld().getSettings().width - curx, bucketWidth);
+			const uint32_t curHeight = std::min(getWorld().getSettings().height - cury, bucketHeight);
+			this->renderer.renderBucket(curx, cury, curWidth, curHeight);
+			this->renderer.updateRenderSurface();
+		}
+	}
 }
