@@ -2,6 +2,8 @@
 
 #include "../math/Vector3f.h"
 
+#define GEOM_EPS 0.0001f
+
 struct Ray {
 	Vector3f origin;
 	Vector3f direction;

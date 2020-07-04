@@ -4,8 +4,11 @@
 #include "../Events.h"
 #include "../Logger.h"
 
+#include "../scene/World.h"
+
 void Renderer::render() {
 	LOGINFO("Start rendering.");
+	World& w = getWorld();
 	
 	DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
 	uint32_t height = this->output.getHeight();
@@ -15,9 +18,19 @@ void Renderer::render() {
 	{
 		for (uint32_t x = 0; x < width; ++x)
 		{
-			pixelData[3 * y * width + 3 * x] = (char)255;
-			pixelData[3 * y * width + 3 * x + 1] = 0;
-			pixelData[3 * y * width + 3 * x + 2] = 0;
+			Ray ray;
+			ray.origin = Vector3f(y, x, -10);
+			ray.direction = Vector3f(0, 0, 1);
+
+			HitRecort rec;
+			rec.color = Vector3f(0.f);
+			rec.t = 1000000.f;
+			for (Shape* shape : w.getShapes()) {
+				shape->hit(ray, 0.f, rec.t, 0, rec);
+			}
+			pixelData[3 * y * width + 3 * x] = (char)(255*rec.color.x());
+			pixelData[3 * y * width + 3 * x + 1] = (char)(255 * rec.color.y());
+			pixelData[3 * y * width + 3 * x + 2] = (char)(255 * rec.color.z());
 		}
 	}
 

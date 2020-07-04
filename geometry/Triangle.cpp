@@ -39,7 +39,7 @@ bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecort
 
 	temp = Vector3f(BLKC, JCAL, AKJB);
 	const float gamma = dot(temp, ray.direction)/denom;
-	if (gamma <= 0.f || gamma >= 1.f) return false;
+	if (gamma <= 0.f || beta + gamma >= 1.f) return false;
 
 	tval = -dot(temp, AC) / denom;
 	if (tval >= tmin && tval <= tmax) {
@@ -49,4 +49,13 @@ bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecort
 		return true;
 	}
 	return false;
+}
+
+// With ::new the sse types are not alligned propely
+void* Triangle::operator new(size_t s) {
+	return _mm_malloc(s, 16);
+}
+
+void Triangle::operator delete(void* p) {
+	_mm_free(p);
 }
