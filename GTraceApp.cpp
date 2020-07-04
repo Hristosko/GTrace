@@ -63,7 +63,7 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 		SceneParser parser = getParser();
 		parser.parseFile(path.c_str());
 
-		this->output.init(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		this->output.init();
 		Renderer renderer(this->renderSurface, this->output);
 		renderer.render();
 	}

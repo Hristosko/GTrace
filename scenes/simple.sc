@@ -1,3 +1,6 @@
+Settings
+background=(0,1,0)
+
 Triangle
 a=(0,0,0)
 b=(200,0,0)

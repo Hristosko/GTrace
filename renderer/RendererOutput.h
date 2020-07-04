@@ -16,13 +16,10 @@ public:
 	DataBuffer& getOutput(RendererOutputType type) {
 		return this->outputs[type];
 	}
-	void init(uint32_t width, uint32_t height);
+	void init();
 
-	uint32_t getWidth() { return this->width; }
-	uint32_t getHeight() { return this->height; }
 private:
 	void initImageOutput();
 private:
-	uint32_t width, height;
 	DataBuffer outputs[RendererOutputType::Count];
 };

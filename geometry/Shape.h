@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Ray.h"
+#include "../scene/Parser.h"
 
-class Shape {
+class Shape : public SceneElement{
 public:
 	virtual ~Shape() {}
 

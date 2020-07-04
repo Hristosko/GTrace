@@ -1,13 +1,12 @@
 #include "RendererOutput.h"
+#include "../scene/World.h"
 
-
-void RendererOutput::init(uint32_t width, uint32_t height) {
-	this->width = width;
-	this->height = height;
+void RendererOutput::init() {
 	this->initImageOutput();
 }
 
 void RendererOutput::initImageOutput() {
+	const SceneSettings& settings = getWorld().getSettings();
 	DataBuffer& buffer = this->getOutput(RendererOutputType::Image);
-	buffer.init<ColorResult>((uint64_t)this->width * this->height);
+	buffer.init<ColorResult>((uint64_t)settings.width * settings.height);
 }

@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Shape.h"
-#include "../scene/Parser.h"
 
-__declspec(align(16)) class Triangle : public Shape, public SceneElement {
+__declspec(align(16)) class Triangle : public Shape {
 public:
 	Triangle() = default;
 	Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Vector3f& color)

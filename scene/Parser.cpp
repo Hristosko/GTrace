@@ -12,6 +12,8 @@
 static SceneElement* getByName(const std::string& name) {
 	if (name == "Triangle")
 		return new Triangle();
+	if (name == "Settings")
+		return &getWorld().getSettings();
 
 	LOGERROR("Parsing unknown scene element: ", name);
 	throw ParseError();
@@ -87,6 +89,16 @@ Vector3f SceneParser::parseVector3f(const std::string& str) const {
 	return Vector3f(x, y, z);
 }
 
+uint32_t SceneParser::parseuint32(const std::string& str) const {
+	uint32_t x;
+	int res = sscanf_s(str.c_str(), "%lo", &x);
+	if (res < 1) {
+		LOGERROR("Parsing uint32_t failed");
+		throw ParseError();
+	}
+	return x;
+}
+
 void SceneParser::parseVector3fAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Vector3f& res) const {
 	auto it = map.find(name);
 	if (it == map.end()) {
@@ -94,6 +106,15 @@ void SceneParser::parseVector3fAndStore(std::unordered_map<std::string, std::str
 		return;
 	}
 	res = this->parseVector3f(it->second);
+}
+
+void SceneParser::parseuint32AndStore(std::unordered_map<std::string, std::string>& map, const char* name, uint32_t& res) const {
+	auto it = map.find(name);
+	if (it == map.end()) {
+		LOGINFO("Missing parameter: ", name);
+		return;
+	}
+	res = this->parseuint32(it->second);
 }
 
 SceneParser& getParser() {

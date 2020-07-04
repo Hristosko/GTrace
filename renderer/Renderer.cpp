@@ -6,24 +6,27 @@
 
 #include "../scene/World.h"
 
+#include<iostream>
 void Renderer::render() {
 	LOGINFO("Start rendering.");
 	World& w = getWorld();
 	
 	DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
-	uint32_t height = this->output.getHeight();
-	uint32_t width = this->output.getWidth();
+	const SceneSettings& settings = w.getSettings();
+	uint32_t height = settings.height;
+	uint32_t width = settings.width;
+	std::cout << height << " " << width << std::endl;
 	char* pixelData = reinterpret_cast<char*>(buffer.getBuffer());
 	for (uint32_t y = 0; y < height; ++y)
 	{
 		for (uint32_t x = 0; x < width; ++x)
 		{
 			Ray ray;
-			ray.origin = Vector3f(y, x, -10);
+			ray.origin = Vector3f(x, y, -10);
 			ray.direction = Vector3f(0, 0, 1);
 
 			HitRecort rec;
-			rec.color = Vector3f(0.f);
+			rec.color = settings.background;
 			rec.t = 1000000.f;
 			for (Shape* shape : w.getShapes()) {
 				shape->hit(ray, 0.f, rec.t, 0, rec);
