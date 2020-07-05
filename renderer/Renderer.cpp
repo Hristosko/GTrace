@@ -35,6 +35,7 @@ void Renderer::updateRenderSurface() {
 
 void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 	Vector3f res(0.f);
+	Vector3f sumSqr(0.f);
 	const uint32_t samples = 4;
 	const float denom = 1.f / samples;
 	for (uint32_t sx = 0; sx < samples; ++sx) {
@@ -54,18 +55,31 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 			}
 
 			res += rec.color;
+			sumSqr += (rec.color * rec.color);
 		}
 	}
 
 	res *= (denom * denom);
+	const Vector3f var = (sumSqr - res * res * denom) * denom;
 
 	// Store the results
-	DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
-	ColorResult* ptr = reinterpret_cast<ColorResult*>(
-		buffer.ptrByIdx((uint64_t)iy * getWorld().getSettings().width + (uint64_t)ix));
-	ptr->r = static_cast<char>(255.f * res.x());
-	ptr->g = static_cast<char>(255.f * res.y());
-	ptr->b = static_cast<char>(255.f * res.z());
+	{
+		DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
+		ColorResult* ptr = reinterpret_cast<ColorResult*>(
+			buffer.ptrByIdx((uint64_t)iy * getWorld().getSettings().width + (uint64_t)ix));
+		ptr->r = static_cast<char>(255.f * res.x());
+		ptr->g = static_cast<char>(255.f * res.y());
+		ptr->b = static_cast<char>(255.f * res.z());
+	}
+
+	{
+		DataBuffer& buffer = this->output.getOutput(RendererOutputType::Variance);
+		VarianceResult* ptr = reinterpret_cast<VarianceResult*>(
+			buffer.ptrByIdx((uint64_t)iy * getWorld().getSettings().width + (uint64_t)ix));
+		ptr->x = var.x();
+		ptr->y = var.y();
+		ptr->z = var.z();
+	}
 }
 
 void Renderer::ThreadedRenderer::run(unsigned threadIdx, unsigned numThreads) {
