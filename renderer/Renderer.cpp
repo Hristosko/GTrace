@@ -26,12 +26,11 @@ void Renderer::renderBucket(uint32_t offsetx, uint32_t offsety, uint32_t bucketW
 			const uint32_t realix = ix + offsetx;
 			const Vector3f col = this->rayTrace(realix, realiy);
 
-			//char* ptr = reinterpret_cast<char*>(buffer.ptrByIdx(UINT64_C(3) * realiy * getWorld().getSettings().width + UINT64_C(3) * realix));
-			char* ptr = reinterpret_cast<char*>(buffer.getBuffer());
-			uint32_t width = getWorld().getSettings().width;
-			ptr[3 * realiy * width + 3 * realix] = static_cast<char>(255.f * col.x());
-			ptr[3 * realiy * width + 3 * realix + 1] = static_cast<char>(255.f * col.y());
-			ptr[3 * realiy * width + 3 * realix + 2] = static_cast<char>(255.f * col.z());
+			ColorResult* ptr = reinterpret_cast<ColorResult*>(
+				buffer.ptrByIdx((uint64_t)realiy * getWorld().getSettings().width + (uint64_t)realix));
+			ptr->r = static_cast<char>(255.f * col.x());
+			ptr->g = static_cast<char>(255.f * col.y());
+			ptr->b = static_cast<char>(255.f * col.z());
 		}
 	}
 }
@@ -42,6 +41,7 @@ void Renderer::updateRenderSurface() {
 }
 
 Vector3f Renderer::rayTrace(uint32_t ix, uint32_t iy) {
+	const uint32_t samples = 4;
 	Ray ray;
 	ray.origin = Vector3f(ix, iy, -10);
 	ray.direction = Vector3f(0, 0, 1);
