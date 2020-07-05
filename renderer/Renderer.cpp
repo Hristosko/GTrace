@@ -19,18 +19,11 @@ void Renderer::render() {
 }
 
 void Renderer::renderBucket(uint32_t offsetx, uint32_t offsety, uint32_t bucketWidth, uint32_t bucketHeight) {
-	DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
 	for (uint32_t iy = 0; iy < bucketHeight; ++iy) {
 		const uint32_t realiy = iy + offsety;
 		for (uint32_t ix = 0; ix < bucketWidth; ++ix) {
 			const uint32_t realix = ix + offsetx;
-			const Vector3f col = this->rayTrace(realix, realiy);
-
-			ColorResult* ptr = reinterpret_cast<ColorResult*>(
-				buffer.ptrByIdx((uint64_t)realiy * getWorld().getSettings().width + (uint64_t)realix));
-			ptr->r = static_cast<char>(255.f * col.x());
-			ptr->g = static_cast<char>(255.f * col.y());
-			ptr->b = static_cast<char>(255.f * col.z());
+			this->rayTrace(realix, realiy);
 		}
 	}
 }
@@ -40,7 +33,7 @@ void Renderer::updateRenderSurface() {
 	wxQueueEvent(this->renderSurface, event);
 }
 
-Vector3f Renderer::rayTrace(uint32_t ix, uint32_t iy) {
+void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 	Vector3f res(0.f);
 	const uint32_t samples = 4;
 	const float denom = 1.f / samples;
@@ -64,7 +57,15 @@ Vector3f Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 		}
 	}
 
-	return res*denom*denom;
+	res *= (denom * denom);
+
+	// Store the results
+	DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
+	ColorResult* ptr = reinterpret_cast<ColorResult*>(
+		buffer.ptrByIdx((uint64_t)iy * getWorld().getSettings().width + (uint64_t)ix));
+	ptr->r = static_cast<char>(255.f * res.x());
+	ptr->g = static_cast<char>(255.f * res.y());
+	ptr->b = static_cast<char>(255.f * res.z());
 }
 
 void Renderer::ThreadedRenderer::run(unsigned threadIdx, unsigned numThreads) {

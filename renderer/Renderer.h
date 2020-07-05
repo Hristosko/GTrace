@@ -22,7 +22,7 @@ public:
 
 	void render();
 private:
-	Vector3f rayTrace(uint32_t ix, uint32_t iy);
+	void rayTrace(uint32_t ix, uint32_t iy);
 	void renderBucket(uint32_t offsetx, uint32_t offsety, uint32_t bucketWidth, uint32_t bucketHeight);
 	
 	void updateRenderSurface();
