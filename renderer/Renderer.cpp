@@ -36,7 +36,7 @@ void Renderer::updateRenderSurface() {
 void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 	Vector3f res(0.f);
 	Vector3f sumSqr(0.f);
-	const uint32_t samples = 4;
+	const uint32_t samples = getWorld().getSettings().subdivs;
 	const float denom = 1.f / samples;
 	for (uint32_t sx = 0; sx < samples; ++sx) {
 		for (uint32_t sy = 0; sy < samples; ++sy) {

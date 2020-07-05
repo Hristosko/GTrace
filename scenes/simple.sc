@@ -1,5 +1,6 @@
 Settings
 background=(0,1,0)
+subdivs=5
 
 Triangle
 a=(0,0,0)
