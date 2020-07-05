@@ -18,6 +18,9 @@ private:
 	void OnElementRendered(wxCommandEvent& event);
 
 	void NewFile(wxCommandEvent& event);
+	void Image(wxCommandEvent& event);
+	void StandardDeviation(wxCommandEvent& event);
+
 	void rebuildBufferAndRefresh();
 
 	DECLARE_EVENT_TABLE()
@@ -31,11 +34,15 @@ private:
 
 enum {
 	TEXT_Main = wxID_HIGHEST + 1,
-	MENU_New
+	MENU_New,
+	MENU_Image,
+	MENU_StDev,
 };
 
 BEGIN_EVENT_TABLE(GTraceMainWindow, wxFrame)
 	EVT_MENU(MENU_New, GTraceMainWindow::NewFile)
+	EVT_MENU(MENU_Image, GTraceMainWindow::Image)
+	EVT_MENU(MENU_StDev, GTraceMainWindow::StandardDeviation)
 END_EVENT_TABLE()
 
 class GTraceApp : public wxApp {

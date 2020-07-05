@@ -33,11 +33,17 @@ GTraceMainWindow::GTraceMainWindow()
 
 	CreateStatusBar(1);
 	this->mainMenu = new wxMenuBar();
+
 	wxMenu* fileMenu = new wxMenu();
 	fileMenu->Append(MENU_New, _("&New"), _("Open a new scene"));
 	this->mainMenu->Append(fileMenu, _("&File"));
-	SetMenuBar(this->mainMenu);
 
+	wxMenu* viewMenu = new wxMenu();
+	viewMenu->Append(MENU_Image, _("&Image"), _("Load the image output"));
+	viewMenu->Append(MENU_StDev, _("&StDev"), _("Load standard deviation"));
+	this->mainMenu->Append(viewMenu, _("&View"));
+
+	SetMenuBar(this->mainMenu);
 	LOGINFO("GTrace Main Window created.");
 }
 
@@ -73,6 +79,16 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 		std::thread th(renderNewScene, this->renderSurface, &this->output);
 		th.detach();
 	}
+}
+
+void GTraceMainWindow::Image(wxCommandEvent& event) {
+	this->display.setDisplayType(RendererOutputType::Image);
+	this->rebuildBufferAndRefresh();
+}
+
+void GTraceMainWindow::StandardDeviation(wxCommandEvent& event) {
+	this->display.setDisplayType(RendererOutputType::Variance);
+	this->rebuildBufferAndRefresh();
 }
 
 void GTraceMainWindow::rebuildBufferAndRefresh() {

@@ -59,8 +59,8 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 		}
 	}
 
-	res *= (denom * denom);
-	const Vector3f var = (sumSqr - res * res * denom) * denom;
+	res *= (denom * denom); // the mean value, there are sample^2 samples totals
+	const Vector3f var = sumSqr * denom *denom - res * res;
 
 	// Store the results
 	{
@@ -79,6 +79,15 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 		ptr->x = var.x();
 		ptr->y = var.y();
 		ptr->z = var.z();
+	}
+
+	if (ix == 10 && iy == 10) {
+		std::cout << std::endl;
+		std::cout << res.x() << " " << res.y() << " " << res.z() << std::endl;
+		std::cout << sumSqr.x() << " " << sumSqr.y() << " " << sumSqr.z() << std::endl;
+
+		std::cout << var.x() << " " << var.y() << " " << var.z() << std::endl;
+		std::cout << sqrtf(var.x()) << " " << sqrtf(var.y()) << " " << sqrtf(var.z()) << std::endl;
 	}
 }
 
