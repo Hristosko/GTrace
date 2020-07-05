@@ -4,6 +4,10 @@
 World::World() {}
 
 World::~World() {
+	this->clear();
+}
+
+void World::clear() {
 	for (Shape* shape : this->shapes) delete shape;
 }
 

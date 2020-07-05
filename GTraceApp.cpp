@@ -7,6 +7,7 @@
 #include "Events.h"
 #include "renderer/Renderer.h"
 #include "scene/Parser.h"
+#include "scene/World.h"
 
 IMPLEMENT_APP(GTraceApp);
 
@@ -73,6 +74,7 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 
 	if (openDialog->ShowModal() == wxID_OK) {
 		wxString path = openDialog->GetPath();
+		getWorld().clear();
 		SceneParser parser = getParser();
 		parser.parseFile(path.c_str());
 

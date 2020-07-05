@@ -10,6 +10,8 @@ public:
 	World();
 	~World();
 
+	void clear();
+
 	void addElemenet(SceneElement* el);
 	void add(Shape* shape);
 	
