@@ -80,15 +80,6 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 		ptr->y = var.y();
 		ptr->z = var.z();
 	}
-
-	if (ix == 10 && iy == 10) {
-		std::cout << std::endl;
-		std::cout << res.x() << " " << res.y() << " " << res.z() << std::endl;
-		std::cout << sumSqr.x() << " " << sumSqr.y() << " " << sumSqr.z() << std::endl;
-
-		std::cout << var.x() << " " << var.y() << " " << var.z() << std::endl;
-		std::cout << sqrtf(var.x()) << " " << sqrtf(var.y()) << " " << sqrtf(var.z()) << std::endl;
-	}
 }
 
 void Renderer::ThreadedRenderer::run(unsigned threadIdx, unsigned numThreads) {
