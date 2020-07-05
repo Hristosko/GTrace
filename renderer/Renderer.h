@@ -3,6 +3,7 @@
 #include "RendererOutput.h"
 #include "../Threaded.h"
 #include "../math/Vector3f.h"
+#include "../Random.h"
 
 #include "wx/wx.h"
 
@@ -28,5 +29,6 @@ private:
 private:
 	wxWindow* renderSurface;
 	RendererOutput& output;
+	RandomGenerator rng;
 };
 

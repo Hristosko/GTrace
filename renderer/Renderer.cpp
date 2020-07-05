@@ -41,18 +41,30 @@ void Renderer::updateRenderSurface() {
 }
 
 Vector3f Renderer::rayTrace(uint32_t ix, uint32_t iy) {
+	Vector3f res(0.f);
 	const uint32_t samples = 4;
-	Ray ray;
-	ray.origin = Vector3f(ix, iy, -10);
-	ray.direction = Vector3f(0, 0, 1);
+	const float denom = 1.f / samples;
+	for (uint32_t sx = 0; sx < samples; ++sx) {
+		for (uint32_t sy = 0; sy < samples; ++sy) {
+			const float dx = ((float)sx + this->rng.get()) * denom - 0.5f;
+			const float dy = ((float)sy + this->rng.get()) * denom - 0.5f;
 
-	HitRecort rec;
-	rec.color = getWorld().getSettings().background;
-	rec.t = 1000000.f;
-	for (Shape* shape : getWorld().getShapes()) {
-		shape->hit(ray, 0.f, rec.t, 0, rec);
+			Ray ray;
+			ray.origin = Vector3f(ix + dx, iy + dy, -10);
+			ray.direction = Vector3f(0, 0, 1);
+
+			HitRecort rec;
+			rec.color = getWorld().getSettings().background;
+			rec.t = 1000000.f;
+			for (Shape* shape : getWorld().getShapes()) {
+				shape->hit(ray, 0.f, rec.t, 0, rec);
+			}
+
+			res += rec.color;
+		}
 	}
-	return rec.color;
+
+	return res*denom*denom;
 }
 
 void Renderer::ThreadedRenderer::run(unsigned threadIdx, unsigned numThreads) {
