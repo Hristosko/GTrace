@@ -55,7 +55,9 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 			}
 
 			const Vector3f hitPoint = ray.origin + rec.t * ray.direction;
-			const Vector3f color = rec.text->getValue(Vector2f(), hitPoint);
+			const Vector3f color = (rec.text == nullptr) ?
+				DEFAULT_TEXTURE_VALUE:
+				rec.text->getValue(Vector2f(), hitPoint);
 			res += color;
 			sumSqr += (color * color);
 		}

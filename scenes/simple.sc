@@ -22,7 +22,6 @@ name=cyan
 color=(0,1,1)
 
 Settings
-background=green
 subdivs=5
 
 Triangle

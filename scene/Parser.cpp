@@ -45,8 +45,8 @@ static void makeElement(const std::string& obj, std::unordered_map<std::string, 
 	el->parse(fields);
 	w.addElemenet(el, fields);
 	fields.clear();
-
 }
+
 void SceneParser::parseFile(const char* path) {
 	std::ifstream file(path);
 
@@ -150,7 +150,7 @@ void SceneParser::parseTextureAndStore(std::unordered_map<std::string, std::stri
 		LOGINFO("Missning texture: ", name);
 		res = nullptr;
 	}
-	res = getWorld().getTextureByName(it->second);
+	else res = getWorld().getTextureByName(it->second);
 }
 
 SceneParser& getParser() {

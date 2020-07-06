@@ -2,6 +2,8 @@
 
 #include "../scene/Parser.h"
 
+#define DEFAULT_TEXTURE_VALUE Vector3f(0.5f)
+
 // temp. defined here
 struct Vector2f {
 	float x, y;
