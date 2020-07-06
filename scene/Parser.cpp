@@ -15,6 +15,8 @@ static SceneElement* getByName(const std::string& name) {
 		return new Triangle();
 	if (name == "Sphere")
 		return new Sphere();
+	if (name == "Camera")
+		return &getWorld().getCamera();
 	if (name == "Settings")
 		return &getWorld().getSettings();
 

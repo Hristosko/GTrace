@@ -34,19 +34,20 @@ void Renderer::updateRenderSurface() {
 }
 
 void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
+	int64_t camx = (int64_t)ix - getWorld().getSettings().width / 2;
+	int64_t camy = (int64_t)iy - getWorld().getSettings().height / 2;
+	Camera& camera = getWorld().getCamera();
 	Vector3f res(0.f);
 	Vector3f sumSqr(0.f);
 	const uint32_t samples = getWorld().getSettings().subdivs;
 	const float denom = 1.f / samples;
+
 	for (uint32_t sx = 0; sx < samples; ++sx) {
 		for (uint32_t sy = 0; sy < samples; ++sy) {
 			const float dx = ((float)sx + this->rng.get()) * denom - 0.5f;
 			const float dy = ((float)sy + this->rng.get()) * denom - 0.5f;
 
-			Ray ray;
-			ray.origin = Vector3f(ix + dx, iy + dy, -10);
-			ray.direction = Vector3f(0, 0, 1);
-
+			Ray ray = camera.castRay(camx + dx, camy + dy);
 			HitRecort rec;
 			rec.color = getWorld().getSettings().background;
 			rec.t = 1000000.f;
@@ -61,7 +62,6 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 
 	res *= (denom * denom); // the mean value, there are sample^2 samples totals
 	const Vector3f var = sumSqr * denom *denom - res * res;
-
 	// Store the results
 	{
 		DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);

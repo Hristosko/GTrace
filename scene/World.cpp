@@ -9,6 +9,7 @@ World::~World() {
 
 void World::clear() {
 	for (Shape* shape : this->shapes) delete shape;
+	this->shapes.clear();
 }
 
 void World::addElemenet(SceneElement* el) {
