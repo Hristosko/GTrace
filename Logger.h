@@ -39,6 +39,12 @@ inline void log() { getLogger() << '\n'; }
 		getLogger().flush(); \
 	}
 
+#define LOGWARNING(...) \
+	{ \
+		log("[WARN]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n', '\n'); \
+		getLogger().flush(); \
+	}
+
 #define LOGERROR(...) \
 	{ \
 		log("[ERROR]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n', '\n'); \

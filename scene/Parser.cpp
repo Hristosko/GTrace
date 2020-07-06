@@ -10,7 +10,7 @@
 #include "../geometry/Triangle.h"
 #include "../geometry/Sphere.h"
 
-static SceneElement* getByName(const std::string& name) {
+static SceneElement* getByName(const std::string& name, std::unordered_map<std::string, std::string>& fields) {
 	if (name == "Triangle")
 		return new Triangle();
 	if (name == "Sphere")
@@ -38,7 +38,7 @@ void split(const std::string& src, std::string& a, std::string& b) {
 
 static void makeElement(const std::string& obj, std::unordered_map<std::string, std::string>& fields) {
 	World& w = getWorld();
-	SceneElement* el = getByName(obj);
+	SceneElement* el = getByName(obj, fields);
 	el->parse(fields);
 	w.addElemenet(el);
 	fields.clear();
