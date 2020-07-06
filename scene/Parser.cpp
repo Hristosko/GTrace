@@ -153,6 +153,15 @@ void SceneParser::parseTextureAndStore(std::unordered_map<std::string, std::stri
 	else res = getWorld().getTextureByName(it->second);
 }
 
+void SceneParser::parseMaterialAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Material*& res) const {
+	auto it = map.find(name);
+	if (it == map.end()) {
+		LOGINFO("Missning texture: ", name);
+		res = nullptr;
+	}
+	else res = getWorld().getMaterialByName(it->second);
+}
+
 SceneParser& getParser() {
 	static SceneParser parser;
 	return parser;
