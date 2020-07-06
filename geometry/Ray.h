@@ -1,11 +1,11 @@
 #pragma once
 
 #include "../math/Vector3f.h"
-#include "../texture/Texture.h"
 
 #define GEOM_EPS 0.0001f
 
 class Renderer;
+class Material;
 
 struct Ray {
 	Renderer* renderer;
@@ -21,5 +21,5 @@ struct HitRecord {
 	float t;
 	Vector3f normal;
 	Vector3f position;
-	Texture* text;
+	Material* mat;
 };

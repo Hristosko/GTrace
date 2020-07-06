@@ -26,6 +26,21 @@ name=mat_green
 k=1
 text=green
 
+MatteMaterial
+name=mat_red
+k=1
+text=red
+
+MatteMaterial
+name=mat_blue
+k=1
+text=blue
+
+MatteMaterial
+name=mat_cyan
+k=1
+text=cyan
+
 Settings
 subdivs=5
 
@@ -33,14 +48,14 @@ Triangle
 a=(-500,-500,0)
 b=(200,0,0)
 c=(0,200,0)
-text=red
+mat=mat_red
 
 Sphere
 center=(0,0,200)
 radius=100
-text=cyan
+mat=mat_cyan
 
 Sphere
 center=(400,400,-400)
 radius=200
-text=blue
+mat=mat_blue

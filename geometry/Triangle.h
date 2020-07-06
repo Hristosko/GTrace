@@ -13,5 +13,5 @@ public:
 	void operator delete(void* p);
 private:
 	Vector3f a, b, c;
-	Texture* text;
+	Material* mat;
 };

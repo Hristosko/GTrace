@@ -13,7 +13,7 @@ struct SceneSettings : public SceneElement {
 	uint32_t width;
 	uint32_t height;
 	uint32_t subdivs;
-	Texture* background;
+	Material* background;
 
 	SceneSettings()
 		: width(SCENE_DEFAULT_WIDTH),
@@ -25,6 +25,6 @@ struct SceneSettings : public SceneElement {
 		parser.parseuint32AndStore(map, "width", this->width);
 		parser.parseuint32AndStore(map, "height", this->height);
 		parser.parseuint32AndStore(map, "subdivs", this->subdivs);
-		parser.parseTextureAndStore(map, "background", this->background);
+		parser.parseMaterialAndStore(map, "background", this->background);
 	}
 };

@@ -3,8 +3,8 @@
 void Sphere::parse(std::unordered_map<std::string, std::string>& map) {
 	SceneParser& parser = getParser();
 	parser.parseVector3fAndStore(map, "center", this->center);
-	parser.parseTextureAndStore(map, "text", this->text);
 	parser.parsefloatAndStore(map, "radius", this->radius);
+	parser.parseMaterialAndStore(map, "mat", this->mat);
 }
 
 bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
@@ -25,7 +25,7 @@ bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& 
 		// we have a hit
 		rec.t = t;
 		rec.normal = normalize(ray.origin + t * ray.direction - this->center);
-		rec.text = this->text;
+		rec.mat = this->mat;
 		return true;
 	}
 	return false;

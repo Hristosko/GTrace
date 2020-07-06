@@ -28,6 +28,14 @@ void World::addElemenet(SceneElement* el, const std::unordered_map<std::string, 
 		else {
 			this->addTexture(it->second, x);
 		}
+	} else if (Material * x = dynamic_cast<Material*>(el)) {
+		auto it = map.find("name");
+		if (it == map.end()) {
+			LOGWARNING("Unnamed texture.");
+		}
+		else {
+			this->addMaterial(it->second, x);
+		}
 	}
 }
 

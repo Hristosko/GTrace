@@ -49,16 +49,16 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 			Ray ray = camera.castRay(camx + dx, camy + dy);
 			ray.renderer = this;
 			HitRecord rec;
-			rec.text = getWorld().getSettings().background;
+			rec.mat = getWorld().getSettings().background;
 			rec.t = 1000000.f;
 			for (Shape* shape : getWorld().getShapes()) {
 				shape->hit(ray, 0.f, rec.t, 0, rec);
 			}
 
 			rec.position = ray.origin + rec.t * ray.direction;
-			const Vector3f color = (rec.text == nullptr) ?
-				DEFAULT_TEXTURE_VALUE:
-				rec.text->getValue(Vector2f(), rec.position);
+			const Vector3f color = (rec.mat == nullptr) ?
+				DEFAULT_TEXTURE_VALUE :
+				rec.mat->shade(rec, ray);
 			res += color;
 			sumSqr += (color * color);
 		}
