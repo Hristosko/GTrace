@@ -11,9 +11,9 @@ void Triangle::parse(std::unordered_map<std::string, std::string>& map) {
 bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
 	float tval;
 
-	Vector3f AB = a - b;
-	Vector3f AC = a - c;
-	Vector3f AO = a - ray.origin;
+	Vector3f AB = Vector3f(a) - Vector3f(b);
+	Vector3f AC = Vector3f(a) - Vector3f(c);
+	Vector3f AO = Vector3f(a) - ray.origin;
 
 	const float E = AC.y();
 	const float I = ray.direction.z();
@@ -57,13 +57,4 @@ bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord
 		return true;
 	}
 	return false;
-}
-
-// With ::new the sse types are not alligned propely
-void* Triangle::operator new(size_t s) {
-	return _mm_malloc(s, 16);
-}
-
-void Triangle::operator delete(void* p) {
-	_mm_free(p);
 }

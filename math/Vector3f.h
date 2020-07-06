@@ -3,6 +3,18 @@
 #include <smmintrin.h>
 #include <cmath>
 
+///
+/// Storing Vector3f in a clss that will be allocated on the heap
+/// causes allignment issues.
+/// Use this struct to store the data and make Vector3f for calculations
+///
+struct Vector3fData {
+	float x, y, z;
+
+	Vector3fData(float t = 0.f) : x(t), y(t), z(t) {}
+	Vector3fData(float x, float y, float z) : x(x), y(y), z(z) {}
+};
+
 class Vector3f {
 private:
 	Vector3f(__m128 v) { this->vec = v; }
@@ -10,6 +22,7 @@ public:
 	Vector3f() { this->vec = _mm_setzero_ps(); }
 	explicit Vector3f(float v) { this->vec = _mm_setr_ps(v, v, v, 0.f); }
 	Vector3f(float x, float y, float z) { this->vec = _mm_setr_ps(x, y, z, 0.f); }
+	Vector3f(const Vector3fData vd) { this->vec = _mm_setr_ps(vd.x, vd.y, vd.z, 0.f); }
 
 	float x() const {
 		int res = _mm_extract_ps(this->vec, 0);

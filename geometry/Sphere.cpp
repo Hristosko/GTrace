@@ -8,7 +8,7 @@ void Sphere::parse(std::unordered_map<std::string, std::string>& map) {
 }
 
 bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
-	const Vector3f temp = ray.origin - this->center;
+	const Vector3f temp = ray.origin - Vector3f(this->center);
 	const float a = dot(ray.direction, ray.direction);
 	const float b = 2.f * dot(ray.direction, temp);
 	const float c = dot(temp, temp) - radius * radius;
@@ -31,10 +31,3 @@ bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& 
 	return false;
 }
 
-void* Sphere::operator new(size_t s) {
-	return _mm_malloc(s, 16);;
-}
-
-void Sphere::operator delete(void* p) {
-	_mm_free(p);
-}

@@ -82,7 +82,7 @@ void SceneParser::addElement(const char* name, ElementParseFunc func) {
 	elementParsers[std::string(name)] = func;
 }
 
-Vector3f SceneParser::parseVector3f(const std::string& str) const {
+Vector3fData SceneParser::parseVector3f(const std::string& str) const {
 	if (str[0] != '(') {
 		LOGERROR("Parsing Vector3f: expected (");
 		throw ParseError();
@@ -97,7 +97,7 @@ Vector3f SceneParser::parseVector3f(const std::string& str) const {
 		LOGERROR("Parsing Vector3f: unknown format");
 		throw ParseError();
 	}
-	return Vector3f(x, y, z);
+	return Vector3fData(x, y, z);
 }
 
 uint32_t SceneParser::parseuint32(const std::string& str) const {
@@ -120,7 +120,7 @@ float SceneParser::parsefloat(const std::string& str) const {
 	return x;
 }
 
-void SceneParser::parseVector3fAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Vector3f& res) const {
+void SceneParser::parseVector3fAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Vector3fData& res) const {
 	auto it = map.find(name);
 	if (it == map.end()) {
 		LOGINFO("Missing parameter: ", name);

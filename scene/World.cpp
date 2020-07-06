@@ -12,7 +12,12 @@ void World::clear() {
 	for (Shape* shape : this->shapes) delete shape;
 	this->shapes.clear();
 
-	for (auto& it : this->textures) delete it.second;
+	for (auto& it : this->materials) delete it.second;
+	this->materials.clear();
+
+	for (auto& it : this->textures) {
+		delete it.second;
+	}
 	this->textures.clear();
 }
 
