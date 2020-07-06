@@ -3,6 +3,7 @@
 
 #include "../geometry/Shape.h"
 #include "../texture/Texture.h"
+#include "../material/Material.h"
 
 #include "../renderer/Camera.h"
 
@@ -25,10 +26,12 @@ public:
 
 	Texture* getTextureByName(const std::string& name);
 	void addTexture(const std::string& name, Texture* text);
+
+	Material* getMaterialByName(const std::string& name);
+	void addMaterial(const std::string& name, Material* mat);
 private:
-	// This works since the map never moves the data in memory
-	// Has to be changed if I use diff. map
 	std::unordered_map<std::string, Texture*> textures;
+	std::unordered_map<std::string, Material*> materials;
 	std::vector<Shape*> shapes;
 	SceneSettings settings;
 	Camera camera;

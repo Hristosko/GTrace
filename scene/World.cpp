@@ -52,6 +52,23 @@ void World::addTexture(const std::string& name, Texture* text) {
 	this->textures[name] = text;
 }
 
+Material* World::getMaterialByName(const std::string& name) {
+	auto it = this->materials.find(name);
+	if (it == this->materials.end()) {
+		LOGERROR("Searching for unexisting mateial: ", name);
+		throw std::out_of_range("material not faund");
+	}
+	return it->second;
+}
+
+void World::addMaterial(const std::string& name, Material* mat) {
+	auto it = this->materials.find(name);
+	if (it != this->materials.end()) {
+		LOGWARNING("Overwriting material: ", name);
+	}
+	this->materials[name] = mat;
+}
+
 World& getWorld() {
 	static World w;
 	return w;
