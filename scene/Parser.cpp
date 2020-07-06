@@ -10,6 +10,7 @@
 #include "../geometry/Triangle.h"
 #include "../geometry/Sphere.h"
 #include "../texture/ColorTexture.h"
+#include "../material/MatteMaterial.h"
 
 static SceneElement* getByName(const std::string& name) {
 	if (name == "Triangle")
@@ -18,6 +19,8 @@ static SceneElement* getByName(const std::string& name) {
 		return new Sphere();
 	if (name == "ColorTexture")
 		return new ColorTexture();
+	if (name == "MatteMaterial")
+		return new MatteMaterial();
 	if (name == "Camera")
 		return &getWorld().getCamera();
 	if (name == "Settings")

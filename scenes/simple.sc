@@ -21,6 +21,11 @@ ColorTexture
 name=cyan
 color=(0,1,1)
 
+MatteMaterial
+name=mat_green
+k=1
+text=green
+
 Settings
 subdivs=5
 
