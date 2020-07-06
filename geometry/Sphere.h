@@ -12,5 +12,5 @@ public:
 private:
 	Vector3f center;
 	float radius;
-	Vector3f color;
+	Texture* text;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../math/Vector3f.h"
+#include "../texture/Texture.h"
 
 #define GEOM_EPS 0.0001f
 
@@ -16,5 +17,5 @@ struct Ray {
 struct HitRecort {
 	float t;
 	Vector3f normal;
-	Vector3f color;
+	Texture* text;
 };

@@ -6,7 +6,6 @@
 
 #include "../scene/World.h"
 
-#include<iostream>
 void Renderer::render() {
 	LOGINFO("Start rendering.");
 	
@@ -49,14 +48,16 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 
 			Ray ray = camera.castRay(camx + dx, camy + dy);
 			HitRecort rec;
-			rec.color = getWorld().getSettings().background;
+			rec.text = getWorld().getSettings().background;
 			rec.t = 1000000.f;
 			for (Shape* shape : getWorld().getShapes()) {
 				shape->hit(ray, 0.f, rec.t, 0, rec);
 			}
 
-			res += rec.color;
-			sumSqr += (rec.color * rec.color);
+			const Vector3f hitPoint = ray.origin + rec.t * ray.direction;
+			const Vector3f color = rec.text->getValue(Vector2f(), hitPoint);
+			res += color;
+			sumSqr += (color * color);
 		}
 	}
 

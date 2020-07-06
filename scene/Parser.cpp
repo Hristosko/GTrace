@@ -144,6 +144,15 @@ void SceneParser::parsefloatAndStore(std::unordered_map<std::string, std::string
 	res = this->parsefloat(it->second);
 }
 
+void SceneParser::parseTextureAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Texture*& res) const {
+	auto it = map.find(name);
+	if (it == map.end()) {
+		LOGINFO("Missning texture: ", name);
+		res = nullptr;
+	}
+	res = getWorld().getTextureByName(it->second);
+}
+
 SceneParser& getParser() {
 	static SceneParser parser;
 	return parser;

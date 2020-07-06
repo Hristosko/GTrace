@@ -5,6 +5,7 @@
 
 #include "../math/Vector3f.h"
 
+class Texture;
 class SceneParser;
 
 class SceneElement {
@@ -26,6 +27,7 @@ public:
 	void parseVector3fAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Vector3f& res) const;
 	void parseuint32AndStore(std::unordered_map<std::string, std::string>& map, const char* name, uint32_t& res) const;
 	void parsefloatAndStore(std::unordered_map<std::string, std::string>& map, const char* name, float& res) const;
+	void parseTextureAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Texture*& res) const;
 
 private:
 	std::unordered_map<std::string, ElementParseFunc> elementParsers;

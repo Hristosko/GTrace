@@ -5,7 +5,7 @@ void Triangle::parse(std::unordered_map<std::string, std::string>& map) {
 	parser.parseVector3fAndStore(map, "a", this->a);
 	parser.parseVector3fAndStore(map, "b", this->b);
 	parser.parseVector3fAndStore(map, "c", this->c);
-	parser.parseVector3fAndStore(map, "color", this->color);
+	parser.parseTextureAndStore(map, "text", this->text);
 }
 
 bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecort& rec) const {
@@ -52,7 +52,7 @@ bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecort
 	tval = -dot(temp, AC) / denom;
 	if (tval >= tmin && tval <= tmax) {
 		rec.t = tval;
-		rec.color = this->color;
+		rec.text = this->text;
 		rec.normal = normalize(cross(b - a, c - a));
 		return true;
 	}

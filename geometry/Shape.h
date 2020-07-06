@@ -2,6 +2,7 @@
 
 #include "Ray.h"
 #include "../scene/Parser.h"
+#include "../texture/Texture.h"
 
 class Shape : public SceneElement{
 public:
