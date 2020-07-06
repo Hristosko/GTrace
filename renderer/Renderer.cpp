@@ -47,17 +47,18 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 			const float dy = ((float)sy + this->rng.get()) * denom - 0.5f;
 
 			Ray ray = camera.castRay(camx + dx, camy + dy);
-			HitRecort rec;
+			ray.renderer = this;
+			HitRecord rec;
 			rec.text = getWorld().getSettings().background;
 			rec.t = 1000000.f;
 			for (Shape* shape : getWorld().getShapes()) {
 				shape->hit(ray, 0.f, rec.t, 0, rec);
 			}
 
-			const Vector3f hitPoint = ray.origin + rec.t * ray.direction;
+			rec.position = ray.origin + rec.t * ray.direction;
 			const Vector3f color = (rec.text == nullptr) ?
 				DEFAULT_TEXTURE_VALUE:
-				rec.text->getValue(Vector2f(), hitPoint);
+				rec.text->getValue(Vector2f(), rec.position);
 			res += color;
 			sumSqr += (color * color);
 		}

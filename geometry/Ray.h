@@ -5,7 +5,10 @@
 
 #define GEOM_EPS 0.0001f
 
+class Renderer;
+
 struct Ray {
+	Renderer* renderer;
 	Vector3f origin;
 	Vector3f direction;
 
@@ -14,8 +17,9 @@ struct Ray {
 	}
 };
 
-struct HitRecort {
+struct HitRecord {
 	float t;
 	Vector3f normal;
+	Vector3f position;
 	Texture* text;
 };

@@ -7,7 +7,7 @@ void Sphere::parse(std::unordered_map<std::string, std::string>& map) {
 	parser.parsefloatAndStore(map, "radius", this->radius);
 }
 
-bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecort& rec) const {
+bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
 	const Vector3f temp = ray.origin - this->center;
 	const float a = dot(ray.direction, ray.direction);
 	const float b = 2.f * dot(ray.direction, temp);

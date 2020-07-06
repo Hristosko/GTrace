@@ -8,7 +8,7 @@ void Triangle::parse(std::unordered_map<std::string, std::string>& map) {
 	parser.parseTextureAndStore(map, "text", this->text);
 }
 
-bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecort& rec) const {
+bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
 	float tval;
 
 	Vector3f AB = a - b;
