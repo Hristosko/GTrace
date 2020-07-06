@@ -9,6 +9,10 @@ Settings
 background=(0,1,0)
 subdivs=5
 
+ColorTexture
+name=red
+color=(1,0,0)
+
 Triangle
 a=(-500,-500,0)
 b=(200,0,0)

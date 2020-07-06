@@ -9,12 +9,15 @@
 
 #include "../geometry/Triangle.h"
 #include "../geometry/Sphere.h"
+#include "../texture/ColorTexture.h"
 
-static SceneElement* getByName(const std::string& name, std::unordered_map<std::string, std::string>& fields) {
+static SceneElement* getByName(const std::string& name) {
 	if (name == "Triangle")
 		return new Triangle();
 	if (name == "Sphere")
 		return new Sphere();
+	if (name == "ColorTexture")
+		return new ColorTexture();
 	if (name == "Camera")
 		return &getWorld().getCamera();
 	if (name == "Settings")
@@ -38,9 +41,9 @@ void split(const std::string& src, std::string& a, std::string& b) {
 
 static void makeElement(const std::string& obj, std::unordered_map<std::string, std::string>& fields) {
 	World& w = getWorld();
-	SceneElement* el = getByName(obj, fields);
+	SceneElement* el = getByName(obj);
 	el->parse(fields);
-	w.addElemenet(el);
+	w.addElemenet(el, fields);
 	fields.clear();
 
 }
