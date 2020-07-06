@@ -3,6 +3,8 @@
 #define EPSILON 0.001f
 #define EPSILON_SQR EPSILON*EPSILON
 
+// Some might not work properly !!!
+
 OrthonormalBasis::OrthonormalBasis(const Vector3f& a, OB_fromU) {
 	Vector3f n(1.f, 0.f, 0.f);
 	Vector3f m(0.f, 1.f, 0.f);
@@ -55,4 +57,10 @@ OrthonormalBasis::OrthonormalBasis(const Vector3f& a, const Vector3f& b, OB_from
 	this->vec[1] = normalize(a);
 	this->vec[0] = normalize(cross(a, b));
 	this->vec[2] = cross(this->vec[0], this->vec[1]);
+}
+
+OrthonormalBasis::OrthonormalBasis(const Vector3f& a, const Vector3f& b, OB_fromWV) {
+	this->vec[2] = normalize(a);
+	this->vec[0] = normalize(cross(b, a));
+	this->vec[1] = cross(this->vec[2], this->vec[0]);
 }

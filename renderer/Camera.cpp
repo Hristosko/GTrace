@@ -8,17 +8,15 @@ void Camera::parse(std::unordered_map<std::string, std::string>& map) {
 	parser.parsefloatAndStore(map, "view_plane_distance", this->viewPlaneDistance);
 	parser.parsefloatAndStore(map, "zoom", this->zoom);
 
-	this->w = normalize(eye - lookPoint);
-	this->u = normalize(cross(up, w));
-	this->v = cross(w, u);
+	this->uvw = OrthonormalBasis(eye - lookPoint, up, OB_fromWV());
 }
 
 Ray Camera::castRay(float px, float py) const {
 	Ray ray;
 	ray.origin = this->eye;
 	ray.direction = normalize(
-		zoom*px*u +
-		zoom*py*v -
-		viewPlaneDistance*w);
+		zoom*px*uvw.u() +
+		zoom*py*uvw.v() -
+		viewPlaneDistance*uvw.w());
 	return ray;
 }

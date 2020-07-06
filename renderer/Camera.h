@@ -2,6 +2,7 @@
 
 #include "../scene/Parser.h"
 #include "../geometry/Ray.h"
+#include "../math/OrthonormalBasis.h"
 
 class Camera : public SceneElement {
 public:
@@ -12,7 +13,7 @@ private:
 	Vector3f eye;
 	Vector3f lookPoint;
 	Vector3f up;
-	Vector3f u, v, w;
+	OrthonormalBasis uvw;
 	float viewPlaneDistance;
 	float zoom;
 };

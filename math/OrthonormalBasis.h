@@ -8,10 +8,12 @@ struct OB_fromW {};
 struct OB_fromUV {};
 struct OB_fromVW {};
 struct OB_fromUW {};
+struct OB_fromWV {};
 
 
 class OrthonormalBasis {
 public:
+	OrthonormalBasis() = default;
 	OrthonormalBasis(const Vector3f& a, OB_fromU);
 	OrthonormalBasis(const Vector3f& a, OB_fromV);
 	OrthonormalBasis(const Vector3f& a, OB_fromW);
@@ -19,6 +21,7 @@ public:
 	OrthonormalBasis(const Vector3f& a, const Vector3f& b, OB_fromUV);
 	OrthonormalBasis(const Vector3f& a, const Vector3f& b, OB_fromUW);
 	OrthonormalBasis(const Vector3f& a, const Vector3f& b, OB_fromVW);
+	OrthonormalBasis(const Vector3f& a, const Vector3f& b, OB_fromWV);
 
 
 
