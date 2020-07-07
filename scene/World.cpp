@@ -12,6 +12,9 @@ void World::clear() {
 	for (Shape* shape : this->shapes) delete shape;
 	this->shapes.clear();
 
+	for (Light* light : this->lights) delete light;
+	this->lights.clear();
+
 	for (auto& it : this->materials) delete it.second;
 	this->materials.clear();
 
@@ -41,6 +44,8 @@ void World::addElemenet(SceneElement* el, const std::unordered_map<std::string, 
 		else {
 			this->addMaterial(it->second, x);
 		}
+	} else if(Light* x = dynamic_cast<Light*>(el)) {
+		this->lights.push_back(x);
 	}
 }
 
