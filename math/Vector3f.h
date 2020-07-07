@@ -36,6 +36,9 @@ public:
 		int res = _mm_extract_ps(this->vec, 2);
 		return reinterpret_cast<float&>(res);
 	}
+	Vector3fData data() const {
+		return Vector3fData(this->x(), this->y(), this->z());
+	}
 
 	friend Vector3f min(const Vector3f& a, const Vector3f& b);
 	friend Vector3f max(const Vector3f& a, const Vector3f& b);

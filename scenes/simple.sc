@@ -3,10 +3,10 @@ eye=(0,0,500)
 look_point=(0,0,0)
 up=(0,1,0)
 view_plane_distance=100
-zoom=0.5
+zoom=0.25
 
 DirectionalLight
-direction=(0,0,-1)
+direction=(1,1,-1)
 color=(1,1,1)
 
 ColorTexture
@@ -46,7 +46,7 @@ k=1
 text=cyan
 
 Settings
-subdivs=5
+subdivs=10
 
 Triangle
 a=(-500,-500,0)
