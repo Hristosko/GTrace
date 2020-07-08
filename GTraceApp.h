@@ -19,6 +19,7 @@ private:
 
 	void NewFile(wxCommandEvent& event);
 	void SaveFile(wxCommandEvent& event);
+	void OpenFile(wxCommandEvent& event);
 	void Image(wxCommandEvent& event);
 	void StandardDeviation(wxCommandEvent& event);
 
@@ -37,6 +38,7 @@ enum {
 	TEXT_Main = wxID_HIGHEST + 1,
 	MENU_New,
 	MENU_Save,
+	MENU_Open,
 	MENU_Image,
 	MENU_StDev,
 };
@@ -44,6 +46,7 @@ enum {
 BEGIN_EVENT_TABLE(GTraceMainWindow, wxFrame)
 	EVT_MENU(MENU_New, GTraceMainWindow::NewFile)
 	EVT_MENU(MENU_Save, GTraceMainWindow::SaveFile)
+	EVT_MENU(MENU_Open, GTraceMainWindow::OpenFile)
 	EVT_MENU(MENU_Image, GTraceMainWindow::Image)
 	EVT_MENU(MENU_StDev, GTraceMainWindow::StandardDeviation)
 END_EVENT_TABLE()

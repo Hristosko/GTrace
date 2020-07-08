@@ -37,6 +37,7 @@ GTraceMainWindow::GTraceMainWindow()
 
 	wxMenu* fileMenu = new wxMenu();
 	fileMenu->Append(MENU_New, _("&New"), _("Open a new scene"));
+	fileMenu->Append(MENU_Open, _("&Open"), _("Open a render output"));
 	fileMenu->Append(MENU_Save, _("&Save"), _("Save render output"));
 	this->mainMenu->Append(fileMenu, _("&File"));
 
@@ -93,6 +94,20 @@ void GTraceMainWindow::SaveFile(wxCommandEvent& event) {
 	if (saveDialog->ShowModal() == wxID_OK) {
 		wxString path = saveDialog->GetPath();
 		this->output.save(path.c_str());
+	}
+}
+
+void GTraceMainWindow::OpenFile(wxCommandEvent& event) {
+	wxFileDialog* openDialog = new wxFileDialog(
+		this, _("Open render output"),
+		wxEmptyString, wxEmptyString, wxEmptyString,
+		wxFD_OPEN, wxDefaultPosition
+	);
+
+	if (openDialog->ShowModal() == wxID_OK) {
+		wxString path = openDialog->GetPath();
+		this->output.open(path.c_str());
+		this->rebuildBufferAndRefresh();
 	}
 }
 

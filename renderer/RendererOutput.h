@@ -24,6 +24,7 @@ public:
 	void init();
 
 	void save(const char* path);
+	void open(const char* path);
 
 private:
 	void initImageOutput();
