@@ -37,6 +37,7 @@ GTraceMainWindow::GTraceMainWindow()
 
 	wxMenu* fileMenu = new wxMenu();
 	fileMenu->Append(MENU_New, _("&New"), _("Open a new scene"));
+	fileMenu->Append(MENU_Save, _("&Save"), _("Save render output"));
 	this->mainMenu->Append(fileMenu, _("&File"));
 
 	wxMenu* viewMenu = new wxMenu();
@@ -80,6 +81,18 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 
 		std::thread th(renderNewScene, this->renderSurface, &this->output);
 		th.detach();
+	}
+}
+
+void GTraceMainWindow::SaveFile(wxCommandEvent& event) {
+	wxFileDialog* saveDialog = new wxFileDialog(
+		this, _("Save file as"),
+		wxEmptyString, wxEmptyString, wxEmptyString,
+		wxFD_SAVE, wxDefaultPosition // add overwrite prompt?
+	);
+	if (saveDialog->ShowModal() == wxID_OK) {
+		wxString path = saveDialog->GetPath();
+		LOGINFO(path.c_str());
 	}
 }
 
