@@ -92,7 +92,7 @@ void GTraceMainWindow::SaveFile(wxCommandEvent& event) {
 	);
 	if (saveDialog->ShowModal() == wxID_OK) {
 		wxString path = saveDialog->GetPath();
-		LOGINFO(path.c_str());
+		this->output.save(path.c_str());
 	}
 }
 

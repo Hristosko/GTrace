@@ -23,6 +23,8 @@ public:
 	}
 	void init();
 
+	void save(const char* path);
+
 private:
 	void initImageOutput();
 	void initVarianceOutput();

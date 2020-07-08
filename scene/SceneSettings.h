@@ -18,7 +18,8 @@ struct SceneSettings : public SceneElement {
 	SceneSettings()
 		: width(SCENE_DEFAULT_WIDTH),
 		height(SCENE_DEFAULT_HEIGHT),
-		subdivs(SCENE_DEFAULT_SUBDIVS) {}
+		subdivs(SCENE_DEFAULT_SUBDIVS),
+		background(nullptr) {}
 
 	void parse(std::unordered_map<std::string, std::string>& map) override {
 		SceneParser& parser = getParser();
