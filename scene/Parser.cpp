@@ -1,11 +1,13 @@
 #include "Parser.h"
 #include "../Logger.h"
 #include "../Errors.h"
+#include "../FileUtils.h"
 #include "World.h"
 
 #include <fstream>
 
 #define DELIMER '='
+#define MAX_LINE_LENGTH 200
 
 #include "../geometry/Triangle.h"
 #include "../geometry/Sphere.h"
@@ -29,13 +31,14 @@ static SceneElement* getByName(const std::string& name) {
 	if (name == "Settings")
 		return &getWorld().getSettings();
 
-	LOGERROR("Parsing unknown scene element: ", name);
+	LOGERROR("Parsing unknown scene element: ", name, " length: ", name.size());
 	throw ParseError();
 }
 
-void split(const std::string& src, std::string& a, std::string& b) {
+void split(const char* src, size_t len, std::string& a, std::string& b) {
 	std::string* cur = &a;
-	for (char c : src) {
+	for (size_t i = 0; i < len; ++i) {
+		const char c = src[i];
 		if (c == DELIMER && cur == &a) {
 			cur = &b;
 		}
@@ -54,27 +57,34 @@ static void makeElement(const std::string& obj, std::unordered_map<std::string, 
 }
 
 void SceneParser::parseFile(const char* path) {
-	std::ifstream file(path);
+	FILE* fp;
+	if (0 != fopen_s(&fp, path, "r")) {
+		LOGERROR("Cannot open file: ", path);
+		throw FileError();
+	}
+	FileRAII fpRAII(fp);
 
+	char buffer[MAX_LINE_LENGTH];
 	std::unordered_map<std::string, std::string> fields;
-	std::string line;
 	std::string curObject;
 	bool atObject = false;
-	while (std::getline(file, line)) {
+
+	int len;
+	while ((len = readLine(buffer, MAX_LINE_LENGTH, fp)) >= 0) {
 		if (!atObject) {
-			curObject = line;
-			if (curObject != "") {
+			if (len != 0) {
 				atObject = true;
+				curObject = buffer;
 			}
 		}
 		else {
-			if (line == "") {
+			if (len == 0) {
 				makeElement(curObject, fields);
 				atObject = false;
 				continue;
 			}
 			std::string a, b;
-			split(line, a, b);
+			split(buffer, len, a, b);
 			fields.insert(std::make_pair(std::move(a), std::move(b)));
 		}
 	}
