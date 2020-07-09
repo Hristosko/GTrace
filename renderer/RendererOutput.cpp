@@ -1,8 +1,8 @@
 #include "RendererOutput.h"
 #include "../scene/World.h"
 #include "../Logger.h"
-
-#include <stdio.h>
+#include "../FileUtils.h"
+#include "../Errors.h"
 
 #define CURRENT_VERSION UINT32_C(1)
 
@@ -15,39 +15,31 @@ void RendererOutput::save(const char* path) {
 	FILE* fp;
 	if (0 != fopen_s(&fp, path, "wb")) {
 		LOGERROR("Cannot open file: ", path);
-		return;
+		throw FileError();
 	}
-	size_t s;
+	FileRAII fpRAII(fp);
 	const uint32_t version = CURRENT_VERSION;
-	s = fwrite(&version, sizeof(version), 1, fp);
-	LOGINFO(s);
+	writeBin(&version, sizeof(version), 1, fp);
+	
 	// write image size
 	const uint32_t width = getWorld().getSettings().width;
 	const uint32_t height = getWorld().getSettings().height;
 
-	s = fwrite(&width, sizeof(uint32_t), 1, fp);
-	LOGINFO(s);
+	writeBin(&width, sizeof(uint32_t), 1, fp);
+	writeBin(&height, sizeof(uint32_t), 1, fp);
 
-	s = fwrite(&height, sizeof(uint32_t), 1, fp);
-	LOGINFO(s);
 	uint16_t cnt = RendererOutputType::Count;
-	fwrite(&cnt, sizeof(cnt), 1, fp);
+	writeBin(&cnt, sizeof(cnt), 1, fp);
 
 	// write image
 	cnt = RendererOutputType::Image;
-	s = fwrite(&cnt, sizeof(cnt), 1, fp);
-	LOGINFO(s);
-	s = fwrite(outputs[RendererOutputType::Image].getBuffer(), sizeof(ColorResult), width * height, fp);
-	LOGINFO(s);
+	writeBin(&cnt, sizeof(cnt), 1, fp);
+	writeBin(outputs[RendererOutputType::Image].getBuffer(), sizeof(ColorResult), width * height, fp);
 
 	//write variance
 	cnt = RendererOutputType::Variance;
-	s = fwrite(&cnt, sizeof(cnt), 1, fp);
-	LOGINFO(s);
-	s = fwrite(outputs[RendererOutputType::Variance].getBuffer(), sizeof(VarianceResult), width * height, fp);
-	LOGINFO(s);
-
-	fclose(fp);
+	writeBin(&cnt, sizeof(cnt), 1, fp);
+	writeBin(outputs[RendererOutputType::Variance].getBuffer(), sizeof(VarianceResult), width * height, fp);
 }
 
 void RendererOutput::open(const char* path) {
