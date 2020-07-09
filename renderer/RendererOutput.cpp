@@ -46,21 +46,17 @@ void RendererOutput::open(const char* path) {
 	FILE* fp;
 	if (0 != fopen_s(&fp, path, "rb")) {
 		LOGERROR("Cannot open file: ", path);
-		return;
+		throw FileError();
 	}
 	uint32_t version; // ignored
-	size_t s;
-	s = fread(&version, sizeof(version), 1, fp);
-	LOGINFO(s);
+	readBin(&version, sizeof(version), 1, fp);
 	LOGINFO("opening grt file, version: ", version);
 	// write image size
 	uint32_t width;
 	uint32_t height;
 
-	s = fread(&width, sizeof(width), 1, fp);
-	LOGINFO(s);
-	s = fread(&height, sizeof(height), 1, fp);
-	LOGINFO(s);
+	readBin(&width, sizeof(width), 1, fp);
+	readBin(&height, sizeof(height), 1, fp);
 	LOGINFO("scene width: ", width, " scene height: ", height);
 	getWorld().getSettings().width = width;
 	getWorld().getSettings().height = height;
@@ -69,26 +65,21 @@ void RendererOutput::open(const char* path) {
 
 	uint16_t cnt;
 	bool fail = false;
-	s = fread(&cnt, sizeof(cnt), 1, fp);
-	LOGINFO(s);
+	readBin(&cnt, sizeof(cnt), 1, fp);
 	LOGINFO("output count: ", cnt);
 	for (uint16_t i = 0; i < cnt; ++i && !fail) {
 		uint16_t type;
-		s = fread(&type, sizeof(type), 1, fp);
-		LOGINFO(s);
+		readBin(&type, sizeof(type), 1, fp);
 		LOGINFO("new render output: ", type);
 		switch (type)
 		{
 		case RendererOutputType::Image:
-			s = 0;
-			s = fread(this->getOutput(RendererOutputType::Image).getBuffer(),
+			readBin(this->getOutput(RendererOutputType::Image).getBuffer(),
 									sizeof(ColorResult), size, fp);
-			LOGINFO(s);
 			break;
 		case RendererOutputType::Variance:
-			s = fread(this->getOutput(RendererOutputType::Variance).getBuffer(),
+			readBin(this->getOutput(RendererOutputType::Variance).getBuffer(),
 				sizeof(VarianceResult), size, fp);
-			LOGINFO(s);
 			break;
 		default:
 			LOGERROR("Unknown render output.");
@@ -96,8 +87,6 @@ void RendererOutput::open(const char* path) {
 			break;
 		}
 	}
-
-	fclose(fp);
 }
 
 void RendererOutput::initImageOutput() {
