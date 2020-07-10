@@ -25,6 +25,19 @@ ColorTexture
 name=cyan
 color=(0,1,1)
 
+ColorTexture
+name=white
+color=(1,1,1)
+
+ColorTexture
+name=black
+color=(0,0,0)
+
+NoiseTexture
+name=noise
+text1=white
+text2=black
+
 MatteMaterial
 name=mat_green
 k=1
@@ -41,9 +54,9 @@ k=1
 text=blue
 
 MatteMaterial
-name=mat_cyan
+name=mat_noise
 k=1
-text=cyan
+text=noise
 
 Settings
 subdivs=10
@@ -57,7 +70,7 @@ mat=mat_red
 Sphere
 center=(0,0,200)
 radius=100
-mat=mat_cyan
+mat=mat_noise
 
 Sphere
 center=(400,400,-400)

@@ -38,7 +38,7 @@ SolidNoise::SolidNoise() {
 	}
 }
 
-float SolidNoise::perlinNoise(const Vector3f& p) const {
+float SolidNoise::perlinNoise(const Vector3f& p) const{
 	const int fi = static_cast<int>(floor(p.x()));
 	const int fj = static_cast<int>(floor(p.y()));
 	const int fk = static_cast<int>(floor(p.z()));
@@ -63,8 +63,7 @@ float SolidNoise::omega(float t) const {
 	t = fabsf(t);
 	const float t2 = t * t;
 	const float t4 = t2 * t2;
-	const float t6 = t4 * t2;
-	return -6.f * t6 + 15.f * t4 - 10.f * t * t2 + 1;
+	return -6.f * t4 * t + 15.f * t4 - 10.f * t * t2 + 1;
 }
 
 Vector3f SolidNoise::gamma(int i, int j, int k) const {

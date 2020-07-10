@@ -12,6 +12,7 @@
 #include "../geometry/Triangle.h"
 #include "../geometry/Sphere.h"
 #include "../texture/ColorTexture.h"
+#include "../texture/NoiseTexture.h"
 #include "../material/MatteMaterial.h"
 #include "../light/DirectionalLight.h"
 
@@ -22,6 +23,8 @@ static SceneElement* getByName(const std::string& name) {
 		return new Sphere();
 	if (name == "ColorTexture")
 		return new ColorTexture();
+	if (name == "NoiseTexture")
+		return new NoiseTexture();
 	if (name == "MatteMaterial")
 		return new MatteMaterial();
 	if (name == "DirectionalLight")
