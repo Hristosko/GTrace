@@ -2,7 +2,6 @@
 
 #include "Texture.h"
 
-#include <iostream>
 class ColorTexture : public Texture {
 public:
 	virtual void parse(std::unordered_map<std::string, std::string>& map) override {
