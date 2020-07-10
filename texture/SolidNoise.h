@@ -9,7 +9,7 @@ class SolidNoise {
 public:
 	SolidNoise();
 
-	float perlinNoise(const Vector3f& p);
+	float perlinNoise(const Vector3f& p) const;
 private:
 	float omega(float t) const;
 	Vector3f gamma(int i, int j, int k) const;

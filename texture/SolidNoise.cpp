@@ -38,7 +38,7 @@ SolidNoise::SolidNoise() {
 	}
 }
 
-float SolidNoise::perlinNoise(const Vector3f& p) {
+float SolidNoise::perlinNoise(const Vector3f& p) const {
 	const int fi = static_cast<int>(floor(p.x()));
 	const int fj = static_cast<int>(floor(p.y()));
 	const int fk = static_cast<int>(floor(p.z()));

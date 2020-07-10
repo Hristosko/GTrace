@@ -13,3 +13,9 @@ class Texture : public SceneElement {
 public:
 	virtual Vector3f getValue(const Vector2f& uv, const Vector3f& p) const = 0;
 };
+
+inline Vector3f getTextureValue(const Texture* text, const Vector2f& uv, const Vector3f& p) {
+	return (text == nullptr) ?
+		DEFAULT_TEXTURE_VALUE :
+		text->getValue(uv, p);
+}
