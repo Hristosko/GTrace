@@ -4,7 +4,8 @@
 #include "../material/Material.h"
 #include <vector>
 
-struct Mesh {
+class Mesh : public Shape {
+private:
 	Material* mat;
 	std::vector<Vector3fData> vertices;
 };

@@ -3,12 +3,12 @@
 
 void Piramid::parse(std::unordered_map<std::string, std::string>& map) {
 	SceneParser& p = getParser();
-	this->mesh.vertices.reserve(4);
-	p.parseVector3fAndStore(map, "vert1", this->mesh.vertices[0]);
-	p.parseVector3fAndStore(map, "vert2", this->mesh.vertices[1]);
-	p.parseVector3fAndStore(map, "vert3", this->mesh.vertices[2]);
-	p.parseVector3fAndStore(map, "vert4", this->mesh.vertices[3]);
-	p.parseMaterialAndStore(map, "mat", this->mesh.mat);
+	this->vertices.reserve(4);
+	p.parseVector3fAndStore(map, "vert1", this->vertices[0]);
+	p.parseVector3fAndStore(map, "vert2", this->vertices[1]);
+	p.parseVector3fAndStore(map, "vert3", this->vertices[2]);
+	p.parseVector3fAndStore(map, "vert4", this->vertices[3]);
+	p.parseMaterialAndStore(map, "mat", this->mat);
 
 	this->faces[0] = { 0,1,2 };
 	this->faces[1] = { 3,2,1 };
@@ -19,13 +19,13 @@ void Piramid::parse(std::unordered_map<std::string, std::string>& map) {
 bool Piramid::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
 	bool isHit = false;
 	for (int i = 0; i < facesCount; ++i) {
-		const Triangle tr(this->mesh.vertices[this->faces[i].i],
-			this->mesh.vertices[this->faces[i].j],
-			this->mesh.vertices[this->faces[i].k]);
+		const Triangle tr(this->vertices[this->faces[i].i],
+			this->vertices[this->faces[i].j],
+			this->vertices[this->faces[i].k]);
 		if (tr.hit(ray, tmin, tmax, time, rec)) {
 			isHit = true;
 			tmax = rec.t;
-			rec.mat = this->mesh.mat;
+			rec.mat = this->mat;
 		}
 	}
 	return isHit;
