@@ -8,6 +8,9 @@
 #define COMMENT_START '#'
 #define MAX_LINE_LENGTH 200
 
+#define FALSE_STRING "false"
+#define TRUE_STRING "true"
+
 #include "../geometry/Triangle.h"
 #include "../geometry/Sphere.h"
 #include "../geometry/Piramid.h"
@@ -176,7 +179,7 @@ void SceneParser::parsefloatAndStore(std::unordered_map<std::string, std::string
 void SceneParser::parseTextureAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Texture*& res) const {
 	auto it = map.find(name);
 	if (it == map.end()) {
-		LOGWARNING("Missning texture: ", name, " object: ", curObject, " line: ", curObjLine);
+		LOGWARNING("Missing texture: ", name, " object: ", curObject, " line: ", curObjLine);
 		res = nullptr;
 	}
 	else res = getWorld().getTextureByName(it->second);
@@ -185,10 +188,24 @@ void SceneParser::parseTextureAndStore(std::unordered_map<std::string, std::stri
 void SceneParser::parseMaterialAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Material*& res) const {
 	auto it = map.find(name);
 	if (it == map.end()) {
-		LOGWARNING("Missning texture: ", name, " object: ", curObject, " line: ", curObjLine);
+		LOGWARNING("Missing texture: ", name, " object: ", curObject, " line: ", curObjLine);
 		res = nullptr;
 	}
 	else res = getWorld().getMaterialByName(it->second);
+}
+
+void SceneParser::parseBoolAndStore(std::unordered_map<std::string, std::string>& map, const char* name, bool& res) const {
+	auto it = map.find(name);
+	if (it == map.end()) {
+		LOGWARNING("Missing boolean: ", name, " object: ", curObject, " line: ", curObjLine, " Setting to default false");
+		res = false;
+	}
+	else if (it->second == FALSE_STRING) res = false;
+	else if (it->second == TRUE_STRING) res = true;
+	else {
+		LOGWARNING("Unknown boolean: ", it->second, " object: ", curObject, " line: ", curObjLine, " Setting to default false");
+		res = false;
+	}
 }
 
 SceneParser& getParser() {

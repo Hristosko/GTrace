@@ -30,6 +30,7 @@ public:
 	void parsefloatAndStore(std::unordered_map<std::string, std::string>& map, const char* name, float& res) const;
 	void parseTextureAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Texture*& res) const;
 	void parseMaterialAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Material*& res) const;
+	void parseBoolAndStore(std::unordered_map<std::string, std::string>& map, const char* name, bool& res) const;
 private:
 	std::unordered_map<std::string, ElementParseFunc> elementParsers;
 };
