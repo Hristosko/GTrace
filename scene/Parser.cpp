@@ -29,6 +29,8 @@ static SceneElement* getByName(const std::string& name) {
 		return new Triangle();
 	if (name == "Sphere")
 		return new Sphere();
+	if (name == "Mesh")
+		return new Mesh();
 	if (name == "Piramid")
 		return new Piramid();
 	if (name == "ColorTexture")

@@ -9,6 +9,9 @@ class Mesh : public Shape {
 public:
 	virtual void parse(std::unordered_map<std::string, std::string>& map) override;
 	virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const override;
+
+private:
+	void loadFromObjFile(const char* path, bool useNormals);
 private:
 	Material* mat;
 	std::deque<Vector3fData> vertices;

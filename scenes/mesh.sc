@@ -33,3 +33,8 @@ vert2=(0,100,0)
 vert3=(0,-100,0)
 vert4=(0,0,300)
 mat=mat_green
+
+Mesh
+mat=mat_green
+use_normals=true
+file=C:\code\Gtrace\Gtrace\scenes\bunny.obj
