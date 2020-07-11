@@ -22,7 +22,8 @@ bool GTraceApp::OnInit() {
 #define DEFAULT_HEIGHT 600
 
 GTraceMainWindow::GTraceMainWindow()
-	: wxFrame(nullptr, wxID_ANY, "GTrace", wxPoint(10, 10), wxSize(DEFAULT_WIDTH, DEFAULT_HEIGHT)),
+	: outputReady(false),
+	wxFrame(nullptr, wxID_ANY, "GTrace", wxPoint(10, 10), wxSize(DEFAULT_WIDTH, DEFAULT_HEIGHT)),
 	renderSurface(nullptr),
 	display(output)
 {
@@ -61,13 +62,15 @@ void GTraceMainWindow::OnElementRendered(wxCommandEvent& event) {
 	this->rebuildBufferAndRefresh();
 }
 
-static void renderNewScene(wxWindow* renderSurface, RendererOutput* output) {
+static void renderNewScene(wxWindow* renderSurface, RendererOutput* output, bool* setWhenReady) {
 		output->init();
 		Renderer renderer(renderSurface, *output);
 		renderer.render();
+		*setWhenReady = true;
 }
 
 void GTraceMainWindow::NewFile(wxCommandEvent& event) {
+	this->outputReady = false;
 	wxFileDialog* openDialog = new wxFileDialog(
 		this,	_("Choose a scene to load"),
 		wxEmptyString, wxEmptyString, wxEmptyString,
@@ -80,12 +83,14 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 		SceneParser parser = getParser();
 		parser.parseFile(path.c_str());
 
-		std::thread th(renderNewScene, this->renderSurface, &this->output);
+		std::thread th(renderNewScene, this->renderSurface, &this->output, &this->outputReady);
 		th.detach();
 	}
 }
 
 void GTraceMainWindow::SaveFile(wxCommandEvent& event) {
+	if (this->outputReady == false) return;
+
 	wxFileDialog* saveDialog = new wxFileDialog(
 		this, _("Save file as"),
 		wxEmptyString, wxEmptyString, wxEmptyString,
@@ -106,17 +111,21 @@ void GTraceMainWindow::OpenFile(wxCommandEvent& event) {
 
 	if (openDialog->ShowModal() == wxID_OK) {
 		wxString path = openDialog->GetPath();
+		this->outputReady = false;
 		this->output.open(path.c_str());
+		this->outputReady = true;
 		this->rebuildBufferAndRefresh();
 	}
 }
 
 void GTraceMainWindow::Image(wxCommandEvent& event) {
+	if (this->outputReady == false) return;
 	this->display.setDisplayType(RendererOutputType::Image);
 	this->rebuildBufferAndRefresh();
 }
 
 void GTraceMainWindow::StandardDeviation(wxCommandEvent& event) {
+	if (this->outputReady == false) return;
 	this->display.setDisplayType(RendererOutputType::Variance);
 	this->rebuildBufferAndRefresh();
 }

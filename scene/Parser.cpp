@@ -146,7 +146,7 @@ float SceneParser::parsefloat(const std::string& str) const {
 void SceneParser::parseVector3fAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Vector3fData& res) const {
 	auto it = map.find(name);
 	if (it == map.end()) {
-		LOGINFO("Missing parameter: ", name, " object: ", curObject, " line: ", curObjLine);
+		LOGWARNING("Missing parameter: ", name, " object: ", curObject, " line: ", curObjLine);
 		return;
 	}
 	res = this->parseVector3f(it->second);
@@ -155,7 +155,7 @@ void SceneParser::parseVector3fAndStore(std::unordered_map<std::string, std::str
 void SceneParser::parseuint32AndStore(std::unordered_map<std::string, std::string>& map, const char* name, uint32_t& res) const {
 	auto it = map.find(name);
 	if (it == map.end()) {
-		LOGINFO("Missing parameter: ", name, " object: ", curObject, " line: ", curObjLine);
+		LOGWARNING("Missing parameter: ", name, " object: ", curObject, " line: ", curObjLine);
 		return;
 	}
 	res = this->parseuint32(it->second);
@@ -164,7 +164,7 @@ void SceneParser::parseuint32AndStore(std::unordered_map<std::string, std::strin
 void SceneParser::parsefloatAndStore(std::unordered_map<std::string, std::string>& map, const char* name, float& res) const {
 	auto it = map.find(name);
 	if (it == map.end()) {
-		LOGINFO("Missing parameter: ", name, " object: ", curObject, " line: ", curObjLine);
+		LOGWARNING("Missing parameter: ", name, " object: ", curObject, " line: ", curObjLine);
 		return;
 	}
 	res = this->parsefloat(it->second);
@@ -173,7 +173,7 @@ void SceneParser::parsefloatAndStore(std::unordered_map<std::string, std::string
 void SceneParser::parseTextureAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Texture*& res) const {
 	auto it = map.find(name);
 	if (it == map.end()) {
-		LOGINFO("Missning texture: ", name, " object: ", curObject, " line: ", curObjLine);
+		LOGWARNING("Missning texture: ", name, " object: ", curObject, " line: ", curObjLine);
 		res = nullptr;
 	}
 	else res = getWorld().getTextureByName(it->second);
@@ -182,7 +182,7 @@ void SceneParser::parseTextureAndStore(std::unordered_map<std::string, std::stri
 void SceneParser::parseMaterialAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Material*& res) const {
 	auto it = map.find(name);
 	if (it == map.end()) {
-		LOGINFO("Missning texture: ", name, " object: ", curObject, " line: ", curObjLine);
+		LOGWARNING("Missning texture: ", name, " object: ", curObject, " line: ", curObjLine);
 		res = nullptr;
 	}
 	else res = getWorld().getMaterialByName(it->second);

@@ -27,6 +27,7 @@ private:
 
 	DECLARE_EVENT_TABLE()
 private:
+	bool outputReady;
 	wxWindow* renderSurface;
 	wxMenuBar* mainMenu;
 	wxBitmap bitmap;
