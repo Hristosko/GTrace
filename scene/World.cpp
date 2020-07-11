@@ -2,6 +2,7 @@
 
 #include "../Logger.h"
 #include "../geometry/Triangle.h"
+#include "../geometry/Mesh.h"
 World::World() {}
 
 World::~World() {
@@ -9,6 +10,9 @@ World::~World() {
 }
 
 void World::clear() {
+	for (Mesh* mesh : this->meshes) delete mesh;
+	this->meshes.clear();
+
 	for (Shape* shape : this->shapes) delete shape;
 	this->shapes.clear();
 
@@ -25,7 +29,11 @@ void World::clear() {
 }
 
 void World::addElemenet(SceneElement* el, const std::unordered_map<std::string, std::string>& map) {
-	if (Shape* x = dynamic_cast<Shape*>(el)) {
+	// The mesh will store its elements as shapes, the mesh is only kept alive here
+	if (Mesh* x = dynamic_cast<Mesh*>(el)) {
+		this->meshes.push_back(x);
+	}
+	else if (Shape* x = dynamic_cast<Shape*>(el)) {
 		this->add(x);
 	}
 	else if (Texture * x = dynamic_cast<Texture*>(el)) {

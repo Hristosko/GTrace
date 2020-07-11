@@ -11,6 +11,8 @@
 #include "SceneSettings.h"
 #include "Parser.h"
 
+class Mesh;
+
 class World {
 public:
 	World();
@@ -36,6 +38,7 @@ private:
 	std::unordered_map<std::string, Material*> materials;
 	std::vector<Shape*> shapes;
 	std::vector<Light*> lights;
+	std::vector<Mesh*> meshes;
 	SceneSettings settings;
 	Camera camera;
 };

@@ -4,6 +4,7 @@
 #include "../StringUtils.h"
 #include "../FileUtils.h"
 #include "Triangle.h"
+#include "../scene/World.h"
 
 #define OBJ_FILE_EXTENSION ".obj"
 
@@ -37,23 +38,6 @@ static void checkIfNormalExists(const std::deque<Vector3fData>& data, unsigned i
 		LOGWARNING("Unknown normal: ", idx);
 }
 
-bool Mesh::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
-	float tval, beta, gamma;
-	bool hasHit = false;
-	for (const MeshTriangle& tr : this->faces) {
-		const Vector3f a(this->vertices[tr.i]);
-		const Vector3f b(this->vertices[tr.j]);
-		const Vector3f c(this->vertices[tr.k]);
-		if (Triangle::hit(a, b, c, ray, tmin, tmax, beta, gamma, tval)) {
-			hasHit = true;
-			tmax = rec.t = tval;
-			rec.normal = normalize(cross(b - a, c - a));
-		}
-	}
-	if (hasHit) rec.mat = this->mat;
-	return hasHit;
-}
-
 void Mesh::loadFromObjFile(const char* path, bool useNormals) {
 	FILE* fp;
 	if (0 != fopen_s(&fp, path, "r")) {
@@ -67,6 +51,8 @@ void Mesh::loadFromObjFile(const char* path, bool useNormals) {
 	int res;
 	float a, b, c;
 	unsigned i, j, k, ni, nj, nk;
+
+	uint32_t faces = 0, facesNormals = 0;
 	while ((len = readLine(buffer, OBJ_MAX_LINE_LENGTH, fp)) >= 0) {
 		if (len == 0 || buffer[0] == OBJ_COMMENT) continue;
 		res = sscanf_s(buffer, OBJ_VERTEX_FORMAT, &a, &b, &c);
@@ -84,17 +70,22 @@ void Mesh::loadFromObjFile(const char* path, bool useNormals) {
 		res = sscanf_s(buffer, OBJ_FACE_FORMAT, &i, &ni, &j, &nj, &k, &nk);
 		if (res == 6) {
 			if (useNormals) {
+				++facesNormals;
 				checkIfNormalExists(this->normals, ni);
 				checkIfNormalExists(this->normals, nj);
 				checkIfNormalExists(this->normals, nk);
 
-				this->facesNormals.push_back({ ni-1, nj-1, nk-1 });
+				//this->facesNormals.push_back({ ni-1, nj-1, nk-1 });
 			}
+			++faces;
 			checkIfVertexExists(this->vertices, i);
 			checkIfVertexExists(this->vertices, j);
 			checkIfVertexExists(this->vertices, k);
 			
-			this->faces.push_back({ i-1, j-1, k-1 });
+			// add the new triangle to the world
+			// The indexing in the obj file starts from 1
+			MeshElement* el = new MeshElement(this, i-1, j-1, k-1);
+			getWorld().add(el);
 			continue;
 		}
 
@@ -103,6 +94,21 @@ void Mesh::loadFromObjFile(const char* path, bool useNormals) {
 	LOGINFO("Parsed OBJ file ", path,
 		" Vertecies: ", this->vertices.size(),
 		" Normals: ", this->normals.size(),
-		" Faces: ", this->faces.size(),
-		" Faces Normals: ", this->facesNormals.size());
+		" Faces: ", faces,
+		" Faces Normals: ", facesNormals);
+}
+
+bool MeshElement::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
+	float tval, beta, gamma;
+	bool hasHit = false;
+	const Vector3f a(this->mesh->vertices[tr.i]);
+	const Vector3f b(this->mesh->vertices[tr.j]);
+	const Vector3f c(this->mesh->vertices[tr.k]);
+	if (Triangle::hit(a, b, c, ray, tmin, tmax, beta, gamma, tval)) {
+		hasHit = true;
+		tmax = rec.t = tval;
+		rec.normal = normalize(cross(b - a, c - a));
+	}
+	if (hasHit) rec.mat = this->mesh->mat;
+	return hasHit;
 }

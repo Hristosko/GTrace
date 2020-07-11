@@ -1,11 +1,11 @@
 # Scene used for testing meshes
 
 Camera
-eye=(500,0,-100)
+eye=(-500,0,-100)
 look_point=(0,0,0)
-up=(0,0,-1)
+up=(0,-1,0)
 view_plane_distance=100
-zoom=0.25
+zoom=0.0025
 
 DirectionalLight
 direction=(-1,0,0)
@@ -25,7 +25,7 @@ k=1
 text=green
 
 Settings
-subdivs=10
+subdivs=1
 
 Mesh
 mat=mat_green
