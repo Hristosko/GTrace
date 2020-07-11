@@ -46,7 +46,7 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 			const float dx = ((float)sx + this->rng.get()) * denom - 0.5f;
 			const float dy = ((float)sy + this->rng.get()) * denom - 0.5f;
 
-			Ray ray = camera.castRay(camx + dx, camy + dy);
+			Ray ray = camera.castRay(camx + dx, -(camy + dy));
 			ray.renderer = this;
 			HitRecord rec;
 			rec.mat = getWorld().getSettings().background;

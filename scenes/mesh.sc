@@ -1,9 +1,9 @@
 # Scene used for testing meshes
 
 Camera
-eye=(-500,0,-100)
+eye=(-500,0,0)
 look_point=(0,0,0)
-up=(0,-1,0)
+up=(0,1,0)
 view_plane_distance=100
 zoom=0.0025
 
