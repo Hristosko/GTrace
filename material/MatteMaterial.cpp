@@ -19,10 +19,8 @@ Vector3f MatteMaterial::shade(const HitRecord& rec, const Ray& ray) const {
 	Vector3f res;
 	for (Light* l : lights) {
 		l->radiance(wi, lightColor);
-		const float ndotwi = dot(rec.normal, wi);
-		if (ndotwi < 0.f) { // this depends on how we define the normal, currently the normal "comes out" of the object
-			res += -k * color * lightColor * ndotwi;
-		}
+		const float ndotwi = fabsf(dot(rec.normal, wi));
+		res += k * color * lightColor * ndotwi;
 	}
 	return clamp(res, 0.f, 1.f);
 }

@@ -1,16 +1,14 @@
 #pragma once
 
 #include "Shape.h"
+#include "Mesh.h"
 
-class Triangle : public Shape {
+class Piramid : public Shape {
 public:
-	Triangle() = default;
-	Triangle(const Vector3fData& a, const Vector3fData& b, const Vector3fData& c)
-		: a(a), b(b), c(c), mat(nullptr) {}
-
+	static constexpr int facesCount = 4;
 	virtual void parse(std::unordered_map<std::string, std::string>& map) override;
 	virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const override;
 private:
-	Vector3fData a, b, c;
-	Material* mat;
+	Mesh mesh;
+	MeshTriangle faces[facesCount];
 };
