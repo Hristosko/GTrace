@@ -29,12 +29,12 @@ void writeBin(const void* buffer, size_t elementSize, size_t elementCount, FILE*
 int readLine(char* buffer, int n, FILE* fp) {
 	char* res = fgets(buffer, n, fp);
 	if (res == 0) return -1;
-	const size_t size = strnlen_s(buffer, n);
+	size_t size = strnlen_s(buffer, n);
 	if (size == n && buffer[n - 1] != '\0') {
 		LOGERROR("Too long line. Maximum length is: ", n);
 		throw FileWriteError();
 	}
 	// remove the new line symbol
-	res[size - 1] = '\0';
-	return size - 1;
+	if (res[size - 1] == '\n') res[--size] = '\0';
+	return size;
 }
