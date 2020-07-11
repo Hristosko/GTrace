@@ -5,6 +5,10 @@
 #include "Shape.h"
 #include <deque>
 
+struct MeshTriangle {
+	uint32_t i, j, k;
+};
+
 class Mesh : public Shape {
 public:
 	virtual void parse(std::unordered_map<std::string, std::string>& map) override;
@@ -16,8 +20,6 @@ private:
 	Material* mat;
 	std::deque<Vector3fData> vertices;
 	std::deque<Vector3fData> normals;
-};
-
-struct MeshTriangle {
-	uint32_t i, j, k;
+	std::deque<MeshTriangle> faces;
+	std::deque<MeshTriangle> facesNormals;
 };

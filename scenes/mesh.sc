@@ -36,5 +36,5 @@ mat=mat_green
 
 Mesh
 mat=mat_green
-use_normals=true
+use_normals=false
 file=C:\code\Gtrace\Gtrace\scenes\bunny.obj
