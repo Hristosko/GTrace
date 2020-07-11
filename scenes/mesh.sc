@@ -1,3 +1,5 @@
+# Scene used for testing meshes
+
 Camera
 eye=(500,0,-100)
 look_point=(0,0,0)

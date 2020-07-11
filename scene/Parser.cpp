@@ -4,9 +4,8 @@
 #include "../FileUtils.h"
 #include "World.h"
 
-#include <fstream>
-
 #define DELIMER '='
+#define COMMENT_START '#'
 #define MAX_LINE_LENGTH 200
 
 #include "../geometry/Triangle.h"
@@ -83,6 +82,7 @@ void SceneParser::parseFile(const char* path) {
 	int len;
 	while ((len = readLine(buffer, MAX_LINE_LENGTH, fp)) >= 0) {
 		++line;
+		if (buffer[0] == COMMENT_START) continue;
 		if (!atObject) {
 			if (len != 0) {
 				atObject = true;
