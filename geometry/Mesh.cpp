@@ -3,6 +3,7 @@
 #include "../Errors.h"
 #include "../StringUtils.h"
 #include "../FileUtils.h"
+#include "Triangle.h"
 
 #define OBJ_FILE_EXTENSION ".obj"
 
@@ -26,18 +27,31 @@ void Mesh::parse(std::unordered_map<std::string, std::string>& map) {
 	if (endsWith(it->second, OBJ_FILE_EXTENSION)) this->loadFromObjFile(it->second.c_str(), useNormals);
 }
 
-bool Mesh::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
-	return false;
-}
-
-static bool checkIfVertexExists(std::deque<Vector3fData>& data, unsigned idx) {
+static void checkIfVertexExists(const std::deque<Vector3fData>& data, unsigned idx) {
 	if (data.size() < idx)
 		LOGWARNING("Unknown vertex: ", idx);
 }
 
-static bool checkIfNormalExists(std::deque<Vector3fData>& data, unsigned idx) {
+static void checkIfNormalExists(const std::deque<Vector3fData>& data, unsigned idx) {
 	if (data.size() < idx)
 		LOGWARNING("Unknown normal: ", idx);
+}
+
+bool Mesh::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
+	float tval, beta, gamma;
+	bool hasHit = false;
+	for (const MeshTriangle& tr : this->faces) {
+		const Vector3f a(this->vertices[tr.i]);
+		const Vector3f b(this->vertices[tr.j]);
+		const Vector3f c(this->vertices[tr.k]);
+		if (Triangle::hit(a, b, c, ray, tmin, tmax, beta, gamma, tval)) {
+			hasHit = true;
+			tmax = rec.t = tval;
+			rec.normal = normalize(cross(b - a, c - a));
+		}
+	}
+	if (hasHit) rec.mat = this->mat;
+	return hasHit;
 }
 
 void Mesh::loadFromObjFile(const char* path, bool useNormals) {
@@ -74,13 +88,13 @@ void Mesh::loadFromObjFile(const char* path, bool useNormals) {
 				checkIfNormalExists(this->normals, nj);
 				checkIfNormalExists(this->normals, nk);
 
-				this->facesNormals.push_back({ ni, nj, nk });
+				this->facesNormals.push_back({ ni-1, nj-1, nk-1 });
 			}
 			checkIfVertexExists(this->vertices, i);
 			checkIfVertexExists(this->vertices, j);
 			checkIfVertexExists(this->vertices, k);
 			
-			this->faces.push_back({ i, j, k });
+			this->faces.push_back({ i-1, j-1, k-1 });
 			continue;
 		}
 

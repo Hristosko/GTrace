@@ -27,13 +27,6 @@ text=green
 Settings
 subdivs=10
 
-Piramid
-vert1=(200,0,0)
-vert2=(0,100,0)
-vert3=(0,-100,0)
-vert4=(0,0,300)
-mat=mat_green
-
 Mesh
 mat=mat_green
 use_normals=false
