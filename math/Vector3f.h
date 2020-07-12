@@ -15,6 +15,11 @@ struct Vector3fData {
 	Vector3fData(float x, float y, float z) : x(x), y(y), z(z) {}
 };
 
+union MM128 {
+	__m128 m128;
+	float f[4];
+};
+
 class Vector3f {
 private:
 	Vector3f(__m128 v) { this->vec = v; }
@@ -37,12 +42,17 @@ public:
 		return reinterpret_cast<float&>(res);
 	}
 	Vector3fData data() const {
-		return Vector3fData(this->x(), this->y(), this->z());
+		MM128 mm;
+		mm.m128 = this->vec;
+		return Vector3fData(mm.f[0], mm.f[1], mm.f[2]);
 	}
 
 	friend Vector3f min(const Vector3f& a, const Vector3f& b);
 	friend Vector3f max(const Vector3f& a, const Vector3f& b);
 	friend Vector3f clamp(const Vector3f& a, const Vector3f& low, const Vector3f up);
+
+	friend float maxElement(const Vector3f& a, float b);
+	friend float minElement(const Vector3f& a, float b);
 
 	Vector3f operator-() const {
 		return _mm_sub_ps(_mm_setzero_ps(), this->vec);
@@ -172,4 +182,30 @@ inline Vector3f normalize(const Vector3f& v) {
 	Vector3f res = v;
 	res.normalize();
 	return res;
+}
+
+inline float maxElement(const Vector3f& a, float b) {
+	MM128 mm;
+	mm.m128 = a.vec;
+	mm.f[3] = b;
+	// contains the elements of a and b as 4-th element
+	const __m128 vec = mm.m128;
+	const __m128 rotBy1 = _mm_shuffle_ps(vec, vec, _MM_SHUFFLE(2, 1, 0, 3));
+	const __m128 vec2 = _mm_max_ps(vec, rotBy1);
+	const __m128 rotBy2 = _mm_shuffle_ps(vec2, vec2, _MM_SHUFFLE(1, 0, 3, 2));
+	const __m128 vecMax = _mm_max_ps(vec2, rotBy2);
+	return _mm_cvtss_f32(vecMax);
+}
+
+inline float minElement(const Vector3f& a, float b) {
+	MM128 mm;
+	mm.m128 = a.vec;
+	mm.f[3] = b;
+	// contains the elements of a and b as 4-th element
+	const __m128 vec = mm.m128;
+	const __m128 rotBy1 = _mm_shuffle_ps(vec, vec, _MM_SHUFFLE(2, 1, 0, 3));
+	const __m128 vec2 = _mm_min_ps(vec, rotBy1);
+	const __m128 rotBy2 = _mm_shuffle_ps(vec2, vec2, _MM_SHUFFLE(1, 0, 3, 2));
+	const __m128 vecMin = _mm_min_ps(vec2, rotBy2);
+	return _mm_cvtss_f32(vecMin);
 }

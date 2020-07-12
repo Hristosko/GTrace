@@ -6,12 +6,13 @@ class BBox {
 public:
 	BBox() = default;
 	BBox(const Vector3f& bottom, const Vector3f& top)
-		: bottom(bottom), top(top) {}
+		: bottom(bottom.data()), top(top.data()) {}
 
+	static BBox bound(const BBox& a, const BBox& b);
 	const Vector3f& min() const { return this->bottom; }
 	const Vector3f& max() const { return this->top; }
 
-	static BBox bound(const BBox& a, const BBox& b);
+	bool intersect(const Ray& ray, float tmin, float tmax) const;
 private:
-	Vector3f bottom, top;
+	Vector3fData bottom, top;
 };
