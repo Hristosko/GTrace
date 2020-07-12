@@ -67,6 +67,10 @@ public:
 		this->vec = _mm_div_ps(this->vec, _mm_setr_ps(a, a, a, a));
 		return *this;
 	}
+	Vector3f& operator /= (const Vector3f & a) {
+		this->vec = _mm_div_ps(this->vec, a.vec);
+		return *this;
+	}
 
 	friend float dot(const Vector3f& a, const Vector3f& b);
 	friend Vector3f cross(const Vector3f& a, const Vector3f& b);
@@ -135,6 +139,12 @@ inline Vector3f operator*(const Vector3f& a, const Vector3f& b) {
 }
 
 inline Vector3f operator/(const Vector3f& a, float b) {
+	Vector3f res = a;
+	res /= b;
+	return res;
+}
+
+inline Vector3f operator/(const Vector3f& a, const Vector3f& b) {
 	Vector3f res = a;
 	res /= b;
 	return res;

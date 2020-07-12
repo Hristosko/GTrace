@@ -12,11 +12,10 @@ void Camera::parse(std::unordered_map<std::string, std::string>& map) {
 }
 
 Ray Camera::castRay(float px, float py) const {
-	Ray ray;
-	ray.origin = this->eye;
-	ray.direction = normalize(
+	const Vector3f origin = this->eye;
+	const Vector3f direction = normalize(
 		zoom*px*uvw.u() +
 		zoom*py*uvw.v() -
 		viewPlaneDistance*uvw.w());
-	return ray;
+	return Ray(origin, direction);
 }

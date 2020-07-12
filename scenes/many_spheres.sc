@@ -9,7 +9,7 @@ view_plane_distance=600
 zoom=0.25
 
 DirectionalLight
-direction=(1,1,-1)
+direction=(0,0,-1)
 color=(1,1,1)
 
 ColorTexture
