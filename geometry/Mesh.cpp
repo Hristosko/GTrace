@@ -70,19 +70,24 @@ void Mesh::loadFromObjFile(const char* path, bool useNormals) {
 
 		res = sscanf_s(buffer, OBJ_FACE_FORMAT, &i, &ni, &j, &nj, &k, &nk);
 		if (res == 6) {
+			++faces;
+			checkIfVertexExists(this->vertices, i);
+			checkIfVertexExists(this->vertices, j);
+			checkIfVertexExists(this->vertices, k);
+			
 			if (useNormals) {
 				++facesNormals;
 				checkIfNormalExists(this->normals, ni);
 				checkIfNormalExists(this->normals, nj);
 				checkIfNormalExists(this->normals, nk);
 
-				//this->facesNormals.push_back({ ni-1, nj-1, nk-1 });
+				MeshElementWithNormal* el = new
+					MeshElementWithNormal(this,
+						i-1, j-1, k-1,
+						ni-1, nj-1, nk-1);
+				getWorld().add(el);
+				continue;
 			}
-			++faces;
-			checkIfVertexExists(this->vertices, i);
-			checkIfVertexExists(this->vertices, j);
-			checkIfVertexExists(this->vertices, k);
-			
 			// add the new triangle to the world
 			// The indexing in the obj file starts from 1
 			MeshElement* el = new MeshElement(this, i-1, j-1, k-1);
@@ -119,4 +124,23 @@ BBox MeshElement::bbox() const {
 	const Vector3f b(this->mesh->vertices[tr.j]);
 	const Vector3f c(this->mesh->vertices[tr.k]);
 	return Triangle::triangleBBox(a, b, c);
+}
+
+bool MeshElementWithNormal::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
+	float tval, beta, gamma;
+	bool hasHit = false;
+	const Vector3f a(this->mesh->vertices[tr.i]);
+	const Vector3f b(this->mesh->vertices[tr.j]);
+	const Vector3f c(this->mesh->vertices[tr.k]);
+	if (Triangle::hit(a, b, c, ray, tmin, tmax, beta, gamma, tval)) {
+		hasHit = true;
+		tmax = rec.t = tval;
+		const float alpha = 1.f - beta - gamma;
+		// interpolate the normals of the model
+		rec.normal = this->mesh->normals[normals.i] * alpha
+			+ this->mesh->normals[normals.j] * beta
+			+ this->mesh->normals[normals.k] * gamma;
+	}
+	if (hasHit) rec.mat = this->mesh->mat;
+	return hasHit;
 }

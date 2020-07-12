@@ -29,5 +29,5 @@ subdivs=6
 
 Mesh
 mat=mat_green
-use_normals=false
+use_normals=true
 file=C:\code\Gtrace\Gtrace\scenes\bunny.obj

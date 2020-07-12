@@ -46,7 +46,7 @@ static Shape* build(Shape** shapes, uint32_t cnt, int axis) {
 }
 
 Shape* BVH::build(Shape** shapes, uint32_t cnt) {
-	LOGINFO("Start building bounding volume hierarchie.");
+	LOGINFO("Start building bounding volume hierarchie. Shapes count: ", cnt);
 	Shape* res =  ::build(shapes, cnt, 0);
 	LOGINFO("Finish building bounding volume hierarchie.");
 	return res;

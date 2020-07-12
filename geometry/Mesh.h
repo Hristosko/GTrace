@@ -12,6 +12,7 @@ struct MeshTriangle {
 class Mesh : public SceneElement {
 public:
 	friend class MeshElement;
+	friend class MeshElementWithNormal;
 	virtual void parse(std::unordered_map<std::string, std::string>& map) override;
 
 private:
@@ -32,7 +33,19 @@ public:
 	virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const override;
 	virtual BBox bbox() const override;
 
-private:
+protected:
 	Mesh* mesh;
 	MeshTriangle tr;
+};
+
+class MeshElementWithNormal : public MeshElement {
+public:
+	MeshElementWithNormal(Mesh* mesh, uint32_t i, uint32_t j, uint32_t k,
+		uint32_t ni, uint32_t nj, uint32_t nk)
+		: MeshElement(mesh, i, j, k), normals({ ni, nj, nk }) {}
+
+	virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const override;
+
+protected:
+	MeshTriangle normals;
 };
