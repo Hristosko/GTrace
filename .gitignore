@@ -4,3 +4,7 @@ Release/*
 *.grt
 *.log
 *.obj
+
+unit_tests/Release
+unit_tests/Debug
+*.config
