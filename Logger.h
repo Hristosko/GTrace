@@ -23,7 +23,7 @@ Logger& operator<<(Logger& logger, const T& val) {
 }
 
 Logger& getLogger();
-std::string getTimestamp();
+uint64_t getTimestamp();
 
 template<typename T, typename... Args>
 void log(const T& val, const Args& ... args) {
@@ -35,26 +35,26 @@ inline void log() { getLogger() << '\n'; }
 
 #define LOGINFO(...) \
 	{ \
-		log("[INFO]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n', '\n'); \
+		log("[INFO]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
 		getLogger().flush(); \
 	}
 
 #define LOGWARNING(...) \
 	{ \
-		log("[WARN]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n', '\n'); \
+		log("[WARN]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
 		getLogger().flush(); \
 	}
 
 #define LOGERROR(...) \
 	{ \
-		log("[ERROR]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n', '\n'); \
+		log("[ERROR]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
 		getLogger().flush(); \
 	}
 
 #ifdef _DEBUG
 #define LOGDEBUG(...) \
 	{ \
-		log("[DEBUG]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), __VA_ARGS__, '\n', '\n'); \
+		log("[DEBUG]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
 		getLogger().flush(); \
 	}
 #else 

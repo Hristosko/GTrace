@@ -1,4 +1,5 @@
 #include "Logger.h"
+#include <chrono>
 
 #define LOG_FILE_PATH "gtrace.log"
 
@@ -15,11 +16,8 @@ Logger& getLogger() {
 	return logger;
 }
 
-std::string getTimestamp() {
-	char buffer[512] = { '\0' };
-	time_t now = time(&now);
-	struct tm local_time;
-	localtime_s(&local_time, &now);
-	strftime(buffer, BUFSIZ, "%m/%d/%Y %H:%M:%S ", &local_time);
-	return std::string(buffer);
+uint64_t getTimestamp() {
+	return std::chrono::duration_cast<std::chrono::milliseconds>(
+		std::chrono::system_clock::now().time_since_epoch()
+		).count();
 }
