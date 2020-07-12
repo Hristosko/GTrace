@@ -3,13 +3,18 @@
 #include "../Logger.h"
 #include "../geometry/Triangle.h"
 #include "../geometry/Mesh.h"
-World::World() {}
+#include "../geometry/BVH.h"
+
+World::World() : bvh(nullptr) {}
 
 World::~World() {
 	this->clear();
 }
 
 void World::clear() {
+	delete this->bvh;
+	this->bvh = nullptr;
+
 	for (Mesh* mesh : this->meshes) delete mesh;
 	this->meshes.clear();
 
@@ -93,6 +98,12 @@ void World::addMaterial(const std::string& name, Material* mat) {
 		LOGWARNING("Overwriting material: ", name);
 	}
 	this->materials[name] = mat;
+}
+
+void World::buildBVH() {
+	delete this->bvh;
+	this->bvh = BVH::build(this->shapes.data(), this->shapes.size());
+	this->shapes.clear();
 }
 
 World& getWorld() {

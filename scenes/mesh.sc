@@ -25,7 +25,7 @@ k=1
 text=green
 
 Settings
-subdivs=1
+subdivs=6
 
 Mesh
 mat=mat_green

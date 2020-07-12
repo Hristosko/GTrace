@@ -64,6 +64,7 @@ void GTraceMainWindow::OnElementRendered(wxCommandEvent& event) {
 
 static void renderNewScene(wxWindow* renderSurface, RendererOutput* output, bool* setWhenReady) {
 		output->init();
+		getWorld().buildBVH();
 		Renderer renderer(renderSurface, *output);
 		renderer.render();
 		*setWhenReady = true;

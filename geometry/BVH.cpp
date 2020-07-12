@@ -18,8 +18,18 @@ static uint32_t split(Shape** shapes, uint32_t cnt, float pivot, int axis) {
 }
 
 static Shape* build(Shape** shapes, uint32_t cnt, int axis) {
-	if (cnt == 1) return shapes[0];
-	if (cnt == 2) return new BVH(shapes[0], shapes[1]);
+	if (cnt == 1) {
+		Shape* res = shapes[0];
+		// transfer ownership
+		shapes[0] = nullptr;
+		return res;
+	}
+	if (cnt == 2) {
+		BVH* res = new BVH(shapes[0], shapes[1]);
+		shapes[0] = nullptr;
+		shapes[1] = nullptr;
+		return res;
+	}
 
 	// find the midpoint of the bounding box according the given axis
 	BBox box = shapes[0]->bbox();
@@ -36,16 +46,15 @@ static Shape* build(Shape** shapes, uint32_t cnt, int axis) {
 }
 
 Shape* BVH::build(Shape** shapes, uint32_t cnt) {
-	LOGINFO("Start building bounding volume hierarchie.")
-	return ::build(shapes, cnt, 0);
-	LOGINFO("Finish building bounding volume hierarchie.")
+	LOGINFO("Start building bounding volume hierarchie.");
+	Shape* res =  ::build(shapes, cnt, 0);
+	LOGINFO("Finish building bounding volume hierarchie.");
+	return res;
 }
 
 BVH::~BVH() {
-	// delete only BVH since the oder shapes are owned by the world
-	// TODO: better way organize this
-	delete dynamic_cast<BVH*>(this->left);
-	delete dynamic_cast<BVH*>(this->right);
+	delete this->left;
+	delete this->right;
 }
 
 bool BVH::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {

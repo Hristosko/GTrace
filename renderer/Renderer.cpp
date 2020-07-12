@@ -51,9 +51,8 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 			HitRecord rec;
 			rec.mat = getWorld().getSettings().background;
 			rec.t = 1000000.f;
-			for (Shape* shape : getWorld().getShapes()) {
-				shape->hit(ray, 0.f, rec.t, 0, rec);
-			}
+			Shape* bvh = getWorld().getBVH();
+			bvh->hit(ray, 0.f, rec.t, 0, rec);
 
 			rec.position = ray.origin + rec.t * ray.direction;
 			const Vector3f color = (rec.mat == nullptr) ?

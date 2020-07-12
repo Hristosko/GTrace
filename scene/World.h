@@ -33,7 +33,11 @@ public:
 
 	Material* getMaterialByName(const std::string& name);
 	void addMaterial(const std::string& name, Material* mat);
+
+	Shape* getBVH() { return this->bvh; }
+	void buildBVH();
 private:
+	Shape* bvh;
 	std::unordered_map<std::string, Texture*> textures;
 	std::unordered_map<std::string, Material*> materials;
 	std::vector<Shape*> shapes;
