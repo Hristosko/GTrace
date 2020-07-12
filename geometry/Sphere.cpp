@@ -1,4 +1,5 @@
 #include "Sphere.h"
+#include "BBox.h"
 
 void Sphere::parse(std::unordered_map<std::string, std::string>& map) {
 	SceneParser& parser = getParser();
@@ -29,5 +30,12 @@ bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& 
 		return true;
 	}
 	return false;
+}
+
+BBox Sphere::bbox() const {
+	const Vector3f rad(this->radius);
+	return BBox(
+		this->center - rad,
+		this->center + rad);
 }
 

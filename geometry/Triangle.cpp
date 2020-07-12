@@ -1,4 +1,5 @@
 #include "Triangle.h"
+#include "BBox.h"
 
 bool Triangle::hit(const Vector3f& a, const Vector3f& b, const Vector3f& c,
 	const Ray& ray, float tmin, float tmax,
@@ -46,6 +47,12 @@ bool Triangle::hit(const Vector3f& a, const Vector3f& b, const Vector3f& c,
 	return tval >= tmin && tval <= tmax;
 }
 
+BBox Triangle::triangleBBox(const Vector3f& a, const Vector3f& b, const Vector3f& c) {
+	const Vector3f bottom = min(min(a, b), c);
+	const Vector3f top = max(max(a, b), c);
+	return BBox(bottom, top);
+}
+
 void Triangle::parse(std::unordered_map<std::string, std::string>& map) {
 	SceneParser& parser = getParser();
 	parser.parseVector3fAndStore(map, "a", this->a);
@@ -64,4 +71,8 @@ bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord
 		return true;
 	}
 	return false;
+}
+
+BBox Triangle::bbox() const {
+	return Triangle::triangleBBox(this->a, this->b, this->c);
 }

@@ -13,7 +13,7 @@
 
 #include "../geometry/Triangle.h"
 #include "../geometry/Sphere.h"
-#include "../geometry/Piramid.h"
+#include "../geometry/Mesh.h"
 #include "../texture/ColorTexture.h"
 #include "../texture/NoiseTexture.h"
 #include "../material/MatteMaterial.h"
@@ -31,8 +31,6 @@ static SceneElement* getByName(const std::string& name) {
 		return new Sphere();
 	if (name == "Mesh")
 		return new Mesh();
-	if (name == "Piramid")
-		return new Piramid();
 	if (name == "ColorTexture")
 		return new ColorTexture();
 	if (name == "NoiseTexture")

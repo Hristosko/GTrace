@@ -24,4 +24,9 @@ TEST(BBox, intersect) {
 		Ray ray(Vector3f(0.5f, -0.5f, 0.5f), Vector3f(0.f, -1.f, 0.f));
 		EXPECT_FALSE(box.intersect(ray, 0.f, 1.f));
 	}
+	box = BBox(Vector3f(0.f), Vector3f(1.f, 1.f, 0.f));
+	{
+		Ray ray(Vector3f(0.5f, 0.5f, 0.5f), Vector3f(0.f, 0.f, -1.f));
+		EXPECT_TRUE(box.intersect(ray, 0.f, 1.f));
+	}
 }

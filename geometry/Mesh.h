@@ -26,8 +26,12 @@ class MeshElement : public Shape {
 public:
 	MeshElement(Mesh* mesh, uint32_t i, uint32_t j, uint32_t k)
 		: mesh(mesh), tr({ i, j, k }) {}
-	virtual void parse(std::unordered_map<std::string, std::string>& map) override {} // not used, cannot be instanciated from the parsr
+
+	// not used, cannot be instanciated from the parsr
+	virtual void parse(std::unordered_map<std::string, std::string>& map) override {}
 	virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const override;
+	virtual BBox bbox() const override;
+
 private:
 	Mesh* mesh;
 	MeshTriangle tr;

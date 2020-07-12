@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "BBox.h"
 #include "../Logger.h"
 #include "../Errors.h"
 #include "../StringUtils.h"
@@ -111,4 +112,11 @@ bool MeshElement::hit(const Ray& ray, float tmin, float tmax, float time, HitRec
 	}
 	if (hasHit) rec.mat = this->mesh->mat;
 	return hasHit;
+}
+
+BBox MeshElement::bbox() const {
+	const Vector3f a(this->mesh->vertices[tr.i]);
+	const Vector3f b(this->mesh->vertices[tr.j]);
+	const Vector3f c(this->mesh->vertices[tr.k]);
+	return Triangle::triangleBBox(a, b, c);
 }
