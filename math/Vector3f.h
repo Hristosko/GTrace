@@ -1,6 +1,7 @@
 #pragma once
 #include <xmmintrin.h>
 #include <smmintrin.h>
+#include <immintrin.h>
 #include <cmath>
 
 ///
@@ -30,16 +31,18 @@ public:
 	Vector3f(const Vector3fData vd) { this->vec = _mm_setr_ps(vd.x, vd.y, vd.z, 0.f); }
 
 	float x() const {
-		int res = _mm_extract_ps(this->vec, 0);
-		return reinterpret_cast<float&>(res);
+		return (*this)[0];
 	}
 	float y() const {
-		int res = _mm_extract_ps(this->vec, 1);
-		return reinterpret_cast<float&>(res);
+		return (*this)[1];
 	}
 	float z() const {
-		int res = _mm_extract_ps(this->vec, 2);
-		return reinterpret_cast<float&>(res);
+		return (*this)[2];
+	}
+	float operator[](int i) const {
+		__m128i vidx = _mm_cvtsi32_si128(i);
+		__m128 shuffled = _mm_permutevar_ps(this->vec, vidx);
+		return _mm_cvtss_f32(shuffled);
 	}
 	Vector3fData data() const {
 		MM128 mm;
