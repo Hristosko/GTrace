@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RendererOutput.h"
+#include "RendererStat.h"
 #include "../Threaded.h"
 #include "../math/Vector3f.h"
 #include "../Random.h"
@@ -32,5 +33,6 @@ private:
 	wxWindow* renderSurface;
 	RendererOutput& output;
 	RandomGenerator rng;
+	RendererStat stat;
 };
 

@@ -3,16 +3,16 @@
 #include "Renderer.h"
 #include "../Events.h"
 #include "../Logger.h"
-
 #include "../scene/World.h"
 
 void Renderer::render() {
 	LOGINFO("Start rendering.");
-	
+	this->stat.renderBegin();
 	ThreadedRenderer tr(*this);
 	ThreadManager tman(std::thread::hardware_concurrency());
 	tman.run(&tr);
-
+	
+	this->stat.renderFinish();
 	LOGINFO("Finish rendering.");
 	this->updateRenderSurface();
 }
@@ -52,6 +52,7 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 	} while (curSubdivs >= maxSubdivs && varTreshhold < var);
 
 	// Store the results
+	this->stat.updateStat(totalSamples, totalSamples);
 	{
 		DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
 		ColorResult* ptr = reinterpret_cast<ColorResult*>(
