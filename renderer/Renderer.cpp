@@ -33,38 +33,24 @@ void Renderer::updateRenderSurface() {
 }
 
 void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
-	int64_t camx = (int64_t)ix - getWorld().getSettings().width / 2;
-	int64_t camy = (int64_t)iy - getWorld().getSettings().height / 2;
-	Camera& camera = getWorld().getCamera();
-	Vector3f res(0.f);
+	Vector3f res;
+	Vector3f var;
+
+	Vector3f sum(0.f);
 	Vector3f sumSqr(0.f);
-	const uint32_t samples = getWorld().getSettings().subdivs;
-	const float denom = 1.f / samples;
+	uint32_t totalSamples = 0;
+	
+	const uint32_t maxSubdivs = getWorld().getSettings().maxSubdivs;
+	const Vector3f varTreshhold(getWorld().getSettings().stdTreshhold * getWorld().getSettings().stdTreshhold);
+	uint32_t curSubdivs = 1;
+	do {
+		this->rayTraceWithSamples(ix, iy, curSubdivs + 1, sum, sumSqr, totalSamples);
+		const float denom = 1.f / totalSamples;
+		res = sum*denom; // the mean value
+		var = sumSqr * denom - res * res;
+		++curSubdivs;
+	} while (curSubdivs >= maxSubdivs && varTreshhold < var);
 
-	for (uint32_t sx = 0; sx < samples; ++sx) {
-		for (uint32_t sy = 0; sy < samples; ++sy) {
-			const float dx = ((float)sx + this->rng.get()) * denom - 0.5f;
-			const float dy = ((float)sy + this->rng.get()) * denom - 0.5f;
-
-			Ray ray = camera.castRay(camx + dx, -(camy + dy));
-			ray.renderer = this;
-			HitRecord rec;
-			rec.mat = getWorld().getSettings().background;
-			rec.t = 1000000.f;
-			Shape* bvh = getWorld().getBVH();
-			bvh->hit(ray, 0.f, rec.t, 0, rec);
-
-			rec.position = ray.origin + rec.t * ray.direction;
-			const Vector3f color = (rec.mat == nullptr) ?
-				DEFAULT_TEXTURE_VALUE :
-				rec.mat->shade(rec, ray);
-			res += color;
-			sumSqr += (color * color);
-		}
-	}
-
-	res *= (denom * denom); // the mean value, there are sample^2 samples totals
-	const Vector3f var = sumSqr * denom *denom - res * res;
 	// Store the results
 	{
 		DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
@@ -83,6 +69,39 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 		ptr->y = var.y();
 		ptr->z = var.z();
 	}
+}
+
+void Renderer::rayTraceWithSamples(
+	uint32_t ix, uint32_t iy, uint32_t samples,
+	Vector3f& sum, Vector3f& sumSqr, uint32_t& totalSamples) {
+	
+	const int64_t camx = (int64_t)ix - getWorld().getSettings().width / 2;
+	const int64_t camy = (int64_t)iy - getWorld().getSettings().height / 2;
+	const float denom = 1.f / samples;
+	Camera& camera = getWorld().getCamera();
+
+	for (uint32_t sx = 0; sx < samples; ++sx) {
+		for (uint32_t sy = 0; sy < samples; ++sy) {
+			const float dx = ((float)sx + this->rng.get()) * denom - 0.5f;
+			const float dy = ((float)sy + this->rng.get()) * denom - 0.5f;
+
+			Ray ray = camera.castRay(camx + dx, -(camy + dy));
+			ray.renderer = this;
+			HitRecord rec;
+			rec.mat = getWorld().getSettings().background;
+			rec.t = 1000000.f;
+			Shape * bvh = getWorld().getBVH();
+			bvh->hit(ray, 0.f, rec.t, 0, rec);
+
+			rec.position = ray.origin + rec.t * ray.direction;
+			const Vector3f color = (rec.mat == nullptr) ?
+				DEFAULT_TEXTURE_VALUE :
+				rec.mat->shade(rec, ray);
+			sum += color;
+			sumSqr += (color * color);
+		}
+	}
+	totalSamples += (samples * samples);
 }
 
 void Renderer::ThreadedRenderer::run(unsigned threadIdx, unsigned numThreads) {

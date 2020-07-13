@@ -25,7 +25,8 @@ k=1
 text=green
 
 Settings
-subdivs=6
+max_subdivs=20
+std_treshold=0.01
 
 Mesh
 mat=mat_green

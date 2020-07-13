@@ -30,3 +30,21 @@ TEST(Vector3f, minElement) {
 		EXPECT_TRUE(compare(res, -1));
 	}
 }
+
+TEST(Vector3f, comparing) {
+	{
+		const Vector3f a(0.f);
+		const Vector3f b(1.f);
+		EXPECT_TRUE(a <= b);
+		EXPECT_FALSE(b <= a);
+
+		EXPECT_TRUE(a < b);
+		EXPECT_FALSE(b < a);
+	}
+	{
+		const Vector3f a(0.f);
+		const Vector3f b(-1.f, 2.f, -2.f);
+		EXPECT_FALSE(b <= a);
+		EXPECT_FALSE(b <= a);
+	}
+}

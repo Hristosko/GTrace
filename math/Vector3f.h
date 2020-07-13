@@ -85,6 +85,15 @@ public:
 		return *this;
 	}
 
+	bool operator<=(const Vector3f& a) const {
+		const __m128 comp = _mm_cmple_ps(this->vec, a.vec);
+		return _mm_movemask_ps(comp) == 0xF;
+	}
+	bool operator<(const Vector3f& a) const {
+		const __m128 comp = _mm_cmplt_ps(this->vec, a.vec);
+		return _mm_movemask_ps(comp) >= 0x7; // we aren't intersted in the 4th element
+	}
+
 	friend float dot(const Vector3f& a, const Vector3f& b);
 	friend Vector3f cross(const Vector3f& a, const Vector3f& b);
 
