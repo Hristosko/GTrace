@@ -32,7 +32,6 @@ void Renderer::updateRenderSurface() {
 	wxQueueEvent(this->renderSurface, event);
 }
 
-#include <iostream>
 void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 	Vector3f res;
 	Vector3f var;
@@ -108,19 +107,27 @@ void Renderer::rayTraceWithSamples(
 }
 
 void Renderer::ThreadedRenderer::run(unsigned threadIdx, unsigned numThreads) {
-	const uint32_t bucketWidth = 50;
-	const uint32_t bucketHeight = 50;
+	uint32_t cx, cy;
 
-	uint32_t pos = 0;
-	for (uint32_t curx = 0; curx < getWorld().getSettings().width; curx += bucketWidth) {
-		for (uint32_t cury = 0; cury < getWorld().getSettings().height; cury += bucketHeight) {
-			++pos;
-			if ((pos - 1) % numThreads != threadIdx) continue;
-
-			const uint32_t curWidth = std::min(getWorld().getSettings().width - curx, bucketWidth);
-			const uint32_t curHeight = std::min(getWorld().getSettings().height - cury, bucketHeight);
-			this->renderer.renderBucket(curx, cury, curWidth, curHeight);
-			this->renderer.updateRenderSurface();
-		}
+	while (this->getNextBucket(cx, cy)) {
+		const uint32_t curWidth = std::min(getWorld().getSettings().width - cx, bucketWidth);
+		const uint32_t curHeight = std::min(getWorld().getSettings().height - cy, bucketHeight);
+		this->renderer.renderBucket(cx, cy, curWidth, curHeight);
+		this->renderer.updateRenderSurface();
 	}
+}
+
+bool Renderer::ThreadedRenderer::getNextBucket(uint32_t& cx, uint32_t& cy) {
+	std::lock_guard<std::mutex> lock(this->mut);
+	if (this->curx >= getWorld().getSettings().width) return false;
+	if (this->cury < getWorld().getSettings().height) {
+		cy = this->cury;
+		cx = this->curx;
+		this->cury += bucketHeight;
+		return true;
+	}
+	// go to the start of the next row of buckets
+	cy = this->cury = 0;
+	cx = this->curx = (this->curx + bucketWidth);
+	return this->curx < getWorld().getSettings().width;
 }

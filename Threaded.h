@@ -2,7 +2,7 @@
 
 #include <thread>
 #include <vector>
-
+#include "Logger.h"
 
 class Threaded {
 public:
@@ -24,7 +24,9 @@ public:
 	}
 private:
 	void threadFunc(unsigned threadIdx, Threaded * th) {
+		LOGINFO("Thread start: ", threadIdx, "/", this->numThreads);
 		th->run(threadIdx, numThreads);
+		LOGINFO("Thread finish: ", threadIdx, "/", this->numThreads);
 	}
 private:
 	std::vector<std::thread> threads;

@@ -12,10 +12,18 @@ class Renderer {
 private:
 	class ThreadedRenderer : public Threaded {
 	public:
-		ThreadedRenderer(Renderer& r) : renderer(r) {}
+		ThreadedRenderer(Renderer& r) : renderer(r), curx(0), cury(0) {}
 		void run(unsigned threadIdx, unsigned numThreads) override;
+		bool getNextBucket(uint32_t& cx, uint32_t& cy);
+
 	private:
+		static constexpr uint32_t bucketWidth = 20;
+		static constexpr uint32_t bucketHeight = 20;
 		Renderer& renderer;
+		// The next bucket that has to be rendered
+		uint32_t curx, cury;
+		// sync. the rendering threads, when asking for the next bucket
+		std::mutex mut;
 	};
 public:
 	Renderer(wxWindow* renderSurface, RendererOutput& output)
@@ -35,4 +43,3 @@ private:
 	RandomGenerator rng;
 	RendererStat stat;
 };
-
