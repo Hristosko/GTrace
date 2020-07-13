@@ -48,3 +48,11 @@ TEST(Vector3f, comparing) {
 		EXPECT_FALSE(b <= a);
 	}
 }
+
+TEST(Vector3f, isAtLeastOneGreaterThan) {
+	{
+		const Vector3f v(0.f, 2.f, 0.f);
+		bool res = v.isAtLeastOneGreaterThan(1.f);
+		EXPECT_TRUE(res);
+	}
+}

@@ -94,6 +94,13 @@ public:
 		return _mm_movemask_ps(comp) >= 0x7; // we aren't intersted in the 4th element
 	}
 
+	bool isAtLeastOneGreaterThan(float a) const {
+		const __m128 av = _mm_setr_ps(a, a, a, a);
+		const __m128 comp = _mm_cmpgt_ps(this->vec, av);
+		const int res = _mm_movemask_ps(comp);
+		return  res & 0x7;
+	}
+
 	friend float dot(const Vector3f& a, const Vector3f& b);
 	friend Vector3f cross(const Vector3f& a, const Vector3f& b);
 

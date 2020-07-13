@@ -32,6 +32,7 @@ void Renderer::updateRenderSurface() {
 	wxQueueEvent(this->renderSurface, event);
 }
 
+#include <iostream>
 void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 	Vector3f res;
 	Vector3f var;
@@ -41,7 +42,8 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 	uint32_t totalSamples = 0;
 	
 	const uint32_t maxSubdivs = getWorld().getSettings().maxSubdivs;
-	const Vector3f varTreshhold(getWorld().getSettings().stdTreshhold * getWorld().getSettings().stdTreshhold);
+	float tresh = getWorld().getSettings().stdTreshhold;
+	tresh *= tresh; // we compare it to the variance
 	uint32_t curSubdivs = 1;
 	do {
 		this->rayTraceWithSamples(ix, iy, curSubdivs + 1, sum, sumSqr, totalSamples);
@@ -49,7 +51,7 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 		res = sum*denom; // the mean value
 		var = sumSqr * denom - res * res;
 		++curSubdivs;
-	} while (curSubdivs >= maxSubdivs && varTreshhold < var);
+	} while (curSubdivs <= maxSubdivs && var.isAtLeastOneGreaterThan(tresh));
 
 	// Store the results
 	this->stat.updateStat(totalSamples, totalSamples);

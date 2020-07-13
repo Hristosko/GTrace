@@ -18,7 +18,7 @@ void RendererStat::renderFinish() const {
 	const float samplesPerPixel = ((float)this->mainSamples) / denom;
 	const float raysPerPixel = ((float)this->rayCasts) / denom;
 	LOGINFO("Taken samples: ", this->mainSamples,
-		" Avarage samples per pixel: ", mainSamples,
+		" Avarage samples per pixel: ", samplesPerPixel,
 		" Casted rays: ", this->rayCasts,
 		" Avarage rays per pixel: ", raysPerPixel);
 }
