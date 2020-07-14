@@ -29,12 +29,12 @@ void Mesh::parse(std::unordered_map<std::string, std::string>& map) {
 	if (endsWith(it->second, OBJ_FILE_EXTENSION)) this->loadFromObjFile(it->second.c_str(), useNormals);
 }
 
-static void checkIfVertexExists(const std::deque<Vector3fData>& data, unsigned idx) {
+static void checkIfVertexExists(const std::deque<Vector3f>& data, unsigned idx) {
 	if (data.size() < idx)
 		LOGWARNING("Unknown vertex: ", idx);
 }
 
-static void checkIfNormalExists(const std::deque<Vector3fData>& data, unsigned idx) {
+static void checkIfNormalExists(const std::deque<Vector3f>& data, unsigned idx) {
 	if (data.size() < idx)
 		LOGWARNING("Unknown normal: ", idx);
 }

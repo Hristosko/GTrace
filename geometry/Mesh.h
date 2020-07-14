@@ -19,8 +19,8 @@ private:
 	void loadFromObjFile(const char* path, bool useNormals);
 private:
 	Material* mat;
-	std::deque<Vector3fData> vertices;
-	std::deque<Vector3fData> normals;
+	std::deque<Vector3f> vertices;
+	std::deque<Vector3f> normals;
 };
 
 class MeshElement : public Shape {
