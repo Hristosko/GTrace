@@ -56,3 +56,14 @@ TEST(Vector3f, isAtLeastOneGreaterThan) {
 		EXPECT_TRUE(res);
 	}
 }
+
+TEST(Matrix4x4, mult) {
+	{
+		const float mf[] = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 };
+		const Matrix4x4 m(mf);
+		const float expResf[] = { 90,100,110,120,202,225,254,280,314,356,398,440,426,484, 542, 600 };
+		const Matrix4x4 expRes(expResf);
+		const Matrix4x4 res = m * m;
+		EXPECT_TRUE(compare(res, expRes));
+	}
+}
