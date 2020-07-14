@@ -61,7 +61,7 @@ TEST(Matrix4x4, mult) {
 	{
 		const float mf[] = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 };
 		const Matrix4x4 m(mf);
-		const float expResf[] = { 90,100,110,120,202,225,254,280,314,356,398,440,426,484, 542, 600 };
+		const float expResf[] = { 90,100,110,120,202,228,254,280,314,356,398,440,426,484, 542, 600 };
 		const Matrix4x4 expRes(expResf);
 		const Matrix4x4 res = m * m;
 		EXPECT_TRUE(compare(res, expRes));
@@ -75,4 +75,22 @@ TEST(Matrix4x4, transposed) {
 	const Matrix4x4 expRes(expResf);
 	const Matrix4x4 res = m.transposed();
 	EXPECT_TRUE(compare(res, expRes));
+}
+
+TEST(Matrix4x4, mult2x2) {
+	__m128 m = _mm_setr_ps(0, 1, 2, 3);
+	__m128 d  = mult2x2(m, m);
+	EXPECT_TRUE(compare(_mm_setr_ps(2,3,6,11), d));
+}
+
+TEST(Matrix4x4, multAdj2x2) {
+	__m128 m = _mm_setr_ps(0, 1, 2, 3);
+	__m128 d = multAdj2x2(m, m);
+	EXPECT_TRUE(compare(_mm_setr_ps(-2,0,0,-2), d));
+}
+
+TEST(Matrix4x4, mult2xAdj2) {
+	__m128 m = _mm_setr_ps(0, 1, 2, 3);
+	__m128 d = mult2xAdj2(m, m);
+	EXPECT_TRUE(compare(_mm_setr_ps(-2, 0, 0, -2), d));
 }

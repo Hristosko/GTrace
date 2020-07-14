@@ -22,11 +22,10 @@ union MM128 {
 };
 
 class Vector3f {
-private:
+public:
 	friend class Matrix4x4;
 	friend class Transform;
 	Vector3f(__m128 v) { this->vec = v; }
-public:
 	Vector3f() { this->vec = _mm_setzero_ps(); }
 	explicit Vector3f(float v) { this->vec = _mm_setr_ps(v, v, v, 0.f); }
 	Vector3f(float x, float y, float z) { this->vec = _mm_setr_ps(x, y, z, 0.f); }

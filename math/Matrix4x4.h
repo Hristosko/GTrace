@@ -79,3 +79,24 @@ inline Matrix4x4 operator*(const Matrix4x4& a, const Matrix4x4& b) {
 	__m256 out23 = twoRowsMult(a.m256[1], b);
 	return Matrix4x4(out01, out23);
 }
+
+inline __m128 mult2x2(const __m128& a, const __m128& b) {
+	return _mm_add_ps(
+		_mm_mul_ps(a, _mm_shuffle_ps(b, b, _MM_SHUFFLE(3, 0, 3, 0))),
+		_mm_mul_ps(_mm_shuffle_ps(a, a, _MM_SHUFFLE(2,3,0,1)),
+				   _mm_shuffle_ps(b, b, _MM_SHUFFLE(1,2,1,2))));
+}
+
+inline __m128 multAdj2x2(const __m128& a, const __m128& b) {
+	return _mm_sub_ps(
+		_mm_mul_ps(_mm_shuffle_ps(a, a, _MM_SHUFFLE(0, 0, 3, 3)), b),
+		_mm_mul_ps(_mm_shuffle_ps(a, a, _MM_SHUFFLE(2, 2, 1, 1)),
+			_mm_shuffle_ps(b, b, _MM_SHUFFLE(1, 0, 3, 2))));
+}
+
+inline __m128 mult2xAdj2(const __m128& a, const __m128& b) {
+	return _mm_sub_ps(
+		_mm_mul_ps(a, _mm_shuffle_ps(b, b, _MM_SHUFFLE(0, 3, 0, 3))),
+		_mm_mul_ps(_mm_shuffle_ps(a, a, _MM_SHUFFLE(2, 3, 0, 1)),
+			_mm_shuffle_ps(b, b, _MM_SHUFFLE(1, 2, 1, 2))));
+}
