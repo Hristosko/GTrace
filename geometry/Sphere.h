@@ -9,7 +9,7 @@ public:
 	virtual BBox bbox() const override;
 
 private:
-	Vector3fData center;
+	Vector3f center;
 	float radius;
 	Material* mat;
 };

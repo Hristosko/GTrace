@@ -19,6 +19,6 @@ public:
 	virtual BBox bbox() const override;
 
 private:
-	Vector3fData a, b, c;
+	Vector3f a, b, c;
 	Material* mat;
 };

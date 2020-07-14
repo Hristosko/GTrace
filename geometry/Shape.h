@@ -3,9 +3,10 @@
 #include "Ray.h"
 #include "../scene/Parser.h"
 #include "../material/Material.h"
+#include "../HeapAligned.h"
 
 class BBox;
-class Shape : public SceneElement {
+class Shape : public SceneElement, public HeapAligned<16> {
 public:
 	virtual ~Shape() {}
 

@@ -10,9 +10,9 @@ public:
 
 	Ray castRay(float px, float py) const;
 private:
-	Vector3fData eye;
-	Vector3fData lookPoint;
-	Vector3fData up;
+	Vector3f eye;
+	Vector3f lookPoint;
+	Vector3f up;
 	OrthonormalBasis uvw;
 	float viewPlaneDistance;
 	float zoom;

@@ -14,5 +14,5 @@ public:
 		return Vector3f(color);
 	}
 private:
-	Vector3fData color;
+	Vector3f color;
 };
