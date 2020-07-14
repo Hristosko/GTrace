@@ -80,17 +80,29 @@ TEST(Matrix4x4, transposed) {
 TEST(Matrix4x4, mult2x2) {
 	__m128 m = _mm_setr_ps(0, 1, 2, 3);
 	__m128 d  = mult2x2(m, m);
-	EXPECT_TRUE(compare(_mm_setr_ps(2,3,6,11), d));
+	EXPECT_TRUE(compare(_mm_setr_ps(2,3,6,11), d, true));
 }
 
 TEST(Matrix4x4, multAdj2x2) {
 	__m128 m = _mm_setr_ps(0, 1, 2, 3);
 	__m128 d = multAdj2x2(m, m);
-	EXPECT_TRUE(compare(_mm_setr_ps(-2,0,0,-2), d));
+	EXPECT_TRUE(compare(_mm_setr_ps(-2,0,0,-2), d, true));
 }
 
 TEST(Matrix4x4, mult2xAdj2) {
 	__m128 m = _mm_setr_ps(0, 1, 2, 3);
 	__m128 d = mult2xAdj2(m, m);
-	EXPECT_TRUE(compare(_mm_setr_ps(-2, 0, 0, -2), d));
+	EXPECT_TRUE(compare(_mm_setr_ps(-2, 0, 0, -2), d, true));
+}
+
+TEST(Matrix4x4, inversed) {
+	const float mf[] = { 1,0,0,1,0,2,1,2,2,1,0,1,2,0,1,4 };
+	const Matrix4x4 m(mf);
+	const float expResf[] = { -2,-0.5,1,0.5,
+							1,0.5,0,-0.5,
+							-8,-1,2,2,
+							3,0.5,-1,-0.5 };
+	const Matrix4x4 expRes(expResf);
+	const Matrix4x4 res = m.inversed();
+	EXPECT_TRUE(compare(res, expRes));
 }
