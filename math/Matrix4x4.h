@@ -10,6 +10,8 @@ private:
 	};
 
 private:
+	explicit Matrix4x4(const __m128& a, const __m128& b, const __m128& c, const __m128& d)
+		: rows{ a, b, c, d } {}
 	explicit Matrix4x4(const __m256& x, const __m256& y) : m256{ x, y } {}
 
 public:
@@ -23,6 +25,39 @@ public:
 
 	Vector3f operator[](int i) const {
 		return this->rows[i];
+	}
+	Matrix4x4 transposed() const {
+		/*
+		0  1  2  3
+		4  5  6  7
+		8  9  10 11
+		12 13 14 15
+		*/
+		/*
+		->
+		0  1  4  5
+		2  3  6  7
+		8  9  12 13
+		10 11 14 15
+		*/
+		const __m128 a0 = _mm_shuffle_ps(rows[0], rows[1], _MM_SHUFFLE(1, 0, 1, 0));
+		const __m128 b0 = _mm_shuffle_ps(rows[0], rows[1], _MM_SHUFFLE(3, 2, 3, 2));
+		const __m128 c0 = _mm_shuffle_ps(rows[2], rows[3], _MM_SHUFFLE(1, 0, 1, 0));
+		const __m128 d0 = _mm_shuffle_ps(rows[2], rows[3], _MM_SHUFFLE(3, 2, 3, 2));
+
+		/*
+		->
+		0  4  8  12
+		1  5  9  13
+		2  6  10 14
+		3  7  11 15
+		*/
+		const __m128 a1 = _mm_shuffle_ps(a0, c0, _MM_SHUFFLE(2, 0, 2, 0));
+		const __m128 b1 = _mm_shuffle_ps(a0, c0, _MM_SHUFFLE(3, 1, 3, 1));
+		const __m128 c1 = _mm_shuffle_ps(b0, d0, _MM_SHUFFLE(2, 0, 2, 0));
+		const __m128 d1 = _mm_shuffle_ps(b0, d0, _MM_SHUFFLE(3, 1, 3, 1));
+
+		return Matrix4x4(a1, b1, c1, d1);
 	}
 
 	friend __m256 twoRowsMult(const __m256& a01, const Matrix4x4& b);

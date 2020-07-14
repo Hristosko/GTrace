@@ -1,5 +1,6 @@
 Debug/*
 Release/*
+x64/*
 *.vcxproj*
 *.grt
 *.log
@@ -7,4 +8,5 @@ Release/*
 
 unit_tests/Release
 unit_tests/Debug
+unit_tests/x64
 *.config
