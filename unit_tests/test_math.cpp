@@ -105,4 +105,6 @@ TEST(Matrix4x4, inversed) {
 	const Matrix4x4 expRes(expResf);
 	const Matrix4x4 res = m.inversed();
 	EXPECT_TRUE(compare(res, expRes));
+	const Matrix4x4 orig = res.inversed();
+	EXPECT_TRUE(compare(m, orig));
 }

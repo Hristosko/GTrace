@@ -17,7 +17,7 @@ inline bool compare(const Vector3f & a, const Vector3f & b, bool cmp4 = false) {
 
 inline bool compare(const Matrix4x4& a, const Matrix4x4& b) {
 	for (int i = 0; i < 4; ++i) {
-		if (!compare(a[i], b[i])) return false;
+		if (!compare(a[i], b[i], true)) return false;
 	}
 	return true;
 }
