@@ -110,8 +110,19 @@ TEST(Matrix4x4, inversed) {
 }
 
 
-TEST(Transform, construct) {
+TEST(Transform, transform) {
+	const Vector3f init(1, 2, 3);
 	const float mf[] = { 1,0,0,1,0,2,1,2,2,1,0,1,2,0,1,4 };
 	const Matrix4x4 m(mf);
 	Ref<Transform> tr(new Transform(m));
+	auto res = tr->transform(init);
+	auto expRes = _mm_setr_ps(2.f/9, 1, 5.f/9, 1);
+	EXPECT_TRUE(compare(expRes, res, true));
+
+	res = tr->invTransform(init);
+	expRes = _mm_setr_ps(1.f, 3.f, -4.f, 1.f);
+	EXPECT_TRUE(compare(expRes, res, true));
+
+	res = tr->transform(res);
+	EXPECT_TRUE(compare(init, res, false));
 }

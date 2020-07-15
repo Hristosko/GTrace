@@ -4,6 +4,7 @@
 
 class Matrix4x4 {
 private:
+	friend class Transform;
 	union {
 		__m128 rows[4];
 		__m256 m256[2];
