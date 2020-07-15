@@ -3,6 +3,7 @@
 #include "../HeapAligned.h"
 #include "../Ref.h"
 #include "Matrix4x4.h"
+#include "Utils.h"
 
 class Transform : public HeapAligned<32>, public ReferenceCounted {
 public:
@@ -20,6 +21,50 @@ public:
 		return this->transform(this->iT, v);
 	}
 
+	static Matrix4x4 makeTranslation(const Vector3f& v) {
+		return Matrix4x4(
+			_mm_setr_ps(1.f, 0.f, 0.f, v.x()),
+			_mm_setr_ps(0.f, 1.f, 0.f, v.y()),
+			_mm_setr_ps(0.f, 0.f, 1.f, v.z()),
+			_mm_setr_ps(0.f, 0.f, 0.f, 1.f));
+	}
+
+	static Matrix4x4 makeRotationX(float x) {
+		x = degToRad(x);
+		const float sx = sinf(x);
+		const float cx = cosf(x);
+		return Matrix4x4(
+			_mm_setr_ps(1.f, 0.f, 0.f, 0.f),
+			_mm_setr_ps(0.f,  cx, -sx, 0.f),
+			_mm_setr_ps(0.f,  sx,  cx, 0.f),
+			_mm_setr_ps(0.f, 0.f, 0.f, 1.f));
+	}
+
+	static Matrix4x4 makeRotationY(float x) {
+		x = degToRad(x);
+		const float sx = sinf(x);
+		const float cx = cosf(x);
+		return Matrix4x4(
+			_mm_setr_ps( cx, 0.f,  sx, 0.f),
+			_mm_setr_ps(0.f, 1.f, 0.f, 0.f),
+			_mm_setr_ps(-sx, 0.f,  cx, 0.f),
+			_mm_setr_ps(0.f, 0.f, 0.f, 1.f));
+	}
+
+	static Matrix4x4 makeRotationZ(float x) {
+		x = degToRad(x);
+		const float sx = sinf(x);
+		const float cx = cosf(x);
+		return Matrix4x4(
+			_mm_setr_ps( cx, -sx, 0.f, 0.f),
+			_mm_setr_ps( sx,  cx, 0.f, 0.f),
+			_mm_setr_ps(0.f, 0.f, 1.f, 0.f),
+			_mm_setr_ps(0.f, 0.f, 0.f, 1.f));
+	}
+
+	static Matrix4x4 makeRotation(float x, float y, float z) {
+		return makeRotationX(x) * makeRotationY(y) * makeRotationZ(z);
+	}
 private:
 	Vector3f transform(const Matrix4x4& m, const Vector3f& v) const {
 		// make the 4rth el. 1

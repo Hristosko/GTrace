@@ -126,3 +126,41 @@ TEST(Transform, transform) {
 	res = tr->transform(res);
 	EXPECT_TRUE(compare(init, res, false));
 }
+
+
+TEST(Transform, translation) {
+	const Vector3f init(1, 2, 3);
+	const Vector3f trans(1, 1, 1);
+	const Matrix4x4 m = Transform::makeTranslation(trans);
+	Ref<Transform> tr(new Transform(m));
+	const Vector3f res = tr->transform(init);
+	EXPECT_TRUE(compare(init + trans, res));
+}
+
+TEST(Transform, rotation) {
+	const Vector3f init(1, 1, 1);
+	{
+		const Matrix4x4 m = Transform::makeRotationX(180.f);
+		Ref<Transform> tr(new Transform(m));
+		const Vector3f rotX = tr->transform(init);
+		EXPECT_TRUE(compare(Vector3f(1.f, -1.f, -1.f), rotX));
+	}
+	{
+		const Matrix4x4 m = Transform::makeRotationY(180.f);
+		Ref<Transform> tr(new Transform(m));
+		const Vector3f rotY = tr->transform(init);
+		EXPECT_TRUE(compare(Vector3f(-1.f, 1.f, -1.f), rotY));
+	}
+	{
+		const Matrix4x4 m = Transform::makeRotationZ(180.f);
+		Ref<Transform> tr(new Transform(m));
+		const Vector3f rotZ = tr->transform(init);
+		EXPECT_TRUE(compare(Vector3f(-1.f, -1.f, 1.f), rotZ));
+	}
+	{
+		const Matrix4x4 m = Transform::makeRotationZ(0.f);
+		Ref<Transform> tr(new Transform(m));
+		const Vector3f rotZ = tr->transform(init);
+		EXPECT_TRUE(compare(init, rotZ));
+	}
+}
