@@ -15,6 +15,13 @@ private:
 	explicit Matrix4x4(const __m256& x, const __m256& y) : m256{ x, y } {}
 
 public:
+	Matrix4x4()
+		: rows {
+		_mm_setr_ps(1.f, 0.f, 0.f, 0.f),
+		_mm_setr_ps(0.f, 1.f, 0.f, 0.f),
+		_mm_setr_ps(0.f, 0.f, 1.f, 0.f),
+		_mm_setr_ps(0.f, 0.f, 0.f, 1.f)
+	} {}
 	Matrix4x4(const float* elems)
 		: rows{
 		_mm_setr_ps(elems[0], elems[1], elems[2], elems[3]),
