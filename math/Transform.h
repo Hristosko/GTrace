@@ -1,10 +1,10 @@
 #pragma once
 
 #include "../HeapAligned.h"
+#include "../Ref.h"
 #include "Matrix4x4.h"
-#include <memory>
 
-class Transform : public HeapAligned<32>, public std::enable_shared_from_this<Transform> {
+class Transform : public HeapAligned<32>, public ReferenceCounted {
 public:
 	Transform(const Matrix4x4& mat)
 		: T(mat.transposed()), // we store the transposed matrix so that we can eff. transform vectors

@@ -113,6 +113,5 @@ TEST(Matrix4x4, inversed) {
 TEST(Transform, construct) {
 	const float mf[] = { 1,0,0,1,0,2,1,2,2,1,0,1,2,0,1,4 };
 	const Matrix4x4 m(mf);
-	std::shared_ptr<Transform> tr = std::make_shared<Transform>(m);
-
+	Ref<Transform> tr(new Transform(m));
 }
