@@ -121,167 +121,167 @@ name=grey
 text=grey
 
 Sphere
-center=(45,-7,-60)
+position=(45,-7,-60)
 radius=20
 mat=brown
 
 Sphere
-center=(40,43,-100)
+position=(40,43,-100)
 radius=17
 mat=dark_green
 
 Sphere
-center=(-20,28,-15)
+position=(-20,28,-15)
 radius=20
 mat=orange
 
 Sphere
-center=(-25,-7,-35)
+position=(-25,-7,-35)
 radius=27
 mat=green
 
 Sphere
-center=(20,-27,-35)
+position=(20,-27,-35)
 radius=22
 mat=light_green
 
 Sphere
-center=(35,18,-35)
+position=(35,18,-35)
 radius=22
 mat=green
 
 Sphere
-center=(-57,-17,-50)
+position=(-57,-17,-50)
 radius=15
 mat=brown
 
 Sphere
-center=(-47,16,-80)
+position=(-47,16,-80)
 radius=23
 mat=light_green
 
 Sphere
-center=(-15,-32,-60)
+position=(-15,-32,-60)
 radius=22
 mat=dark_green
 
 Sphere
-center=(30,-7,-80)
+position=(30,-7,-80)
 radius=10
 mat=dark_yellow
 
 Sphere
-center=(-35,-37,-80)
+position=(-35,-37,-80)
 radius=22
 mat=dark_yellow
 
 Sphere
-center=(10,47,-80)
+position=(10,47,-80)
 radius=22
 mat=dark_yellow
 
 Sphere
-center=(-40,48,-110)
+position=(-40,48,-110)
 radius=18
 mat=dark_green
 
 Sphere
-center=(-10,53,-120)
+position=(-10,53,-120)
 radius=18
 mat=brown
 
 Sphere
-center=(-55,-52,-100)
+position=(-55,-52,-100)
 radius=10
 mat=light_purple
 
 Sphere
-center=(5,-52,-100)
+position=(5,-52,-100)
 radius=15
 mat=brown
 
 Sphere
-center=(55,-27,-100)
+position=(55,-27,-100)
 radius=17
 mat=dark_green
 
 Sphere
-center=(-20,-57,-120)
+position=(-20,-57,-120)
 radius=15
 mat=dark_purple
 
 Sphere
-center=(50,-47,-120)
+position=(50,-47,-120)
 radius=15
 mat=brown
 
 Sphere
-center=(70,-42,-150)
+position=(70,-42,-150)
 radius=10
 mat=light_purple
 
 Sphere
-center=(5,73,-130)
+position=(5,73,-130)
 radius=12
 mat=light_purple
 end
 
 Sphere
-center=(66,21,-130)
+position=(66,21,-130)
 radius=13
 mat=dark_purple
 
 Sphere
-center=(72,-12,-140)
+position=(72,-12,-140)
 radius=12
 mat=light_purple
 
 Sphere
-center=(64,5,-160)
+position=(64,5,-160)
 radius=11
 mat=green
 
 Sphere
-center=(55,38,-160)
+position=(55,38,-160)
 radius=12
 mat=light_purple
 
 Sphere
-center=(-73,-2,-160)
+position=(-73,-2,-160)
 radius=12
 mat=light_purple
 
 Sphere
-center=(30,-62,-140)
+position=(30,-62,-140)
 radius=15
 mat=dark_purple
 
 Sphere
-center=(25,63,-140)
+position=(25,63,-140)
 radius=15
 mat=dark_purple
 
 Sphere
-center=(-20,68,-130)
+position=(-20,68,-130)
 radius=12
 mat=light_purple
 
 Sphere
-center=(58,56,-180)
+position=(58,56,-180)
 radius=11
 mat=green
 
 Sphere
-center=(-63,-39,-180)
+position=(-63,-39,-180)
 radius=11
 mat=green
 
 Sphere
-center=(46,68,-200)
+position=(46,68,-200)
 radius=10
 mat=light_purple
 
 Sphere
-center=(-3,-72,-130)
+position=(-3,-72,-130)
 radius=12
 mat=light_purple

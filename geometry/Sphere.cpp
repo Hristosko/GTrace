@@ -2,17 +2,18 @@
 #include "BBox.h"
 
 void Sphere::parse(std::unordered_map<std::string, std::string>& map) {
+	this->parseTransform(map);
 	SceneParser& parser = getParser();
-	parser.parseVector3fAndStore(map, "center", this->center);
 	parser.parsefloatAndStore(map, "radius", this->radius);
 	parser.parseMaterialAndStore(map, "mat", this->mat);
 }
 
 bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
-	const Vector3f temp = ray.origin - Vector3f(this->center);
-	const float a = dot(ray.direction, ray.direction);
-	const float b = 2.f * dot(ray.direction, temp);
-	const float c = dot(temp, temp) - radius * radius;
+	const Vector3f origin = objectToWorld->invTransform(ray.origin);
+	const Vector3f direction = objectToWorld->invTransformDirection(ray.direction);
+	const float a = dot(direction, direction);
+	const float b = 2.f * dot(direction, origin);
+	const float c = dot(origin, origin) - radius * radius;
 
 	float discr = b * b - 4.f * a * c;
 	if (discr > 0.f) {
@@ -25,7 +26,8 @@ bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& 
 
 		// we have a hit
 		rec.t = t;
-		rec.normal = normalize(ray.origin + t * ray.direction - this->center);
+		rec.normal = origin + t * direction;
+		rec.normal = normalize(this->objectToWorld->transformDirection(rec.normal));
 		rec.mat = this->mat;
 		return true;
 	}
@@ -34,8 +36,9 @@ bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& 
 
 BBox Sphere::bbox() const {
 	const Vector3f rad(this->radius);
+	const Vector3f center = this->objectToWorld->transform(Vector3f(0.f));
 	return BBox(
-		this->center - rad,
-		this->center + rad);
+		center - rad,
+		center + rad);
 }
 

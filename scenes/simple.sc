@@ -68,11 +68,11 @@ c=(0,200,0)
 mat=mat_red
 
 Sphere
-center=(0,0,200)
+position=(0,0,200)
 radius=100
 mat=mat_noise
 
 Sphere
-center=(400,400,-400)
+position=(400,400,-400)
 radius=200
 mat=mat_blue

@@ -21,6 +21,13 @@ public:
 		return this->transform(this->iT, v);
 	}
 
+	Vector3f transformDirection(const Vector3f& v) const {
+		return this->transformDirection(this->T, v);
+	}
+	Vector3f invTransformDirection(const Vector3f& v) const {
+		return this->transformDirection(this->iT, v);
+	}
+
 	static Matrix4x4 makeTranslation(const Vector3f& v) {
 		return Matrix4x4(
 			_mm_setr_ps(1.f, 0.f, 0.f, v.x()),
@@ -78,6 +85,19 @@ private:
 		res = _mm_add_ps(res, _mm_mul_ps(m.rows[3], _mm_broadcast_ss(&un.f[3])));
 		// make the 4th comp 1
 		res = _mm_div_ps(res, _mm_shuffle_ps(res, res, _MM_SHUFFLE(3, 3, 3, 3)));
+		return res;
+	}
+
+	Vector3f transformDirection(const Matrix4x4& m, const Vector3f& v) const {
+		// make the 4rth el. 1
+		MM128 un;
+		un.m128 = v.vec;
+		un.f[3] = 0.f;
+
+		__m128 res = _mm_mul_ps(m.rows[0], _mm_broadcast_ss(&un.f[0]));
+		res = _mm_add_ps(res, _mm_mul_ps(m.rows[1], _mm_broadcast_ss(&un.f[1])));
+		res = _mm_add_ps(res, _mm_mul_ps(m.rows[2], _mm_broadcast_ss(&un.f[2])));
+		res = _mm_add_ps(res, _mm_mul_ps(m.rows[3], _mm_broadcast_ss(&un.f[3])));
 		return res;
 	}
 

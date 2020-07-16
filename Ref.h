@@ -45,17 +45,20 @@ public:
 			this->ptr = rhs.ptr;
 			if (this->ptr) this->ptr->addRef();
 		}
+		return *this;
 	}
 
-	Ref&& operator=(Ref&& rhs) {
+	Ref&& operator=(Ref&& rhs) noexcept {
 		if (this != &rhs) {
 			this->free();
 			this->ptr = rhs.ptr;
 			rhs.ptr = nullptr;
 		}
+		return std::move(*this);
 	}
 
 	T* operator->() { return this->ptr; }
+	const T* operator->() const { return this->ptr; }
 	T* get() { return this->ptr(); }
 
 	void free() {

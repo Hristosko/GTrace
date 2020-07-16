@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../math/Vector3f.h"
+#include <cstdint>
 
 #define GEOM_EPS 0.0001f
 
@@ -8,6 +9,7 @@ class Renderer;
 class Material;
 
 struct Ray {
+	uint32_t px, py;
 	Renderer* renderer;
 	Vector3f origin;
 	Vector3f direction;

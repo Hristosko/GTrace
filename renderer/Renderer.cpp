@@ -88,6 +88,8 @@ void Renderer::rayTraceWithSamples(
 			const float dy = ((float)sy + this->rng.get()) * denom - 0.5f;
 
 			Ray ray = camera.castRay(camx + dx, -(camy + dy));
+			ray.px = ix;
+			ray.py = iy;
 			ray.renderer = this;
 			HitRecord rec;
 			rec.mat = getWorld().getSettings().background;
