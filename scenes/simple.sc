@@ -66,6 +66,16 @@ a=(-500,-500,0)
 b=(200,0,0)
 c=(0,200,0)
 mat=mat_red
+position=(0,0,-300)
+rotation=(180,0,0)
+
+Triangle
+a=(-500,-500,0)
+b=(200,0,0)
+c=(0,200,0)
+mat=mat_blue
+position=(0,0,-300)
+rotation=(0,0,0)
 
 Sphere
 position=(0,0,200)

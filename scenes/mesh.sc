@@ -32,3 +32,4 @@ Mesh
 mat=mat_green
 use_normals=true
 file=C:\code\Gtrace\Gtrace\scenes\bunny.obj
+rotation=(0,-90,0)

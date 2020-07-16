@@ -16,7 +16,7 @@ public:
 	virtual void parse(std::unordered_map<std::string, std::string>& map) override;
 
 private:
-	void loadFromObjFile(const char* path, bool useNormals);
+	void loadFromObjFile(const char* path, bool useNormals, Ref<Transform>& tr);
 private:
 	Material* mat;
 	std::deque<Vector3f> vertices;
@@ -25,8 +25,8 @@ private:
 
 class MeshElement : public Shape {
 public:
-	MeshElement(Mesh* mesh, uint32_t i, uint32_t j, uint32_t k)
-		: mesh(mesh), tr({ i, j, k }) {}
+	MeshElement(Ref<Transform>& tr, Mesh* mesh, uint32_t i, uint32_t j, uint32_t k)
+		:Shape(tr), mesh(mesh), tr({ i, j, k }) {}
 
 	// not used, cannot be instanciated from the parsr
 	virtual void parse(std::unordered_map<std::string, std::string>& map) override {}
@@ -40,9 +40,9 @@ protected:
 
 class MeshElementWithNormal : public MeshElement {
 public:
-	MeshElementWithNormal(Mesh* mesh, uint32_t i, uint32_t j, uint32_t k,
+	MeshElementWithNormal(Ref<Transform>& tr, Mesh* mesh, uint32_t i, uint32_t j, uint32_t k,
 		uint32_t ni, uint32_t nj, uint32_t nk)
-		: MeshElement(mesh, i, j, k), normals({ ni, nj, nk }) {}
+		: MeshElement(tr, mesh, i, j, k), normals({ ni, nj, nk }) {}
 
 	virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const override;
 

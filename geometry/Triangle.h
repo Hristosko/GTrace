@@ -4,11 +4,11 @@
 
 class Triangle : public Shape {
 public:
-	static bool hit(const Vector3f& a, const Vector3f& b, const Vector3f& c,
+	static bool hit(const Vector3f& a, const Vector3f& b, const Vector3f& c,const Transform* tr,
 		const Ray& ray, float tmin, float tmax,
 		float& beta, float& gamma, float& tval);
 
-	static BBox triangleBBox(const Vector3f& a, const Vector3f& b, const Vector3f& c);
+	static BBox triangleBBox(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Transform* tr);
 
 	Triangle() = default;
 	Triangle(const Vector3fData& a, const Vector3fData& b, const Vector3fData& c)

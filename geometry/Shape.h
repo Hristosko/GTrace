@@ -9,10 +9,14 @@
 class BBox;
 class Shape : public SceneElement, public HeapAligned<16> {
 public:
+	Shape() = default;
+	Shape(Ref<Transform>& tr) : objectToWorld(tr) {}
 	virtual ~Shape() {}
 
 	virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const = 0;
 	virtual BBox bbox() const = 0;
+	
+	static Ref<Transform> parseTranformComponents(std::unordered_map<std::string, std::string>& map);
 protected:
 	void parseTransform(std::unordered_map<std::string, std::string>& map);
 protected:

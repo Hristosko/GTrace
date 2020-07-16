@@ -98,7 +98,7 @@ private:
 		res = _mm_add_ps(res, _mm_mul_ps(m.rows[1], _mm_broadcast_ss(&un.f[1])));
 		res = _mm_add_ps(res, _mm_mul_ps(m.rows[2], _mm_broadcast_ss(&un.f[2])));
 		res = _mm_add_ps(res, _mm_mul_ps(m.rows[3], _mm_broadcast_ss(&un.f[3])));
-		return res;
+		return normalize(Vector3f(res));
 	}
 
 private:

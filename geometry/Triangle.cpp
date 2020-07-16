@@ -1,21 +1,23 @@
 #include "Triangle.h"
 #include "BBox.h"
 
-bool Triangle::hit(const Vector3f& a, const Vector3f& b, const Vector3f& c,
+bool Triangle::hit(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Transform* tr,
 	const Ray& ray, float tmin, float tmax,
 	float& beta, float& gamma, float& tval) {
+	const Vector3f origin = tr->invTransform(ray.origin);
+	const Vector3f direction = tr->invTransformDirection(ray.direction);
 
 	Vector3f AB = Vector3f(a) - Vector3f(b);
 	Vector3f AC = Vector3f(a) - Vector3f(c);
-	Vector3f AO = Vector3f(a) - ray.origin;
+	Vector3f AO = Vector3f(a) - origin;
 
 	const float E = AC.y();
-	const float I = ray.direction.z();
-	const float H = ray.direction.y();
+	const float I = direction.z();
+	const float H = direction.y();
 	const float F = AC.z();
 	const float EIHF = E * I - H * F;
 
-	const float G = ray.direction.x();
+	const float G = direction.x();
 	const float D = AC.x();
 	const float GFDI = G * F - D * I;
 
@@ -40,16 +42,19 @@ bool Triangle::hit(const Vector3f& a, const Vector3f& b, const Vector3f& c,
 	const float BLKC = B * L - K * C;
 
 	temp = Vector3f(BLKC, JCAL, AKJB);
-	gamma = dot(temp, ray.direction) / denom;
+	gamma = dot(temp, direction) / denom;
 	if (gamma <= 0.f || beta + gamma >= 1.f) return false;
 
 	tval = -dot(temp, AC) / denom;
 	return tval >= tmin && tval <= tmax;
 }
 
-BBox Triangle::triangleBBox(const Vector3f& a, const Vector3f& b, const Vector3f& c) {
-	const Vector3f bottom = min(min(a, b), c);
-	const Vector3f top = max(max(a, b), c);
+BBox Triangle::triangleBBox(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Transform* tr) {
+	const Vector3f A = tr->transform(a);
+	const Vector3f B = tr->transform(b);
+	const Vector3f C = tr->transform(c);
+	const Vector3f bottom = min(min(A, B), C);
+	const Vector3f top = max(max(A, B), C);
 	return BBox(bottom, top);
 }
 
@@ -59,20 +64,22 @@ void Triangle::parse(std::unordered_map<std::string, std::string>& map) {
 	parser.parseVector3fAndStore(map, "b", this->b);
 	parser.parseVector3fAndStore(map, "c", this->c);
 	parser.parseMaterialAndStore(map, "mat", this->mat);
+	this->parseTransform(map);
+
 }
 
 bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
 	float tval, beta, gamma;
 
-	if (Triangle::hit(a, b, c, ray, tmin, tmax, beta, gamma, tval)) {
+	if (Triangle::hit(a, b, c, this->objectToWorld.get(), ray, tmin, tmax, beta, gamma, tval)) {
 		rec.t = tval;
 		rec.mat = this->mat;
-		rec.normal = normalize(cross(b - a, c - a));
+		rec.normal = this->objectToWorld->invTransformDirection(cross(b - a, c - a));
 		return true;
 	}
 	return false;
 }
 
 BBox Triangle::bbox() const {
-	return Triangle::triangleBBox(this->a, this->b, this->c);
+	return Triangle::triangleBBox(this->a, this->b, this->c, this->objectToWorld.get());
 }

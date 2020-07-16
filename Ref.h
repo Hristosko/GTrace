@@ -60,6 +60,7 @@ public:
 	T* operator->() { return this->ptr; }
 	const T* operator->() const { return this->ptr; }
 	T* get() { return this->ptr(); }
+	const T* get() const { return this->ptr; }
 
 	void free() {
 		if (ptr && ptr->removeRef()) delete ptr;

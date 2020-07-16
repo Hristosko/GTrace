@@ -25,7 +25,7 @@ bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& 
 		if (t < tmin || t > tmax) return false;
 
 		// we have a hit
-		rec.t = t;
+		rec.t = t; // TODO: not sure if t has to be calc. in world space
 		rec.normal = origin + t * direction;
 		rec.normal = normalize(this->objectToWorld->transformDirection(rec.normal));
 		rec.mat = this->mat;

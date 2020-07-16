@@ -17,6 +17,7 @@
 #define OBJ_FACE_FORMAT "f %u//%u %u//%u %u//%u"
 
 void Mesh::parse(std::unordered_map<std::string, std::string>& map) {
+	Ref<Transform> tr = Shape::parseTranformComponents(map);
 	SceneParser& p = getParser();
 	p.parseMaterialAndStore(map, "mat", this->mat);
 	bool useNormals;
@@ -26,7 +27,7 @@ void Mesh::parse(std::unordered_map<std::string, std::string>& map) {
 		LOGERROR("Mesh source file is not specified.");
 		throw ParseError();
 	}
-	if (endsWith(it->second, OBJ_FILE_EXTENSION)) this->loadFromObjFile(it->second.c_str(), useNormals);
+	if (endsWith(it->second, OBJ_FILE_EXTENSION)) this->loadFromObjFile(it->second.c_str(), useNormals, tr);
 }
 
 static void checkIfVertexExists(const std::deque<Vector3f>& data, unsigned idx) {
@@ -39,7 +40,7 @@ static void checkIfNormalExists(const std::deque<Vector3f>& data, unsigned idx) 
 		LOGWARNING("Unknown normal: ", idx);
 }
 
-void Mesh::loadFromObjFile(const char* path, bool useNormals) {
+void Mesh::loadFromObjFile(const char* path, bool useNormals, Ref<Transform>& tr) {
 	FILE* fp;
 	if (0 != fopen_s(&fp, path, "r")) {
 		LOGERROR("Cannot open file: ", path);
@@ -82,7 +83,7 @@ void Mesh::loadFromObjFile(const char* path, bool useNormals) {
 				checkIfNormalExists(this->normals, nk);
 
 				MeshElementWithNormal* el = new
-					MeshElementWithNormal(this,
+					MeshElementWithNormal(tr, this,
 						i-1, j-1, k-1,
 						ni-1, nj-1, nk-1);
 				getWorld().add(el);
@@ -90,7 +91,7 @@ void Mesh::loadFromObjFile(const char* path, bool useNormals) {
 			}
 			// add the new triangle to the world
 			// The indexing in the obj file starts from 1
-			MeshElement* el = new MeshElement(this, i-1, j-1, k-1);
+			MeshElement* el = new MeshElement(tr, this, i-1, j-1, k-1);
 			getWorld().add(el);
 			continue;
 		}
@@ -110,10 +111,10 @@ bool MeshElement::hit(const Ray& ray, float tmin, float tmax, float time, HitRec
 	const Vector3f a(this->mesh->vertices[tr.i]);
 	const Vector3f b(this->mesh->vertices[tr.j]);
 	const Vector3f c(this->mesh->vertices[tr.k]);
-	if (Triangle::hit(a, b, c, ray, tmin, tmax, beta, gamma, tval)) {
+	if (Triangle::hit(a, b, c, this->objectToWorld.get(), ray, tmin, tmax, beta, gamma, tval)) {
 		hasHit = true;
 		tmax = rec.t = tval;
-		rec.normal = normalize(cross(b - a, c - a));
+		rec.normal = this->objectToWorld->transformDirection((cross(b - a, c - a)));
 	}
 	if (hasHit) rec.mat = this->mesh->mat;
 	return hasHit;
@@ -123,7 +124,7 @@ BBox MeshElement::bbox() const {
 	const Vector3f a(this->mesh->vertices[tr.i]);
 	const Vector3f b(this->mesh->vertices[tr.j]);
 	const Vector3f c(this->mesh->vertices[tr.k]);
-	return Triangle::triangleBBox(a, b, c);
+	return Triangle::triangleBBox(a, b, c, this->objectToWorld.get());
 }
 
 bool MeshElementWithNormal::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
@@ -132,7 +133,7 @@ bool MeshElementWithNormal::hit(const Ray& ray, float tmin, float tmax, float ti
 	const Vector3f a(this->mesh->vertices[tr.i]);
 	const Vector3f b(this->mesh->vertices[tr.j]);
 	const Vector3f c(this->mesh->vertices[tr.k]);
-	if (Triangle::hit(a, b, c, ray, tmin, tmax, beta, gamma, tval)) {
+	if (Triangle::hit(a, b, c, this->objectToWorld.get(), ray, tmin, tmax, beta, gamma, tval)) {
 		hasHit = true;
 		tmax = rec.t = tval;
 		const float alpha = 1.f - beta - gamma;
@@ -140,6 +141,7 @@ bool MeshElementWithNormal::hit(const Ray& ray, float tmin, float tmax, float ti
 		rec.normal = this->mesh->normals[normals.i] * alpha
 			+ this->mesh->normals[normals.j] * beta
 			+ this->mesh->normals[normals.k] * gamma;
+		rec.normal = this->objectToWorld->transformDirection(rec.normal);
 	}
 	if (hasHit) rec.mat = this->mesh->mat;
 	return hasHit;
