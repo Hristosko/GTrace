@@ -36,14 +36,22 @@ public:
 			_mm_setr_ps(0.f, 0.f, 0.f, 1.f));
 	}
 
+	static Matrix4x4 makeScale(float k) {
+		return Matrix4x4(
+			_mm_setr_ps(  k, 0.f, 0.f, 0.f),
+			_mm_setr_ps(0.f,   k, 0.f, 0.f),
+			_mm_setr_ps(0.f,  0.f,  k, 0.f),
+			_mm_setr_ps(0.f, 0.f, 0.f, 1.f));
+	}
+
 	static Matrix4x4 makeRotationX(float x) {
 		x = degToRad(x);
 		const float sx = sinf(x);
 		const float cx = cosf(x);
 		return Matrix4x4(
 			_mm_setr_ps(1.f, 0.f, 0.f, 0.f),
-			_mm_setr_ps(0.f,  cx, -sx, 0.f),
-			_mm_setr_ps(0.f,  sx,  cx, 0.f),
+			_mm_setr_ps(0.f, cx, -sx, 0.f),
+			_mm_setr_ps(0.f, sx, cx, 0.f),
 			_mm_setr_ps(0.f, 0.f, 0.f, 1.f));
 	}
 

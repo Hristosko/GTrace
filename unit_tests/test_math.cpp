@@ -164,3 +164,13 @@ TEST(Transform, rotation) {
 		EXPECT_TRUE(compare(init, rotZ));
 	}
 }
+
+TEST(Transform, scale) {
+	const Vector3f init(1, 2, 3);
+	const Matrix4x4 m = Transform::makeScale(2.f);
+	Ref<Transform> tr(new Transform(m));
+	Vector3f res = tr->transform(init);
+	EXPECT_TRUE(compare(init * 2.f, res));
+	res = tr->invTransform(init);
+	EXPECT_TRUE(compare(init * 0.5f, res));
+}
