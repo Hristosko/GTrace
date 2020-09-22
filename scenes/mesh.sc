@@ -1,6 +1,6 @@
 # Scene used for testing meshes
 
-Camera
+PinholeCamera
 eye=(-500,0,0)
 look_point=(0,0,0)
 up=(0,1,0)

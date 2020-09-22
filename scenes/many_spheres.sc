@@ -1,7 +1,7 @@
 Settings
 subdivs=10
 
-Camera
+PinholeCamera
 eye=(0,0,500)
 look_point=(0,0,0)
 up=(0,1,0)

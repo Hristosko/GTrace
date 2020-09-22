@@ -6,7 +6,7 @@
 #include "../material/Material.h"
 #include "../light/Light.h"
 
-#include "../renderer/Camera.h"
+#include "../camera/Camera.h"
 
 #include "SceneSettings.h"
 #include "Parser.h"
@@ -26,7 +26,9 @@ public:
 	const std::vector<Shape*>& getShapes() const { return this->shapes; }
 	const std::vector<Light*>& getLights() const { return this->lights; }
 	SceneSettings& getSettings() { return this->settings; }
-	Camera& getCamera() { return this->camera; }
+	
+	Camera* getCamera() { return this->camera.get(); }
+	void setCamera(Camera* camera) { this->camera = camera; }
 
 	Texture* getTextureByName(const std::string& name);
 	void addTexture(const std::string& name, Texture* text);
@@ -44,7 +46,7 @@ private:
 	std::vector<Light*> lights;
 	std::vector<Mesh*> meshes;
 	SceneSettings settings;
-	Camera camera;
+	Ref<Camera> camera;
 };
 
 World& getWorld();

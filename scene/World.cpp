@@ -59,6 +59,8 @@ void World::addElemenet(SceneElement* el, const std::unordered_map<std::string, 
 		}
 	} else if(Light* x = dynamic_cast<Light*>(el)) {
 		this->lights.push_back(x);
+	} else if (Camera* x = dynamic_cast<Camera*>(el)) {
+		this->setCamera(x);
 	}
 }
 

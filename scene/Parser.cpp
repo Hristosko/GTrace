@@ -18,6 +18,7 @@
 #include "../texture/NoiseTexture.h"
 #include "../material/MatteMaterial.h"
 #include "../light/DirectionalLight.h"
+#include "../camera/PinholeCamera.h"
 
 /// Store the current object name in global variable
 /// so that we are able to log in warnings, error etc.
@@ -39,8 +40,8 @@ static SceneElement* getByName(const std::string& name) {
 		return new MatteMaterial();
 	if (name == "DirectionalLight")
 		return new DirectionalLight();
-	if (name == "Camera")
-		return &getWorld().getCamera();
+	if (name == "PinholeCamera")
+		return new PinholeCamera();
 	if (name == "Settings")
 		return &getWorld().getSettings();
 

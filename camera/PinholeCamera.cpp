@@ -1,6 +1,6 @@
-#include "Camera.h"
+#include "PinholeCamera.h"
 
-void Camera::parse(std::unordered_map<std::string, std::string>& map) {
+void PinholeCamera::parse(std::unordered_map<std::string, std::string>& map) {
 	SceneParser& parser = getParser();
 	parser.parseVector3fAndStore(map, "eye", this->eye);
 	parser.parseVector3fAndStore(map, "look_point", this->lookPoint);
@@ -11,11 +11,11 @@ void Camera::parse(std::unordered_map<std::string, std::string>& map) {
 	this->uvw = OrthonormalBasis(eye - lookPoint, up, OB_fromWV());
 }
 
-Ray Camera::castRay(float px, float py) const {
+Ray PinholeCamera::castRay(float px, float py) const {
 	const Vector3f origin = this->eye;
 	const Vector3f direction = normalize(
-		zoom*px*uvw.u() +
-		zoom*py*uvw.v() -
-		viewPlaneDistance*uvw.w());
+		zoom * px * uvw.u() +
+		zoom * py * uvw.v() -
+		viewPlaneDistance * uvw.w());
 	return Ray(origin, direction);
 }

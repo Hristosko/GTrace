@@ -1,14 +1,12 @@
 #pragma once
 
-#include "../scene/Parser.h"
-#include "../geometry/Ray.h"
-#include "../math/OrthonormalBasis.h"
+#include "Camera.h"
 
-class Camera : public SceneElement {
+class PinholeCamera : public Camera {
 public:
 	virtual void parse(std::unordered_map<std::string, std::string>& map) override;
 
-	Ray castRay(float px, float py) const;
+	virtual Ray castRay(float px, float py) const override;
 private:
 	Vector3f eye;
 	Vector3f lookPoint;

@@ -80,14 +80,14 @@ void Renderer::rayTraceWithSamples(
 	const int64_t camx = (int64_t)ix - getWorld().getSettings().width / 2;
 	const int64_t camy = (int64_t)iy - getWorld().getSettings().height / 2;
 	const float denom = 1.f / samples;
-	Camera& camera = getWorld().getCamera();
+	const Camera* camera = getWorld().getCamera();
 
 	for (uint32_t sx = 0; sx < samples; ++sx) {
 		for (uint32_t sy = 0; sy < samples; ++sy) {
 			const float dx = ((float)sx + this->rng.get()) * denom - 0.5f;
 			const float dy = ((float)sy + this->rng.get()) * denom - 0.5f;
 
-			Ray ray = camera.castRay(camx + dx, -(camy + dy));
+			Ray ray = camera->castRay(camx + dx, -(camy + dy));
 			ray.px = ix;
 			ray.py = iy;
 			ray.renderer = this;
