@@ -6,6 +6,7 @@
 
 #define DELIMER '='
 #define COMMENT_START '#'
+#define MULTILINE_COMMENT '@'
 #define MAX_LINE_LENGTH 200
 
 #define FALSE_STRING "false"
@@ -82,11 +83,18 @@ void SceneParser::parseFile(const char* path) {
 	std::unordered_map<std::string, std::string> fields;
 	uint32_t line = 0;
 	bool atObject = false;
+	bool insideComment = false;
 
 	int len;
 	while ((len = readLine(buffer, MAX_LINE_LENGTH, fp)) >= 0) {
 		++line;
 		if (buffer[0] == COMMENT_START) continue;
+		if (insideComment == false && buffer[0] == MULTILINE_COMMENT) insideComment = true;
+		if (insideComment)
+		{
+			if (buffer[len - 1] == MULTILINE_COMMENT) insideComment = false;
+			continue;
+		}
 		if (!atObject) {
 			if (len != 0) {
 				atObject = true;
