@@ -20,6 +20,7 @@
 #include "../material/MatteMaterial.h"
 #include "../light/DirectionalLight.h"
 #include "../camera/PinholeCamera.h"
+#include "../camera/OrthogonalCamera.h"
 
 /// Store the current object name in global variable
 /// so that we are able to log in warnings, error etc.
@@ -43,6 +44,8 @@ static SceneElement* getByName(const std::string& name) {
 		return new DirectionalLight();
 	if (name == "PinholeCamera")
 		return new PinholeCamera();
+	if (name == "OrthogonalCamera")
+		return new OrthogonalCamera();
 	if (name == "Settings")
 		return &getWorld().getSettings();
 
@@ -89,7 +92,11 @@ void SceneParser::parseFile(const char* path) {
 	while ((len = readLine(buffer, MAX_LINE_LENGTH, fp)) >= 0) {
 		++line;
 		if (buffer[0] == COMMENT_START) continue;
-		if (insideComment == false && buffer[0] == MULTILINE_COMMENT) insideComment = true;
+		if (insideComment == false && buffer[0] == MULTILINE_COMMENT)
+		{
+			insideComment = true;
+			continue;
+		}
 		if (insideComment)
 		{
 			if (buffer[len - 1] == MULTILINE_COMMENT) insideComment = false;

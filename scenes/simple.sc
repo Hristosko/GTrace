@@ -5,6 +5,14 @@ up=(0,1,0)
 view_plane_distance=100
 zoom=0.25
 
+@
+OrthogonalCamera
+up=(0,1,0)
+look_direction=(0,0,-1)
+height=500
+zoom=2
+@
+
 DirectionalLight
 direction=(1,1,-1)
 color=(1,1,1)
