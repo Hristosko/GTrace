@@ -59,13 +59,13 @@ void Mesh::loadFromObjFile(const char* path, bool useNormals, Ref<Transform>& tr
 		if (len == 0 || buffer[0] == OBJ_COMMENT) continue;
 		res = sscanf_s(buffer, OBJ_VERTEX_FORMAT, &a, &b, &c);
 		if (res == 3) {
-			this->vertices.push_back(Vector3fData(a, b, c));
+			this->vertices.push_back(Vector3f(a, b, c));
 			continue;
 		}
 
 		res = sscanf_s(buffer, OBJ_NORMAL_FORMAT, &a, &b, &c);
 		if (res == 3) {
-			if (useNormals) this->normals.push_back(Vector3fData(a, b, c));
+			if (useNormals) this->normals.push_back(Vector3f(a, b, c));
 			continue;
 		}
 

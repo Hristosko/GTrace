@@ -2,6 +2,9 @@
 
 #include "MemoryBench.h"
 
+/**
+ * Objects that require extra aligment (Vector3f) should inherit this class.
+ */
 template<size_t N>
 class HeapAligned {
 public:

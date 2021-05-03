@@ -4,18 +4,6 @@
 #include <immintrin.h>
 #include <cmath>
 
-///
-/// Storing Vector3f in a clss that will be allocated on the heap
-/// causes allignment issues.
-/// Use this struct to store the data and make Vector3f for calculations
-///
-struct Vector3fData {
-	float x, y, z;
-
-	Vector3fData(float t = 0.f) : x(t), y(t), z(t) {}
-	Vector3fData(float x, float y, float z) : x(x), y(y), z(z) {}
-};
-
 union MM128 {
 	__m128 m128;
 	float f[4];
@@ -29,7 +17,6 @@ public:
 	Vector3f() { this->vec = _mm_setzero_ps(); }
 	explicit Vector3f(float v) { this->vec = _mm_setr_ps(v, v, v, 0.f); }
 	Vector3f(float x, float y, float z) { this->vec = _mm_setr_ps(x, y, z, 0.f); }
-	Vector3f(const Vector3fData vd) { this->vec = _mm_setr_ps(vd.x, vd.y, vd.z, 0.f); }
 
 	float x() const {
 		return (*this)[0];
@@ -44,11 +31,6 @@ public:
 		__m128i vidx = _mm_cvtsi32_si128(i);
 		__m128 shuffled = _mm_permutevar_ps(this->vec, vidx);
 		return _mm_cvtss_f32(shuffled);
-	}
-	Vector3fData data() const {
-		MM128 mm;
-		mm.m128 = this->vec;
-		return Vector3fData(mm.f[0], mm.f[1], mm.f[2]);
 	}
 
 	friend Vector3f min(const Vector3f& a, const Vector3f& b);

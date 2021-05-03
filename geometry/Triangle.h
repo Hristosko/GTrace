@@ -11,7 +11,7 @@ public:
 	static BBox triangleBBox(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Transform* tr);
 
 	Triangle() = default;
-	Triangle(const Vector3fData& a, const Vector3fData& b, const Vector3fData& c)
+	Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c)
 		: a(a), b(b), c(c), mat(nullptr) {}
 
 	virtual void parse(std::unordered_map<std::string, std::string>& map) override;
