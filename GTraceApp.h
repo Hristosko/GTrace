@@ -11,7 +11,7 @@
 class GTraceMainWindow : public wxFrame {
 public:
 	GTraceMainWindow();
-	virtual ~GTraceMainWindow() {}
+	virtual ~GTraceMainWindow();
 
 private:
 	void OnPaint(wxPaintEvent& event);

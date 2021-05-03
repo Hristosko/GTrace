@@ -35,6 +35,13 @@ void log(const T& val, const Args& ... args) {
 }
 inline void log() { getLogger() << '\n'; }
 
+#define LOGSTAT(...) \
+	{ \
+		std::lock_guard<std::mutex> lock(getLogger().mu); \
+		log("[STAT]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
+		getLogger().flush(); \
+	}
+
 #define LOGINFO(...) \
 	{ \
 		std::lock_guard<std::mutex> lock(getLogger().mu); \

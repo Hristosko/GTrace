@@ -54,6 +54,15 @@ GTraceMainWindow::GTraceMainWindow()
 	LOGINFO("GTrace Main Window created.");
 }
 
+GTraceMainWindow::~GTraceMainWindow() {
+	getWorld().clear();
+	const MemoryBench::Data mb = MemoryBench::get();
+	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory);
+	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage);
+	LOGSTAT("Alocations count: ", mb.allocationCount);
+	LOGSTAT("Freed allocations count: ", mb.freeCount);
+}
+
 void GTraceMainWindow::OnPaint(wxPaintEvent& event) {
 	wxPaintDC dc(this->renderSurface);
 	if (this->bitmap.IsOk()) {
