@@ -31,6 +31,7 @@
     <ClInclude Include="geometry\Triangle.h" />
     <ClInclude Include="geometry\Mesh.h" />
     <ClInclude Include="GTraceApp.h" />
+    <ClInclude Include="UniqueBuffer.h" />
     <ClInclude Include="HeapAligned.h" />
     <ClInclude Include="HeapAlocated.h" />
     <ClInclude Include="light\DirectionalLight.h" />
