@@ -1,19 +1,25 @@
 #include "MemoryBench.h"
 
 #include <algorithm> // std:::max
-#include <mutex> //std::mutex
+#include <atomic>
 
 namespace MemoryBench {
 
 #ifdef GTRACE_MEMORY_BENCH
 
 struct InternalData {
-	Counter currentAllocatedMemory;
-	Counter peakAllocatedMemory;
-	Counter totalAllocatedMemory;
-	Counter allocationCount;
-	Counter freeCount;
-	std::mutex mu;
+	std::atomic<Counter> currentAllocatedMemory;
+	std::atomic<Counter> peakAllocatedMemory;
+	std::atomic<Counter> totalAllocatedMemory;
+	std::atomic<Counter> allocationCount;
+	std::atomic<Counter> freeCount;
+
+	InternalData() :
+		currentAllocatedMemory(0),
+		peakAllocatedMemory(0),
+		totalAllocatedMemory(0),
+		allocationCount(0),
+		freeCount(0) {}
 };
 
 static InternalData id;
@@ -47,17 +53,6 @@ static Counter getHeapMemory(void* ptr, size_t alignment) {
 }
 
 /**
- * Initializes the internal data used by the benchmark. 
- */
-void init() {
-	id.currentAllocatedMemory = 0;
-	id.peakAllocatedMemory = 0;
-	id.totalAllocatedMemory = 0;
-	id.allocationCount = 0;
-	id.freeCount = 0;
-}
-
-/**
  * Get the currently accumulated data.
  */
 Data get() {
@@ -68,49 +63,51 @@ Data get() {
  * Accumulates single allocation with the given size. 
  */
 static void increaseMemory(Counter size) {
-	std::lock_guard<std::mutex> lock(id.mu);
-	++id.allocationCount;
-	id.currentAllocatedMemory += size;
-	id.totalAllocatedMemory += size;
-	id.peakAllocatedMemory = std::max(id.peakAllocatedMemory, id.currentAllocatedMemory);
+	id.allocationCount.fetch_add(1, std::memory_order_relaxed);
+	id.currentAllocatedMemory.fetch_add(size, std::memory_order_relaxed);
+
+	Counter peak = id.peakAllocatedMemory.load(std::memory_order_relaxed);
+	Counter cur = id.currentAllocatedMemory.load(std::memory_order_relaxed);
+	while (id.currentAllocatedMemory.load(std::memory_order_relaxed) <= cur
+		&& peak < cur) {
+		id.peakAllocatedMemory.compare_exchange_weak(peak, cur, std::memory_order_relaxed, std::memory_order_relaxed);
+	}
+
+	// This isn't threadsafe, but should be accurate enough
+	if (cur > peak) id.peakAllocatedMemory.store(cur, std::memory_order_relaxed);
+	
+	id.totalAllocatedMemory.fetch_add(size, std::memory_order_relaxed);
 }
 
 /**
  * Accumulates single mem. free with the given size.
  */
 static void decreaseMemory(Counter size) {
-	std::lock_guard<std::mutex> lock(id.mu);
-	++id.freeCount;
-	id.currentAllocatedMemory -= size;
+	id.freeCount.fetch_add(1, std::memory_order_relaxed);
+	id.currentAllocatedMemory.fetch_sub(size, std::memory_order_relaxed);
 }
 
-void allocate(void* ptr) {
+static void allocateMemory(void* ptr) {
 	const Counter size = getHeapMemory(ptr);
 	increaseMemory(size);
 }
 
-void free(void* ptr) {
+static void freeMemory(void* ptr) {
 	const Counter size = getHeapMemory(ptr);
 	decreaseMemory(size);
 }
-void allocate(void* ptr, size_t alignment) {
+
+static void allocateMemory(void* ptr, size_t alignment) {
 	const Counter size = getHeapMemory(ptr, alignment);
 	increaseMemory(size);
 }
-void free(void* ptr, size_t alignment) {
+
+static void freeMemory(void* ptr, size_t alignment) {
 	const Counter size = getHeapMemory(ptr, alignment);
 	decreaseMemory(size);
 }
 
 #else
-
-void init() {}
-
-void allocate(void* ptr) {}
-void free(void* ptr) {}
-
-void allocate(void* ptr, size_t alignment) {}
-void free(void* ptr, size_t alignment) {}
 
 Data get() {
 	return { 0,0,0,0 };
@@ -118,3 +115,50 @@ Data get() {
 
 #endif //GTRACE_MEMORY_BENCH
 }
+
+
+// Override operator new and delete
+// Only Windows is supported
+#ifdef GTRACE_MEMORY_BENCH
+#ifdef _WIN32
+
+void* operator new(std::size_t size) {
+	void* res = malloc(size);
+	if (res == NULL) throw std::bad_alloc();
+	MemoryBench::allocateMemory(res);
+	return res;
+}
+
+void* operator new[](std::size_t size) {
+	void* res = malloc(size);
+	if (res == NULL) throw std::bad_alloc();
+	MemoryBench::allocateMemory(res);
+	return res;
+}
+
+void operator delete(void* ptr) {
+	if (ptr == nullptr) return;
+	MemoryBench::freeMemory(ptr);
+	free(ptr);
+}
+
+void operator delete[](void* ptr) {
+	if (ptr == nullptr) return;
+	MemoryBench::freeMemory(ptr);
+	free(ptr);
+}
+
+void* operator new(std::size_t size, std::align_val_t al) {
+	void* res = _aligned_malloc(size, (size_t)al);
+	MemoryBench::allocateMemory(res, (size_t)al);
+	return res;
+}
+
+void operator delete(void* ptr, std::align_val_t al) {
+	if (ptr == nullptr) return;
+	MemoryBench::freeMemory(ptr, (size_t)al);
+	_aligned_free(ptr);
+}
+
+#endif // _WIN32
+#endif // DEBGTRACE_MEMORY_BENCHUG

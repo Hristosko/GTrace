@@ -13,13 +13,6 @@ struct Data {
 	Counter freeCount;
 };
 
-void init();
 Data get();
-
-void allocate(void* ptr);
-void free(void* ptr);
-
-void allocate(void* ptr, size_t alignment);
-void free(void* ptr, size_t alignment);
 
 };
