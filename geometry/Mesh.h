@@ -2,7 +2,6 @@
 
 #include "../math/Vector3f.h"
 #include "../material/Material.h"
-#include "../HeapAlocated.h"
 #include "Shape.h"
 #include <deque>
 
@@ -10,7 +9,7 @@ struct MeshTriangle {
 	uint32_t i, j, k;
 };
 
-class Mesh : public SceneElement, public HeapAlocated {
+class Mesh : public SceneElement {
 public:
 	friend class MeshElement;
 	friend class MeshElementWithNormal;

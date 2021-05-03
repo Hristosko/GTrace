@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RendererOutput.h"
-#include "../UniqueBuffer.h"
+#include <memory>
 
 class RendererDisplay {
 public:
@@ -14,5 +14,5 @@ public:
 private:
 	RendererOutputType curDisplayType;
 	RendererOutput& output;
-	UniqueBufferPtr<char> pixels;
+	std::unique_ptr<char[]> pixels;
 };

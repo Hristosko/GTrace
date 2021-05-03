@@ -21,7 +21,7 @@ void RendererDisplay::setDisplayType(RendererOutputType type) {
 	if (type == RendererOutputType::Image) return;
 	if (type == RendererOutputType::Variance) {
 		uint32_t size = 3 * getWorld().getSettings().width * getWorld().getSettings().height;
-		this->pixels = makeUniqueBuffer<char>(size);
+		this->pixels = std::make_unique<char[]>(size);
 		float* data = reinterpret_cast<float*>(this->output.getOutput(RendererOutputType::Variance).getBuffer());
 		for (uint32_t i = 0; i < size; ++i) {
 			this->pixels[i] = static_cast<char>(255.f * sqrtf(data[i]));
