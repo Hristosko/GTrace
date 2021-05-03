@@ -3,6 +3,11 @@
 #include "MemoryBench.h"
 #include <memory>
 
+
+/**
+ * Wraper for std::unique_ptr that integrates the memory bench
+ */
+
 template <typename T>
 T* allocateBuffer(size_t count) {
 	T* ptr = new T[count];
