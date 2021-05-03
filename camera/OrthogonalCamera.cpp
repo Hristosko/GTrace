@@ -10,16 +10,11 @@ void OrthogonalCamera::parse(std::unordered_map<std::string, std::string>& map) 
 	this->uvw = OrthonormalBasis(this->direction, up, OB_fromWV());
 }
 
-#include <iostream>
 Ray OrthogonalCamera::castRay(float px, float py) const {
-	if (px > 0 && px < 1 && py > 0 && py < 1)
-	{
-		std::cout << "AAA";
-	}
 	px *= zoom;
 	py *= zoom;
 
-	const Vector3f position = this->uvw.u() * px + this->uvw.v() * py - this->uvw.w() * this->height;
+	const Vector3f position = -this->uvw.u() * px + this->uvw.v() * py - this->uvw.w() * this->height;
 	const Vector3f direction = this->uvw.w();
 
 	return Ray(position, direction);
