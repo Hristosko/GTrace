@@ -57,8 +57,8 @@ GTraceMainWindow::GTraceMainWindow()
 GTraceMainWindow::~GTraceMainWindow() {
 	getWorld().clear();
 	const MemoryBench::Data mb = MemoryBench::get();
-	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory);
-	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage);
+	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", mb.totalAllocatedMemory / (1024*1024), "MB");
+	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage, "B ", mb.peakMemoryUsage / (1024 * 1024), "MB");
 	LOGSTAT("Alocations count: ", mb.allocationCount);
 	LOGSTAT("Freed allocations count: ", mb.freeCount);
 }
