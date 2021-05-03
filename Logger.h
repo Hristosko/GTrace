@@ -2,9 +2,11 @@
 
 #include <fstream>
 #include <time.h>
+#include<mutex>
 
 class Logger {
 public:
+	std::mutex mu;
 	Logger();
 	~Logger();
 
@@ -35,18 +37,21 @@ inline void log() { getLogger() << '\n'; }
 
 #define LOGINFO(...) \
 	{ \
+		std::lock_guard<std::mutex> lock(getLogger().mu); \
 		log("[INFO]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
 		getLogger().flush(); \
 	}
 
 #define LOGWARNING(...) \
 	{ \
+		std::lock_guard<std::mutex> lock(getLogger().mu); \
 		log("[WARN]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
 		getLogger().flush(); \
 	}
 
 #define LOGERROR(...) \
 	{ \
+		std::lock_guard<std::mutex> lock(getLogger().mu); \
 		log("[ERROR]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
 		getLogger().flush(); \
 	}
@@ -54,6 +59,7 @@ inline void log() { getLogger() << '\n'; }
 #ifdef _DEBUG
 #define LOGDEBUG(...) \
 	{ \
+		std::lock_guard<std::mutex> lock(getLogger().mu); \
 		log("[DEBUG]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
 		getLogger().flush(); \
 	}
