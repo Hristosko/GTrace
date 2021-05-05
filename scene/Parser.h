@@ -16,10 +16,7 @@ public:
 
 class SceneParser {
 public:
-	typedef void(*ElementParseFunc)(std::unordered_map<std::string, std::string>);
-
 	void parseFile(const char* path);
-	void addElement(const char* name, ElementParseFunc func);
 
 	Vector3f parseVector3f(const std::string& str) const;
 	uint32_t parseuint32(const std::string& str) const;
@@ -31,8 +28,6 @@ public:
 	void parseTextureAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Texture*& res) const;
 	void parseMaterialAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Material*& res) const;
 	void parseBoolAndStore(std::unordered_map<std::string, std::string>& map, const char* name, bool& res) const;
-private:
-	std::unordered_map<std::string, ElementParseFunc> elementParsers;
 };
 
 SceneParser& getParser();

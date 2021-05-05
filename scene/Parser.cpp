@@ -123,10 +123,6 @@ void SceneParser::parseFile(const char* path) {
 	if (atObject) makeElement(curObject, fields);
 }
 
-void SceneParser::addElement(const char* name, ElementParseFunc func) {
-	elementParsers[std::string(name)] = func;
-}
-
 Vector3f SceneParser::parseVector3f(const std::string& str) const {
 	if (str[0] != '(') {
 		LOGERROR("Parsing Vector3f: expected (; line: ", curObjLine);

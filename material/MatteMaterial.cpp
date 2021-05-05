@@ -17,7 +17,7 @@ Vector3f MatteMaterial::shade(const HitRecord& rec, const Ray& ray) const {
 	const Vector3f wo = -ray.direction;
 	Vector3f wi, lightColor;
 	Vector3f res;
-	for (Light* l : lights) {
+	for (auto& l : lights) {
 		l->radiance(wi, lightColor);
 		const float ndotwi = fabsf(dot(rec.normal, wi));
 		res += k * color * lightColor * ndotwi;

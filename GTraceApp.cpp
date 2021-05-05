@@ -28,7 +28,6 @@ GTraceMainWindow::GTraceMainWindow()
 	renderSurface(nullptr),
 	display(output)
 {
-	// Initialize the mem bench once before we start parsing/rendering scenes and files
 	this->renderSurface = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(DEFAULT_WIDTH, DEFAULT_HEIGHT));
 	this->renderSurface->SetBackgroundStyle(wxBG_STYLE_PAINT);
 
