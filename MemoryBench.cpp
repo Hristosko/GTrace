@@ -60,6 +60,17 @@ Data get() {
 }
 
 /**
+ * Reset all accumulators to 0
+ */
+void reset() {
+	id.currentAllocatedMemory.store(0, std::memory_order_relaxed);
+	id.peakAllocatedMemory.store(0, std::memory_order_relaxed);
+	id.totalAllocatedMemory.store(0, std::memory_order_relaxed);
+	id.allocationCount.store(0, std::memory_order_relaxed);
+	id.freeCount.store(0, std::memory_order_relaxed);
+}
+
+/**
  * Accumulates single allocation with the given size. 
  */
 static void increaseMemory(Counter size) {
@@ -112,6 +123,8 @@ static void freeMemory(void* ptr, size_t alignment) {
 Data get() {
 	return { 0,0,0,0 };
 }
+
+void reset() {}
 
 #endif //GTRACE_MEMORY_BENCH
 }

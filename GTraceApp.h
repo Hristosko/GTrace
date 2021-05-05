@@ -7,6 +7,7 @@
 #include "wx/wx.h"
 #include "renderer/RendererOutput.h"
 #include "renderer/RendererDisplay.h"
+#include "MemoryBench.h"
 
 class GTraceMainWindow : public wxFrame {
 public:
@@ -60,5 +61,5 @@ public:
 
 private:
 	GTraceMainWindow* frame = nullptr;
+	MemoryBench::Scope memBench;
 };
-

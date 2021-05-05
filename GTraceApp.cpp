@@ -4,7 +4,6 @@
 #include <thread>
 
 #include "Logger.h"
-#include "MemoryBench.h"
 #include "Events.h"
 #include "renderer/Renderer.h"
 #include "scene/Parser.h"
@@ -54,11 +53,6 @@ GTraceMainWindow::GTraceMainWindow()
 
 GTraceMainWindow::~GTraceMainWindow() {
 	getWorld().clear();
-	const MemoryBench::Data mb = MemoryBench::get();
-	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", mb.totalAllocatedMemory / (1024*1024), "MB");
-	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage, "B ", mb.peakMemoryUsage / (1024 * 1024), "MB");
-	LOGSTAT("Alocations count: ", mb.allocationCount);
-	LOGSTAT("Freed allocations count: ", mb.freeCount);
 }
 
 void GTraceMainWindow::OnPaint(wxPaintEvent& event) {
