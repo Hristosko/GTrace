@@ -58,8 +58,8 @@ public:
 	virtual ~GTraceApp() {}
 
 	bool OnInit() override;
+	int OnExit() override;
 
 private:
 	GTraceMainWindow* frame = nullptr;
-	MemoryBench::Scope memBench;
 };

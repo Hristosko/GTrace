@@ -16,15 +16,4 @@ struct Data {
 Data get();
 void reset();
 
-struct Scope {
-	Scope() { reset(); }
-	~Scope() {
-		const Data mb = get();
-		LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", mb.totalAllocatedMemory / (1024 * 1024), "MB");
-		LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage, "B ", mb.peakMemoryUsage / (1024 * 1024), "MB");
-		LOGSTAT("Alocations count: ", mb.allocationCount);
-		LOGSTAT("Freed allocations count: ", mb.freeCount);
-	}
-};
-
 };

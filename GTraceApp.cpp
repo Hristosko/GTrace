@@ -15,9 +15,18 @@ IMPLEMENT_APP(GTraceApp);
 bool GTraceApp::OnInit() {
 	this->frame = new GTraceMainWindow();
 	this->frame->Show();
+	MemoryBench::reset();
 	return true;
 }
 
+int GTraceApp::OnExit() {
+	const MemoryBench::Data mb = MemoryBench::get();
+	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", (float)mb.totalAllocatedMemory / (1024 * 1024), "MB");
+	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage, "B ", (float)mb.peakMemoryUsage / (1024 * 1024), "MB");
+	LOGSTAT("Alocations count: ", mb.allocationCount);
+	LOGSTAT("Freed allocations count: ", mb.freeCount);
+	return 0;
+}
 
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 600
