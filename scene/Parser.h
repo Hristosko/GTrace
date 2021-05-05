@@ -7,27 +7,24 @@
 
 class Texture;
 class Material;
-class SceneParser;
 
 class SceneElement {
 public:
 	virtual void parse(std::unordered_map<std::string, std::string>& map) = 0;
 };
 
-class SceneParser {
-public:
+namespace SceneParser
+{
 	void parseFile(const char* path);
 
-	Vector3f parseVector3f(const std::string& str) const;
-	uint32_t parseuint32(const std::string& str) const;
-	float parsefloat(const std::string& str) const;
+	Vector3f parseVector3f(const std::string& str);
+	uint32_t parseuint32(const std::string& str);
+	float parsefloat(const std::string& str);
 	
-	void parseVector3fAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Vector3f& res) const;
-	void parseuint32AndStore(std::unordered_map<std::string, std::string>& map, const char* name, uint32_t& res) const;
-	void parsefloatAndStore(std::unordered_map<std::string, std::string>& map, const char* name, float& res) const;
-	void parseTextureAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Texture*& res) const;
-	void parseMaterialAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Material*& res) const;
-	void parseBoolAndStore(std::unordered_map<std::string, std::string>& map, const char* name, bool& res) const;
+	void parseVector3fAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Vector3f& res);
+	void parseuint32AndStore(std::unordered_map<std::string, std::string>& map, const char* name, uint32_t& res);
+	void parsefloatAndStore(std::unordered_map<std::string, std::string>& map, const char* name, float& res);
+	void parseTextureAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Texture*& res);
+	void parseMaterialAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Material*& res);
+	void parseBoolAndStore(std::unordered_map<std::string, std::string>& map, const char* name, bool& res);
 };
-
-SceneParser& getParser();

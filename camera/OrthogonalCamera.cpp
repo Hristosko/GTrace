@@ -1,11 +1,10 @@
 #include "OrthogonalCamera.h"
 
 void OrthogonalCamera::parse(std::unordered_map<std::string, std::string>& map) {
-	SceneParser& parser = getParser();
-	parser.parseVector3fAndStore(map, "look_direction", this->direction);
-	parser.parseVector3fAndStore(map, "up", this->up);
-	parser.parsefloatAndStore(map, "zoom", this->zoom);
-	parser.parsefloatAndStore(map, "height", this->height);
+	SceneParser::parseVector3fAndStore(map, "look_direction", this->direction);
+	SceneParser::parseVector3fAndStore(map, "up", this->up);
+	SceneParser::parsefloatAndStore(map, "zoom", this->zoom);
+	SceneParser::parsefloatAndStore(map, "height", this->height);
 
 	this->uvw = OrthonormalBasis(this->direction, up, OB_fromWV());
 }

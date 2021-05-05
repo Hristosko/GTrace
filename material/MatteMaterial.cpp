@@ -3,9 +3,8 @@
 #include "../scene/World.h"
 
 void MatteMaterial::parse(std::unordered_map<std::string, std::string>& map) {
-	SceneParser& p = getParser();
-	p.parseTextureAndStore(map, "text", this->text);
-	p.parsefloatAndStore(map, "k", this->k);
+	SceneParser::parseTextureAndStore(map, "text", this->text);
+	SceneParser::parsefloatAndStore(map, "k", this->k);
 }
 
 Vector3f MatteMaterial::shade(const HitRecord& rec, const Ray& ray) const {

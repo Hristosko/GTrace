@@ -1,12 +1,11 @@
 #include "PinholeCamera.h"
 
 void PinholeCamera::parse(std::unordered_map<std::string, std::string>& map) {
-	SceneParser& parser = getParser();
-	parser.parseVector3fAndStore(map, "eye", this->eye);
-	parser.parseVector3fAndStore(map, "look_point", this->lookPoint);
-	parser.parseVector3fAndStore(map, "up", this->up);
-	parser.parsefloatAndStore(map, "view_plane_distance", this->viewPlaneDistance);
-	parser.parsefloatAndStore(map, "zoom", this->zoom);
+	SceneParser::parseVector3fAndStore(map, "eye", this->eye);
+	SceneParser::parseVector3fAndStore(map, "look_point", this->lookPoint);
+	SceneParser::parseVector3fAndStore(map, "up", this->up);
+	SceneParser::parsefloatAndStore(map, "view_plane_distance", this->viewPlaneDistance);
+	SceneParser::parsefloatAndStore(map, "zoom", this->zoom);
 
 	this->uvw = OrthonormalBasis(eye - lookPoint, up, OB_fromWV());
 }

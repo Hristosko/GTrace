@@ -3,11 +3,10 @@
 #define DEFAULT_SCALE_VALUE 0.1f
 
 void NoiseTexture::parse(std::unordered_map<std::string, std::string>& map) {
-	SceneParser& p = getParser();
 	this->scale = DEFAULT_SCALE_VALUE;
-	p.parsefloatAndStore(map, "scale", this->scale);
-	p.parseTextureAndStore(map, "text1", this->text1);
-	p.parseTextureAndStore(map, "text2", this->text2);
+	SceneParser::parsefloatAndStore(map, "scale", this->scale);
+	SceneParser::parseTextureAndStore(map, "text1", this->text1);
+	SceneParser::parseTextureAndStore(map, "text2", this->text2);
 }
 
 Vector3f NoiseTexture::getValue(const Vector2f& uv, const Vector3f& p) const {

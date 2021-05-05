@@ -18,10 +18,9 @@
 
 void Mesh::parse(std::unordered_map<std::string, std::string>& map) {
 	Ref<Transform> tr = Shape::parseTranformComponents(map);
-	SceneParser& p = getParser();
-	p.parseMaterialAndStore(map, "mat", this->mat);
+	SceneParser::parseMaterialAndStore(map, "mat", this->mat);
 	bool useNormals;
-	p.parseBoolAndStore(map, "use_normals", useNormals);
+	SceneParser::parseBoolAndStore(map, "use_normals", useNormals);
 	auto it = map.find("file");
 	if (it == map.end()) {
 		LOGERROR("Mesh source file is not specified.");

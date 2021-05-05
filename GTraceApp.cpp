@@ -91,8 +91,7 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 	if (openDialog->ShowModal() == wxID_OK) {
 		wxString path = openDialog->GetPath();
 		getWorld().clear();
-		SceneParser parser = getParser();
-		parser.parseFile(path.c_str());
+		SceneParser::parseFile(path.c_str());
 
 		std::thread th(renderNewScene, this->renderSurface, &this->output, &this->outputReady);
 		th.detach();

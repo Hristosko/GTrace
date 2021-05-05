@@ -3,9 +3,8 @@
 
 void Sphere::parse(std::unordered_map<std::string, std::string>& map) {
 	this->parseTransform(map);
-	SceneParser& parser = getParser();
-	parser.parsefloatAndStore(map, "radius", this->radius);
-	parser.parseMaterialAndStore(map, "mat", this->mat);
+	SceneParser::parsefloatAndStore(map, "radius", this->radius);
+	SceneParser::parseMaterialAndStore(map, "mat", this->mat);
 }
 
 bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {

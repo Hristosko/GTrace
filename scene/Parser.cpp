@@ -22,6 +22,9 @@
 #include "../camera/PinholeCamera.h"
 #include "../camera/OrthogonalCamera.h"
 
+namespace  SceneParser
+{
+
 /// Store the current object name in global variable
 /// so that we are able to log in warnings, error etc.
 static std::string curObject;
@@ -74,7 +77,7 @@ static void makeElement(const std::string& obj, std::unordered_map<std::string, 
 	fields.clear();
 }
 
-void SceneParser::parseFile(const char* path) {
+void parseFile(const char* path) {
 	FILE* fp;
 	if (0 != fopen_s(&fp, path, "r")) {
 		LOGERROR("Cannot open file: ", path);
@@ -123,7 +126,7 @@ void SceneParser::parseFile(const char* path) {
 	if (atObject) makeElement(curObject, fields);
 }
 
-Vector3f SceneParser::parseVector3f(const std::string& str) const {
+Vector3f parseVector3f(const std::string& str) {
 	if (str[0] != '(') {
 		LOGERROR("Parsing Vector3f: expected (; line: ", curObjLine);
 		throw ParseError();
@@ -141,7 +144,7 @@ Vector3f SceneParser::parseVector3f(const std::string& str) const {
 	return Vector3f(x, y, z);
 }
 
-uint32_t SceneParser::parseuint32(const std::string& str) const {
+uint32_t parseuint32(const std::string& str) {
 	uint32_t x;
 	int res = sscanf_s(str.c_str(), "%lo", &x);
 	if (res < 1) {
@@ -151,7 +154,7 @@ uint32_t SceneParser::parseuint32(const std::string& str) const {
 	return x;
 }
 
-float SceneParser::parsefloat(const std::string& str) const {
+float parsefloat(const std::string& str) {
 	float x;
 	int res = sscanf_s(str.c_str(), "%f", &x);
 	if (res < 1) {
@@ -161,34 +164,34 @@ float SceneParser::parsefloat(const std::string& str) const {
 	return x;
 }
 
-void SceneParser::parseVector3fAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Vector3f& res) const {
+void parseVector3fAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Vector3f& res) {
 	auto it = map.find(name);
 	if (it == map.end()) {
 		LOGWARNING("Missing parameter: ", name, " object: ", curObject, " line: ", curObjLine);
 		return;
 	}
-	res = this->parseVector3f(it->second);
+	res = parseVector3f(it->second);
 }
 
-void SceneParser::parseuint32AndStore(std::unordered_map<std::string, std::string>& map, const char* name, uint32_t& res) const {
+void parseuint32AndStore(std::unordered_map<std::string, std::string>& map, const char* name, uint32_t& res) {
 	auto it = map.find(name);
 	if (it == map.end()) {
 		LOGWARNING("Missing parameter: ", name, " object: ", curObject, " line: ", curObjLine);
 		return;
 	}
-	res = this->parseuint32(it->second);
+	res = parseuint32(it->second);
 }
 
-void SceneParser::parsefloatAndStore(std::unordered_map<std::string, std::string>& map, const char* name, float& res) const {
+void parsefloatAndStore(std::unordered_map<std::string, std::string>& map, const char* name, float& res) {
 	auto it = map.find(name);
 	if (it == map.end()) {
 		LOGWARNING("Missing parameter: ", name, " object: ", curObject, " line: ", curObjLine);
 		return;
 	}
-	res = this->parsefloat(it->second);
+	res = parsefloat(it->second);
 }
 
-void SceneParser::parseTextureAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Texture*& res) const {
+void parseTextureAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Texture*& res) {
 	auto it = map.find(name);
 	if (it == map.end()) {
 		LOGWARNING("Missing texture: ", name, " object: ", curObject, " line: ", curObjLine);
@@ -197,7 +200,7 @@ void SceneParser::parseTextureAndStore(std::unordered_map<std::string, std::stri
 	else res = getWorld().getTextureByName(it->second);
 }
 
-void SceneParser::parseMaterialAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Material*& res) const {
+void parseMaterialAndStore(std::unordered_map<std::string, std::string>& map, const char* name, Material*& res) {
 	auto it = map.find(name);
 	if (it == map.end()) {
 		LOGWARNING("Missing texture: ", name, " object: ", curObject, " line: ", curObjLine);
@@ -206,7 +209,7 @@ void SceneParser::parseMaterialAndStore(std::unordered_map<std::string, std::str
 	else res = getWorld().getMaterialByName(it->second);
 }
 
-void SceneParser::parseBoolAndStore(std::unordered_map<std::string, std::string>& map, const char* name, bool& res) const {
+void parseBoolAndStore(std::unordered_map<std::string, std::string>& map, const char* name, bool& res) {
 	auto it = map.find(name);
 	if (it == map.end()) {
 		LOGWARNING("Missing boolean: ", name, " object: ", curObject, " line: ", curObjLine, " Setting to default false");
@@ -220,7 +223,4 @@ void SceneParser::parseBoolAndStore(std::unordered_map<std::string, std::string>
 	}
 }
 
-SceneParser& getParser() {
-	static SceneParser parser;
-	return parser;
 }
