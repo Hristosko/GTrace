@@ -2,6 +2,7 @@
 
 #include "wx/rawbmp.h"
 #include <thread>
+#include <memory>
 
 #include "Logger.h"
 #include "Events.h"
@@ -76,11 +77,11 @@ static void renderNewScene(wxWindow* renderSurface, RendererOutput* output, bool
 
 void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 	this->outputReady = false;
-	wxFileDialog* openDialog = new wxFileDialog(
+	std::unique_ptr<wxFileDialog> openDialog( new wxFileDialog(
 		this,	_("Choose a scene to load"),
 		wxEmptyString, wxEmptyString, wxEmptyString,
 		wxFD_OPEN, wxDefaultPosition
-	);
+	));
 
 	if (openDialog->ShowModal() == wxID_OK) {
 		wxString path = openDialog->GetPath();
@@ -95,11 +96,11 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 void GTraceMainWindow::SaveFile(wxCommandEvent& event) {
 	if (this->outputReady == false) return;
 
-	wxFileDialog* saveDialog = new wxFileDialog(
+	std::unique_ptr<wxFileDialog> saveDialog (new wxFileDialog(
 		this, _("Save file as"),
 		wxEmptyString, wxEmptyString, wxEmptyString,
 		wxFD_SAVE, wxDefaultPosition // add overwrite prompt?
-	);
+	));
 	if (saveDialog->ShowModal() == wxID_OK) {
 		wxString path = saveDialog->GetPath();
 		this->output.save(path.c_str());
@@ -107,11 +108,11 @@ void GTraceMainWindow::SaveFile(wxCommandEvent& event) {
 }
 
 void GTraceMainWindow::OpenFile(wxCommandEvent& event) {
-	wxFileDialog* openDialog = new wxFileDialog(
+	std::unique_ptr<wxFileDialog> openDialog (new wxFileDialog(
 		this, _("Open render output"),
 		wxEmptyString, wxEmptyString, wxEmptyString,
 		wxFD_OPEN, wxDefaultPosition
-	);
+	));
 
 	if (openDialog->ShowModal() == wxID_OK) {
 		wxString path = openDialog->GetPath();
