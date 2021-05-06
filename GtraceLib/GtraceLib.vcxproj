@@ -81,7 +81,7 @@
     <ClInclude Include="reflection\BxDF.h" />
     <ClInclude Include="reflection\Fresnel.h" />
     <ClInclude Include="reflection\FresnelNoOp.h" />
-    <ClInclude Include="reflection\SpecularReflection.h" />
+    <ClInclude Include="reflection\Specular.h" />
     <ClInclude Include="renderer\DataBuffer.h" />
     <ClInclude Include="renderer\Renderer.h" />
     <ClInclude Include="renderer\RendererDisplay.h" />
@@ -115,7 +115,7 @@
     <ClCompile Include="MemoryBench.cpp" />
     <ClCompile Include="reflection\BxDF.cpp" />
     <ClCompile Include="reflection\Fresnel.cpp" />
-    <ClCompile Include="reflection\SpecularReflection.cpp" />
+    <ClCompile Include="reflection\Specular.cpp" />
     <ClCompile Include="renderer\Renderer.cpp" />
     <ClCompile Include="renderer\RendererDisplay.cpp" />
     <ClCompile Include="renderer\RendererOutput.cpp" />
