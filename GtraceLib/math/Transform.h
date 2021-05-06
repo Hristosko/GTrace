@@ -83,13 +83,7 @@ public:
 			_mm_setr_ps(v.x(), v.y(), v.z(), 0.f),
 			_mm_setr_ps(w.x(), w.y(), w.z(), 0.f),
 			_mm_setr_ps(  0.f,   0.f,   0.f, 1.f)
-		);/*
-		return Matrix4x4(
-			_mm_setr_ps(u.x(), v.x(), w.x(), 0.f),
-			_mm_setr_ps(u.y(), v.y(), w.y(), 0.f),
-			_mm_setr_ps(u.z(), v.z(), w.z(), 0.f),
-			_mm_setr_ps(0.f, 0.f, 0.f, 1.f)
-		);*/
+		);
 	}
 
 	static Matrix4x4 makeRotation(float x, float y, float z) {
