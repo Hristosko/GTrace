@@ -78,7 +78,6 @@
     <ClInclude Include="math\Transform.h" />
     <ClInclude Include="math\Vector3f.h" />
     <ClInclude Include="Random.h" />
-    <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="reflection\BxDF.h" />
     <ClInclude Include="reflection\Fresnel.h" />
     <ClInclude Include="reflection\FresnelNoOp.h" />
