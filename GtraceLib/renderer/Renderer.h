@@ -5,8 +5,9 @@
 #include "../Threaded.h"
 #include "../math/Vector3f.h"
 #include "../Random.h"
+#include <functional>
 
-using UpdateRenderSurfaceFunc = void(*)();
+using UpdateRenderSurfaceFunc = std::function<void()>;
 
 class Renderer {
 private:

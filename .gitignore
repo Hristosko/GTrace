@@ -10,6 +10,7 @@ packages/*
 
 GtraceConsole/x64
 GtraceLib/x64/
+GtraceApp/x64/
 
 unit_tests/Release
 unit_tests/Debug

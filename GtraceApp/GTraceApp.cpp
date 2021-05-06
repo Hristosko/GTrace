@@ -79,7 +79,11 @@ void GTraceMainWindow::OnElementRendered(wxCommandEvent& event) {
 static void renderNewScene(wxWindow* renderSurface, RendererOutput* output, bool* setWhenReady) {
 		output->init();
 		getWorld().buildBVH();
-		Renderer renderer(renderSurface, *output);
+		auto frameUpdater = [renderSurface]() {
+			wxCommandEvent* event = new wxCommandEvent(GTRACE_RENDERED_ELEMENT);
+			wxQueueEvent(renderSurface, event);
+		};
+		Renderer renderer(frameUpdater, *output);
 		renderer.render();
 		*setWhenReady = true;
 }
