@@ -2,6 +2,7 @@
 
 #include "../math/Vector3f.h"
 #include "../geometry/Ray.h"
+#include "../HeapAligned.h"
 
 enum class BxDFType : uint16_t {
 	Reflection = 1 << 0,
@@ -27,7 +28,7 @@ inline bool operator&(BxDFType a, BxDFType b) {
 	return static_cast<bool>(static_cast<uint16_t>(a) & static_cast<uint16_t>(b));
 }
 
-class BxDF {
+class BxDF : public HeapAligned<16> {
 public:
 	friend class BRDFtoBTDF;
 	BxDF(BxDFType t) : type(t) {}
@@ -44,7 +45,7 @@ public:
 		const Ray& ray, const HitRecord& hr, 
 		const Vector3f& wo, Vector3f& wi, float u1, float u2, float& pdf) const = 0;
 
-	virtual Vector3f rho(const Ray& ray, const HitRecord& hr, uint32_t nSamples, float* samples = nullptr) const = 0;
+	virtual Vector3f rho(const Ray& ray, const HitRecord& hr, uint32_t nSamples, float* samples = nullptr) const { return Vector3f(0.f); }
 protected:
 	const BxDFType type;
 };
