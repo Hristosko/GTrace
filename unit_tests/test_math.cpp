@@ -183,6 +183,21 @@ TEST(Transform, scale) {
 	EXPECT_TRUE(compare(init * 0.5f, res));
 }
 
+TEST(Transform, changeBasis) {
+	const Vector3f init(1, 2, 3);
+	const Matrix4x4 m = Transform::makeBasisChange(
+		Vector3f(1.f, 1.f, 1.f),
+		Vector3f(3.f, 2.f, 2.f),
+		Vector3f(1.f, 1.f, -10.f)
+	);
+	Ref<Transform> tr(new Transform(m));
+	const Vector3f res = tr->transform(init);
+	const Vector3f expected(6.f, 13.f, -27.f);
+	EXPECT_TRUE(compare(expected, res));
+	const Vector3f reversed = tr->invTransformDirection(res);
+	EXPECT_TRUE(compare(normalize(init), reversed));
+}
+
 TEST(SphericalCoordinates, Theta) {
 	// The spherical coordinates are: (r=1, theta = 30, phi = 60)
 	Vector3f vec(0.25f, 0.4330127019f, 0.8660254038f);

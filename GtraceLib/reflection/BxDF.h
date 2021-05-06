@@ -31,6 +31,7 @@ inline bool operator&(BxDFType a, BxDFType b) {
 class BxDF : public HeapAligned<16> {
 public:
 	friend class BRDFtoBTDF;
+	friend class BSDF;
 	BxDF(BxDFType t) : type(t) {}
 	virtual ~BxDF() {}
 
