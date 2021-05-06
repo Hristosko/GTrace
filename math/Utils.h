@@ -43,3 +43,7 @@ inline float cosPhi(const Vector3f& vec) {
 inline float sinPhi(const Vector3f& vec) {
 	return vec.y() / sinTheta(vec);
 }
+
+inline Vector3f otherHemisphere(const Vector3f& vec) {
+	return vec * Vector3f(1.f, 1.f, -1.f);
+}
