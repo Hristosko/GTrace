@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../math/Vector3f.h"
-#include "../math/Matrix4x4.h"
-#include "../math/Transform.h"
+#include "math/Vector3f.h"
+#include "math/Matrix4x4.h"
+#include "math/Transform.h"
 #define EPS 0.001
 
 inline bool compare(float a, float b) {

@@ -4,5 +4,3 @@
 //
 
 #include "pch.h"
-
-#include "../MemoryBench.cpp"
