@@ -46,6 +46,7 @@
     <ClInclude Include="math\Vector3f.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="camera\Camera.h" />
+    <ClInclude Include="reflection\BxDF.h" />
     <ClInclude Include="renderer\DataBuffer.h" />
     <ClInclude Include="renderer\Renderer.h" />
     <ClInclude Include="renderer\RendererDisplay.h" />
@@ -78,6 +79,7 @@
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="material\MatteMaterial.cpp" />
     <ClCompile Include="math\OrthonormalBasis.cpp" />
+    <ClCompile Include="math\Utils.cpp" />
     <ClCompile Include="MemoryBench.cpp" />
     <ClCompile Include="renderer\Renderer.cpp" />
     <ClCompile Include="renderer\RendererDisplay.cpp" />
