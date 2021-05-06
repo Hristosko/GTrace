@@ -1,3 +1,5 @@
+#ifndef GTRACE_CONSOLE_APP
+
 #include "GTraceApp.h"
 
 #include "wx/rawbmp.h"
@@ -173,3 +175,5 @@ void GTraceMainWindow::rebuildBufferAndRefresh() {
 	this->renderSurface->Refresh();
 	this->renderSurface->Update();
 }
+
+#endif // !GTRACE_CONSOLE_APP

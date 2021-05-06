@@ -1,3 +1,4 @@
+#ifndef GTRACE_CONSOLE_APP
 #pragma once
 
 #include "wx/wx.h"
@@ -59,3 +60,5 @@ public:
 private:
 	GTraceMainWindow* frame = nullptr;
 };
+
+#endif // !GTRACE_CONSOLE_APP
