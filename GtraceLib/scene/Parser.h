@@ -10,6 +10,7 @@ class Material;
 
 class SceneElement {
 public:
+	virtual ~SceneElement() {}
 	virtual void parse(std::unordered_map<std::string, std::string>& map) = 0;
 };
 

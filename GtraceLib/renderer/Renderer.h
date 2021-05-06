@@ -5,8 +5,9 @@
 #include "../Threaded.h"
 #include "../math/Vector3f.h"
 #include "../Random.h"
+#include <functional>
 
-#include "wx/wx.h"
+using UpdateRenderSurfaceFunc = std::function<void()>;
 
 class Renderer {
 private:
@@ -26,8 +27,8 @@ private:
 		std::mutex mut;
 	};
 public:
-	Renderer(wxWindow* renderSurface, RendererOutput& output)
-		: renderSurface(renderSurface), output(output) {}
+	Renderer(UpdateRenderSurfaceFunc updater, RendererOutput& output)
+		: updateRenderSurfaceFunc(updater), output(output) {}
 
 	void render();
 private:
@@ -38,7 +39,7 @@ private:
 	
 	void updateRenderSurface();
 private:
-	wxWindow* renderSurface;
+	UpdateRenderSurfaceFunc updateRenderSurfaceFunc;
 	RendererOutput& output;
 	RandomGenerator rng;
 	RendererStat stat;

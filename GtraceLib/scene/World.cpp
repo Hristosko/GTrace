@@ -31,6 +31,7 @@ void World::clear() {
 		delete it.second;
 	}
 	this->textures.clear();
+	camera = nullptr;
 }
 
 void World::addElemenet(SceneElement* el, const std::unordered_map<std::string, std::string>& map) {

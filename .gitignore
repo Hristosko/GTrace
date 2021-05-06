@@ -8,6 +8,10 @@ x64/*
 packages/*
 .vs/
 
+GtraceConsole/x64
+GtraceLib/x64/
+GtraceApp/x64/
+
 unit_tests/Release
 unit_tests/Debug
 unit_tests/x64

@@ -1,10 +1,6 @@
 #pragma once
 
 #include "wx/wx.h"
-
-#pragma once
-
-#include "wx/wx.h"
 #include "renderer/RendererOutput.h"
 #include "renderer/RendererDisplay.h"
 #include "MemoryBench.h"
