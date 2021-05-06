@@ -65,6 +65,7 @@
   <ItemGroup>
     <ClCompile Include="camera\OrthogonalCamera.cpp" />
     <ClCompile Include="camera\PinholeCamera.cpp" />
+    <ClCompile Include="ConsoleApp.cpp" />
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="geometry\BBox.cpp" />
