@@ -2,7 +2,7 @@
 
 float sinTheta(const Vector3f& vec) {
 	const float as = absSinTheta(vec);
-	return (vec.z() < 0.f) ? -as : as;
+	return (vec.x() < 0.f) ? -as : as;
 }
 
 float absSinTheta(const Vector3f& vec) {

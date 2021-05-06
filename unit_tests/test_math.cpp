@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Utils.h"
+#include "../math/Utils.h"
 
 TEST(Vector3f, maxElement) {
 	{
@@ -173,4 +174,52 @@ TEST(Transform, scale) {
 	EXPECT_TRUE(compare(init * 2.f, res));
 	res = tr->invTransform(init);
 	EXPECT_TRUE(compare(init * 0.5f, res));
+}
+
+TEST(SphericalCoordinates, Theta) {
+	// The spherical coordinates are: (r=1, theta = 30, phi = 60)
+	Vector3f vec(0.25f, 0.4330127019f, 0.8660254038f);
+	vec = normalize(vec);
+
+	const float theta = degToRad(30);
+	ASSERT_TRUE(compare(cosf(theta), cosTheta(vec)));
+	ASSERT_TRUE(compare(sinf(theta), sinTheta(vec)));
+	ASSERT_TRUE(compare(fabsf(sinf(theta)), absSinTheta(vec)));
+	ASSERT_TRUE(compare(sinf(theta)*sinf(theta), sin2Theta(vec)));
+}
+
+TEST(SphericalCoordinates, Theta2ndQuad) {
+	// The spherical coordinates are: (r=1, theta = 150, phi = 60)
+	Vector3f vec(0.25f, 0.4330127019f, -0.8660254038f);
+	vec = normalize(vec);
+
+	const float theta = degToRad(150);
+	ASSERT_TRUE(compare(cosf(theta), cosTheta(vec)));
+	ASSERT_TRUE(compare(sinf(theta), sinTheta(vec)));
+	ASSERT_TRUE(compare(fabsf(sinf(theta)), absSinTheta(vec)));
+	ASSERT_TRUE(compare(sinf(theta) * sinf(theta), sin2Theta(vec)));
+}
+
+TEST(SphericalCoordinates, Theta3rdQuad) {
+	// The spherical coordinates are: (r=1, theta = 210, phi = 60)
+	Vector3f vec(-0.25f, -0.4330127019f, -0.8660254038f);
+	vec = normalize(vec);
+
+	const float theta = degToRad(210);
+	ASSERT_TRUE(compare(cosf(theta), cosTheta(vec)));
+	ASSERT_TRUE(compare(sinf(theta), sinTheta(vec)));
+	ASSERT_TRUE(compare(fabsf(sinf(theta)), absSinTheta(vec)));
+	ASSERT_TRUE(compare(sinf(theta) * sinf(theta), sin2Theta(vec)));
+}
+
+TEST(SphericalCoordinates, Theta4rdQuad) {
+	// The spherical coordinates are: (r=1, theta = 330, phi = 60)
+	Vector3f vec(-0.25f, -0.4330127019f, 0.8660254038f);
+	vec = normalize(vec);
+
+	const float theta = degToRad(330);
+	ASSERT_TRUE(compare(cosf(theta), cosTheta(vec)));
+	ASSERT_TRUE(compare(sinf(theta), sinTheta(vec)));
+	ASSERT_TRUE(compare(fabsf(sinf(theta)), absSinTheta(vec)));
+	ASSERT_TRUE(compare(sinf(theta) * sinf(theta), sin2Theta(vec)));
 }
