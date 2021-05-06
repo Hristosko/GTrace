@@ -1,7 +1,6 @@
 #pragma warning(disable : 4996)
 
 #include "Renderer.h"
-#include "../Events.h"
 #include "../Logger.h"
 #include "../scene/World.h"
 
@@ -28,8 +27,7 @@ void Renderer::renderBucket(uint32_t offsetx, uint32_t offsety, uint32_t bucketW
 }
 
 void Renderer::updateRenderSurface() {
-	wxCommandEvent* event = new wxCommandEvent(GTRACE_RENDERED_ELEMENT);
-	wxQueueEvent(this->renderSurface, event);
+	this->updateRenderSurfaceFunc();
 }
 
 void Renderer::rayTrace(uint32_t ix, uint32_t iy) {

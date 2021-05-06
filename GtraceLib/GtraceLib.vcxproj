@@ -52,6 +52,66 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <ItemGroup>
+    <ClInclude Include="FileUtils.h" />
+    <ClInclude Include="geometry\BBox.h" />
+    <ClInclude Include="geometry\BVH.h" />
+    <ClInclude Include="geometry\Ray.h" />
+    <ClInclude Include="geometry\Shape.h" />
+    <ClInclude Include="geometry\Sphere.h" />
+    <ClInclude Include="geometry\Triangle.h" />
+    <ClInclude Include="geometry\Mesh.h" />
+    <ClInclude Include="HeapAligned.h" />
+    <ClInclude Include="light\DirectionalLight.h" />
+    <ClInclude Include="light\Light.h" />
+    <ClInclude Include="Logger.h" />
+    <ClInclude Include="material\Material.h" />
+    <ClInclude Include="material\MatteMaterial.h" />
+    <ClInclude Include="math\Matrix4x4.h" />
+    <ClInclude Include="math\OrthonormalBasis.h" />
+    <ClInclude Include="math\Utils.h" />
+    <ClInclude Include="MemoryBench.h" />
+    <ClInclude Include="Ref.h" />
+    <ClInclude Include="math\Transform.h" />
+    <ClInclude Include="math\Vector3f.h" />
+    <ClInclude Include="Random.h" />
+    <ClInclude Include="renderer\DataBuffer.h" />
+    <ClInclude Include="renderer\Renderer.h" />
+    <ClInclude Include="renderer\RendererDisplay.h" />
+    <ClInclude Include="renderer\RendererOutput.h" />
+    <ClInclude Include="renderer\RendererStat.h" />
+    <ClInclude Include="scene\Parser.h" />
+    <ClInclude Include="scene\SceneSettings.h" />
+    <ClInclude Include="scene\World.h" />
+    <ClInclude Include="StringUtils.h" />
+    <ClInclude Include="texture\ColorTexture.h" />
+    <ClInclude Include="texture\NoiseTexture.h" />
+    <ClInclude Include="texture\SolidNoise.h" />
+    <ClInclude Include="texture\Texture.h" />
+    <ClInclude Include="Threaded.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="FileUtils.cpp" />
+    <ClCompile Include="geometry\BBox.cpp" />
+    <ClCompile Include="geometry\BVH.cpp" />
+    <ClCompile Include="geometry\Mesh.cpp" />
+    <ClCompile Include="geometry\Shape.cpp" />
+    <ClCompile Include="geometry\Sphere.cpp" />
+    <ClCompile Include="geometry\Triangle.cpp" />
+    <ClCompile Include="light\DirectionalLight.cpp" />
+    <ClCompile Include="Logger.cpp" />
+    <ClCompile Include="material\MatteMaterial.cpp" />
+    <ClCompile Include="math\OrthonormalBasis.cpp" />
+    <ClCompile Include="MemoryBench.cpp" />
+    <ClCompile Include="renderer\Renderer.cpp" />
+    <ClCompile Include="renderer\RendererDisplay.cpp" />
+    <ClCompile Include="renderer\RendererOutput.cpp" />
+    <ClCompile Include="renderer\RendererStat.cpp" />
+    <ClCompile Include="scene\Parser.cpp" />
+    <ClCompile Include="scene\World.cpp" />
+    <ClCompile Include="texture\NoiseTexture.cpp" />
+    <ClCompile Include="texture\SolidNoise.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -107,6 +167,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/D_ENABLE_EXTENDED_ALIGNED_STORAGE %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -141,6 +203,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/D_ENABLE_EXTENDED_ALIGNED_STORAGE %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>
