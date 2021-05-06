@@ -1,6 +1,6 @@
-#include "pch.h"
+#include "gtest/gtest.h"
 #include "Utils.h"
-#include "../math/Utils.h"
+#include "math/Utils.h"
 
 TEST(Vector3f, maxElement) {
 	{

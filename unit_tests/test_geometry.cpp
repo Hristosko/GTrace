@@ -1,7 +1,7 @@
-#include "pch.h"
+#include "gtest/gtest.h"
 #include "Utils.h"
 
-#include "geometry/BBox.cpp"
+#include "geometry/BBox.h"
 TEST(BBox, bound) {
 	BBox a(Vector3f(0.f), Vector3f(1.f));
 	BBox b(Vector3f(-1.f), Vector3f(0.f));
