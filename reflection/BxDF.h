@@ -31,6 +31,7 @@ class BxDF {
 public:
 	friend class BRDFtoBTDF;
 	BxDF(BxDFType t) : type(t) {}
+	virtual ~BxDF() {}
 
 	virtual Vector3f f(const Ray& ray, const HitRecord& hr, const Vector3f& wo, const Vector3f& wi) const = 0;
 	/**

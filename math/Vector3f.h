@@ -100,6 +100,10 @@ public:
 		return sqrtf(this->lengthSqr());
 	}
 
+	void sqrt() {
+		this->vec = _mm_sqrt_ps(this->vec);
+	}
+
 private:
 	__m128 vec;
 };
@@ -118,6 +122,12 @@ inline Vector3f clamp(const Vector3f& a, const Vector3f& low, const Vector3f up)
 
 inline Vector3f clamp(const Vector3f& v, float low, float up) {
 	return clamp(v, Vector3f(low), Vector3f(up));
+}
+
+inline Vector3f sqrt(const Vector3f& v) {
+	Vector3f res = v;
+	res.sqrt();
+	return res;
 }
 
 inline Vector3f operator-(const Vector3f& a, const Vector3f& b) {

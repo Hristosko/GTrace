@@ -58,6 +58,13 @@ TEST(Vector3f, isAtLeastOneGreaterThan) {
 	}
 }
 
+TEST(Vector3f, sqrt) {
+	const Vector3f v(0.25f, 10.f, 625.f);
+	const Vector3f expected(sqrtf(0.25f), sqrtf(10.f), sqrtf(625.f));
+	const Vector3f res = sqrt(v);
+	EXPECT_TRUE(compare(expected, res));
+}
+
 TEST(Matrix4x4, mult) {
 	{
 		const float mf[] = { 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16 };
