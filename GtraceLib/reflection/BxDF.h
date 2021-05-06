@@ -24,8 +24,12 @@ inline BxDFType operator^(BxDFType a, BxDFType b) {
 	return static_cast<BxDFType>(static_cast<uint16_t>(a) ^ static_cast<uint16_t>(b));
 }
 
-inline bool operator&(BxDFType a, BxDFType b) {
-	return static_cast<bool>(static_cast<uint16_t>(a) & static_cast<uint16_t>(b));
+inline BxDFType operator&(BxDFType a, BxDFType b) {
+	return static_cast<BxDFType>(static_cast<uint16_t>(a) & static_cast<uint16_t>(b));
+}
+
+inline BxDFType operator~(BxDFType a) {
+	return static_cast<BxDFType>(~static_cast<uint16_t>(a));
 }
 
 class BxDF : public HeapAligned<16> {

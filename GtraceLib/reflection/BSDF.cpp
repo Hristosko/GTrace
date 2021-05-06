@@ -2,7 +2,7 @@
 #include <assert.h>
 
 BSDF::BSDF(const Ray& ray, const HitRecord& hr) 
-	: OrthonormalBasis(hr.normal, OB_fromW), nbxdfs(0)
+	: OrthonormalBasis(hr.normal, OB_fromW), nbxdfs(0), gnormal(hr.normal)
 {
 	const Matrix4x4 m = Transform::makeBasisChange(
 		this->localCoordinates.u(),

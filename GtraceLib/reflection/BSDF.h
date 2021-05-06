@@ -13,8 +13,11 @@ public:
 	BSDF(const Ray& ray, const HitRecord& hr);
 
 	void add(BxDF* bxdf);
+
+
 private:
 	OrthonormalBasis localCoordinates;
+	Vector3f gnormal;
 	Ref<Transform> worldToObj;
 	int nbxdfs;
 	BxDF* bxdfs[GTRACE_MAX_BxDF_COUNT];
