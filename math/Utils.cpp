@@ -1,11 +1,6 @@
 #include "Utils.h"
 
 float sinTheta(const Vector3f& vec) {
-	const float as = absSinTheta(vec);
-	return (vec.x() < 0.f) ? -as : as;
-}
-
-float absSinTheta(const Vector3f& vec) {
 	return fabsf(sqrtf(sin2Theta(vec)));
 }
 

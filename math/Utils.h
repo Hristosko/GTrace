@@ -14,20 +14,17 @@ inline float degToRad(float deg) {
 /**
  * Compute the cos of the angla between this unit vector and the Oz axis
  * Theta is the angle in spherical coordinates
+ * Theta is in [0, pi]
+ * Phi is in [0, 2pi]
  */
 inline float cosTheta(const Vector3f& vec) {
 	return vec.z();
 }
 
 /**
- * Compute the sin of the angla between this unit vector and the Oz axis
+ * Compute the sin of the angla between this unit vector and the Oz axis. Always > 0
  */
 float sinTheta(const Vector3f& vec);
-
-/**
- * Compute the |sin| of the angla between this unit vector and the Oz axis
- */
-float absSinTheta(const Vector3f& vec);
 
 
 /**
