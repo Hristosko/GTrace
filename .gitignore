@@ -4,7 +4,6 @@ x64/*
 *.grt
 *.log
 *.obj
-*.vcxproj.*
 packages/*
 .vs/
 
@@ -16,3 +15,11 @@ unit_tests/Release
 unit_tests/Debug
 unit_tests/x64
 *.config
+
+*.vcxproj*
+*sln
+
+*.cmake
+CMakeCache.txt
+CMakeFiles/
+GtraceConsole/GTaceConsole.dir/
