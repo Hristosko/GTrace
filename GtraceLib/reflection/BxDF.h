@@ -43,13 +43,13 @@ public:
 	virtual Vector3f f(const Vector3f& wo, const Vector3f& wi) const = 0;
 	/**
 	 * Compute the direction of the incomming light (wi) given the outgoing direction.
-	 * @param u1 random number
-	 * @param u2 random number
+	 * Uses a cosine distr in the hemisphere
+	 * @param p random numbers
 	 * @pram[out] pdf tthe probability of this incomming direction
 	 */
 	virtual Vector3f sample(
-		const Ray& ray, const HitRecord& hr, 
-		const Vector3f& wo, Vector3f& wi, const Point2f& p, float& pdf) const = 0;
+		const Ray& ray, const HitRecord& hr,
+		const Vector3f& wo, Vector3f& wi, const Point2f& p, float& pdf) const;
 
 	virtual Vector3f rho(const Ray& ray, const HitRecord& hr, uint32_t nSamples, float* samples = nullptr) const { return Vector3f(0.f); }
 protected:

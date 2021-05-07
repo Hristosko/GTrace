@@ -18,4 +18,7 @@ Point2f concentricSampleDisk(const Point2f& u);
  */
 Vector3f cosineSampleHemisphere(const Point2f& u);
 
-inline float CosineHemispherePdf(float cosTheta) { return cosTheta * PI_1; }
+inline bool sameHemisphere(const Vector3f& a, const Vector3f& b) {
+    return a.z() * b.z() > 0;
+}
+inline float cosineHemispherePdf(float cosTheta) { return cosTheta * PI_1; }
