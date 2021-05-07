@@ -113,6 +113,7 @@
     <ClCompile Include="math\OrthonormalBasis.cpp" />
     <ClCompile Include="math\Utils.cpp" />
     <ClCompile Include="MemoryBench.cpp" />
+    <ClCompile Include="reflection\BSDF.cpp" />
     <ClCompile Include="reflection\BxDF.cpp" />
     <ClCompile Include="reflection\Fresnel.cpp" />
     <ClCompile Include="reflection\Specular.cpp" />

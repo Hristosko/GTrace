@@ -59,7 +59,7 @@ class BRDFtoBTDF : public BxDF {
 public:
 	BRDFtoBTDF(BxDF *brdf) : BxDF(brdf->type ^ (BxDFType::Transmission | BxDFType::Reflection)), brdf(brdf) {}
 
-	virtual Vector3f f(const Ray& ray, const HitRecord& hr, const Vector3f& wo, const Vector3f& wi) const;
+	virtual Vector3f f(const Vector3f& wo, const Vector3f& wi) const;
 	virtual Vector3f sample(
 		const Ray& ray, const HitRecord& hr,
 		const Vector3f& wo, Vector3f& wi, float u1, float u2, float& pdf) const;
