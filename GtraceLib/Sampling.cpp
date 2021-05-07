@@ -7,7 +7,7 @@ Point2f concentricSampleDisk(const Point2f& u) {
     const float xOffset = uOffset.x();
     const float yOffset = uOffset.y();
     // Handle degeneracy at the origin
-    if (xOffset == 0.f && uOffset.y() == 0.f) return Point2f(0.f);
+    if (xOffset == 0.f && yOffset == 0.f) return Point2f(0.f);
 
     // Apply concentric mapping to point
     float theta, r;
