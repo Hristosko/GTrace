@@ -28,3 +28,7 @@ CMakeCache.txt
 CMakeFiles/
 GtraceLib/GTraceLib.dir/
 GtraceConsole/GTaceConsole.dir/
+unit_tests/GTaceUnitTests.dir/
+unit_tests/google-test/googletest-build/
+unit_tests/google-test/googletest-download/
+unit_tests/google-test/googletest-src/
