@@ -2,13 +2,9 @@
 
 #include "../scene/Parser.h"
 #include "../HeapAligned.h"
+#include "../math/Vector2f.h"
 
 #define DEFAULT_TEXTURE_VALUE Vector3f(0.5f)
-
-// temp. defined here
-struct Vector2f {
-	float x, y;
-};
 
 class Texture : public SceneElement, public HeapAligned<16> {
 public:
