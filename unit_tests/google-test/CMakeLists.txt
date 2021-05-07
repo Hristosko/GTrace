@@ -28,34 +28,6 @@ set(INSTALL_GMOCK OFF CACHE BOOL "" FORCE)
 add_subdirectory(${CMAKE_CURRENT_BINARY_DIR}/googletest-src
                  ${CMAKE_CURRENT_BINARY_DIR}/googletest-build)
 
-#set(CMAKE_CXX_STANDARD 17)
-# This is a bit of a hack that can be used to get gtest libraries to build in C++11 if you aren't using CMAKE_CXX_STANDARD
-#
-#set(CXX11_FEATURES
-#    cxx_nullptr
-#    cxx_auto_type
-#    cxx_delegating_constructors
-#)
-#target_compile_features(gtest
-#    PRIVATE
-#        ${CXX11_FEATURES}
-#)
-#
-#target_compile_features(gmock_main
-#    PRIVATE
-#        ${CXX11_FEATURES}
-#)
-#
-#target_compile_features(gmock
-#    PRIVATE
-#        ${CXX11_FEATURES}
-#)
-#
-#target_compile_features(gmock_main
-#    PRIVATE
-#        ${CXX11_FEATURES}
-#)
-
 # Add aliases for GTest and GMock libraries
 if(NOT TARGET GTest::GTest)
     add_library(GTest::GTest ALIAS gtest)
