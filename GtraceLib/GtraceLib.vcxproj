@@ -84,6 +84,7 @@
     <ClInclude Include="reflection\BxDF.h" />
     <ClInclude Include="reflection\Fresnel.h" />
     <ClInclude Include="reflection\FresnelNoOp.h" />
+    <ClInclude Include="reflection\Lambertian.h" />
     <ClInclude Include="reflection\Specular.h" />
     <ClInclude Include="renderer\DataBuffer.h" />
     <ClInclude Include="renderer\Renderer.h" />

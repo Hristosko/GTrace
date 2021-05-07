@@ -11,7 +11,7 @@ public:
 
 	// return no scatering
 	virtual Vector3f f(const Vector3f& wo, const Vector3f& wi) const {
-		return R;
+		return Vector3f(0.f);
 	}
 
 	virtual Vector3f sample(
