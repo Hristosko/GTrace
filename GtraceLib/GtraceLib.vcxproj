@@ -75,6 +75,7 @@
     <ClInclude Include="math\Matrix4x4.h" />
     <ClInclude Include="math\OrthonormalBasis.h" />
     <ClInclude Include="math\Utils.h" />
+    <ClInclude Include="math\Vector2f.h" />
     <ClInclude Include="MemoryBench.h" />
     <ClInclude Include="Ref.h" />
     <ClInclude Include="math\Transform.h" />
