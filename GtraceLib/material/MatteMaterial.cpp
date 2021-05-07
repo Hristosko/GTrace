@@ -28,6 +28,6 @@ Vector3f MatteMaterial::shade(const HitRecord& rec, const Ray& ray) const {
 BSDF MatteMaterial::getBSDF(const Ray& ray, const HitRecord& hr) const {
 	BSDF res(ray, hr);
 	const Vector3f r = getTextureValue(this->text, Vector2f(), hr.position);
-	res.add(std::make_unique<SpecularReflection>(r));
+	//res.add(std::make_unique<SpecularReflection>(r));
 	return res;
 }

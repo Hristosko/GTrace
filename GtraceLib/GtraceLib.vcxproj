@@ -65,6 +65,8 @@
     <ClInclude Include="geometry\Triangle.h" />
     <ClInclude Include="geometry\Mesh.h" />
     <ClInclude Include="HeapAligned.h" />
+    <ClInclude Include="integrator\DirectLightIntegrator.h" />
+    <ClInclude Include="integrator\Integrator.h" />
     <ClInclude Include="light\DirectionalLight.h" />
     <ClInclude Include="light\Light.h" />
     <ClInclude Include="Logger.h" />
@@ -107,6 +109,7 @@
     <ClCompile Include="geometry\Shape.cpp" />
     <ClCompile Include="geometry\Sphere.cpp" />
     <ClCompile Include="geometry\Triangle.cpp" />
+    <ClCompile Include="integrator\DirectLightIntegrator.cpp" />
     <ClCompile Include="light\DirectionalLight.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="material\MatteMaterial.cpp" />
