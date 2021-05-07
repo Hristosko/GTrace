@@ -19,7 +19,7 @@ struct Ray {
 		: origin(origin), direction(direction),
 		invDirection(Vector3f(1.f) / direction) {}
 
-	Vector3f pointAt(float t) {
+	Vector3f pointAt(float t) const {
 		return this->origin + t * this->direction;
 	}
 };
@@ -28,5 +28,5 @@ struct HitRecord {
 	float t;
 	Vector3f normal;
 	Vector3f position;
-	Material* mat;
+	Material* mat = nullptr;
 };

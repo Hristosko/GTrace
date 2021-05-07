@@ -5,6 +5,8 @@
 #include "../geometry/Mesh.h"
 #include "../geometry/BVH.h"
 
+#include <limits>
+
 World::World() : bvh(nullptr) {}
 
 World::~World() {
@@ -107,6 +109,17 @@ void World::buildBVH() {
 	delete this->bvh;
 	this->bvh = BVH::build(this->shapes.data(), this->shapes.size());
 	this->shapes.clear();
+}
+
+bool World::intersect(const Ray& ray, HitRecord& rec, float time) const {
+	if (this->bvh == nullptr) return false;
+	return this->bvh->hit(ray, 0.f, std::numeric_limits<float>::max(), time, rec);
+}
+
+bool World::intersect(const Ray& ray) const {
+	if (this->bvh == nullptr) return false;
+	HitRecord rec;
+	return this->intersect(ray, rec);
 }
 
 World& getWorld() {

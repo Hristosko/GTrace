@@ -38,6 +38,9 @@ public:
 
 	Shape* getBVH() { return this->bvh; }
 	void buildBVH();
+
+	bool intersect(const Ray& ray, HitRecord& rec, float time = 0.f) const;
+	bool intersect(const Ray& ray) const;
 private:
 	Shape* bvh;
 	std::unordered_map<std::string, Texture*> textures;

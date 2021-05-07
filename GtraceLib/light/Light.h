@@ -3,6 +3,7 @@
 #include "../scene/Parser.h"
 #include "../HeapAligned.h"
 #include "../geometry/Ray.h"
+#include "../math/Vector2f.h"
 
 class Light : public SceneElement, public HeapAligned<16> {
 public:

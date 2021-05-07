@@ -90,10 +90,7 @@ void Renderer::rayTraceWithSamples(
 			ray.py = iy;
 			ray.renderer = this;
 			HitRecord rec;
-			rec.mat = getWorld().getSettings().background;
-			rec.t = 1000000.f;
-			Shape * bvh = getWorld().getBVH();
-			bvh->hit(ray, 0.f, rec.t, 0, rec);
+			getWorld().intersect(ray, rec);
 
 			rec.position = ray.origin + rec.t * ray.direction;
 			const Vector3f color = (rec.mat == nullptr) ?
