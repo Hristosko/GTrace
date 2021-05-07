@@ -9,6 +9,7 @@ packages/*
 
 GtraceConsole/x64
 GtraceLib/x64/
+GtraceLib/Release/
 GtraceApp/x64/
 
 unit_tests/Release
@@ -22,4 +23,5 @@ unit_tests/x64
 *.cmake
 CMakeCache.txt
 CMakeFiles/
+GtraceLib/GTraceLib.dir/
 GtraceConsole/GTaceConsole.dir/
