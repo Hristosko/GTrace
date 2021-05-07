@@ -5,6 +5,7 @@
 #include "../math/Transform.h"
 #include "../geometry/Ray.h"
 #include "../Ref.h"
+#include <memory>
 
 #define GTRACE_MAX_BxDF_COUNT 8
 
@@ -12,7 +13,7 @@ class BSDF {
 public:
 	BSDF(const Ray& ray, const HitRecord& hr);
 
-	void add(BxDF* bxdf);
+	void add(std::unique_ptr<BxDF>&& bxdf);
 
 	int numComponents() const { return this->nbxdfs; }
 
@@ -28,5 +29,5 @@ private:
 	Vector3f gnormal;
 	Ref<Transform> worldToObj;
 	int nbxdfs;
-	BxDF* bxdfs[GTRACE_MAX_BxDF_COUNT];
+	std::unique_ptr<BxDF> bxdfs[GTRACE_MAX_BxDF_COUNT];
 };

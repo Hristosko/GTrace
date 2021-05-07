@@ -1,5 +1,5 @@
 #include "BSDF.h"
-#include <assert.h>
+#include "../Logger.h"
 
 BSDF::BSDF(const Ray& ray, const HitRecord& hr) 
 	: localCoordinates(hr.normal, OB_fromW()), nbxdfs(0), gnormal(hr.normal)
@@ -12,9 +12,12 @@ BSDF::BSDF(const Ray& ray, const HitRecord& hr)
 	this->worldToObj = new Transform(m);
 }
 
-void BSDF::add(BxDF* bxdf) {
-	assert(this->nbxdfs < GTRACE_MAX_BxDF_COUNT);
-	this->bxdfs[this->nbxdfs++] = bxdf;
+void BSDF::add(std::unique_ptr<BxDF>&& bxdf) {
+	if (this->nbxdfs >= GTRACE_MAX_BxDF_COUNT)
+	{
+		LOGERROR("Exceeding max BxDFs per BSDF.");
+	}
+	else this->bxdfs[this->nbxdfs++] = std::move(bxdf);
 }
 
 int BSDF::numComponents(BxDFType flags) const {
