@@ -7,9 +7,12 @@ x64/*
 packages/*
 .vs/
 
-GtraceConsole/x64
+GtraceConsole/x64/
+GtraceConsole/Release/
+GtraceConsole/Debug/
 GtraceLib/x64/
 GtraceLib/Release/
+GtraceLib/Debug/
 GtraceApp/x64/
 
 unit_tests/Release

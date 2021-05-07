@@ -38,3 +38,14 @@ add_library(sub::gtrace ALIAS ${PROJECT_NAME})
 target_include_directories( ${PROJECT_NAME}
     PUBLIC ${PROJECT_SOURCE_DIR}/.
 )
+
+target_compile_definitions(${PROJECT_NAME}
+    # should work for gcc and clang, not supported for msvc
+    PUBLIC cxx_std_17
+)
+
+if(MSVC)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+endif(MSVC)
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC GTRACE_MEMORY_BENCH)
