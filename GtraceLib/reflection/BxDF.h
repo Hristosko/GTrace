@@ -39,7 +39,7 @@ public:
 	BxDF(BxDFType t) : type(t) {}
 	virtual ~BxDF() {}
 
-	virtual Vector3f f(const Ray& ray, const HitRecord& hr, const Vector3f& wo, const Vector3f& wi) const = 0;
+	virtual Vector3f f(const Vector3f& wo, const Vector3f& wi) const = 0;
 	/**
 	 * Compute the direction of the incomming light (wi) given the outgoing direction.
 	 * @param u1 random number

@@ -9,7 +9,7 @@ public:
 		BxDF(BxDFType::Reflection | BxDFType::Specular), fresnel(fresnel), R(r) {}
 
 	// return no scatering
-	virtual Vector3f f(const Ray& ray, const HitRecord& hr, const Vector3f& wo, const Vector3f& wi) const {
+	virtual Vector3f f(const Vector3f& wo, const Vector3f& wi) const {
 		return Vector3f(0.f);
 	}
 
