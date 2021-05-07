@@ -90,6 +90,7 @@
     <ClInclude Include="renderer\RendererDisplay.h" />
     <ClInclude Include="renderer\RendererOutput.h" />
     <ClInclude Include="renderer\RendererStat.h" />
+    <ClInclude Include="Sampling.h" />
     <ClInclude Include="scene\Parser.h" />
     <ClInclude Include="scene\SceneSettings.h" />
     <ClInclude Include="scene\World.h" />
@@ -125,6 +126,7 @@
     <ClCompile Include="renderer\RendererDisplay.cpp" />
     <ClCompile Include="renderer\RendererOutput.cpp" />
     <ClCompile Include="renderer\RendererStat.cpp" />
+    <ClCompile Include="Sampling.cpp" />
     <ClCompile Include="scene\Parser.cpp" />
     <ClCompile Include="scene\World.cpp" />
     <ClCompile Include="texture\NoiseTexture.cpp" />

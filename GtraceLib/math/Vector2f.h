@@ -32,24 +32,24 @@ private:
 
 using Point2f = Vector2f;
 
-Vector2f operator+(const Vector2f& a, const Vector2f& b) {
+inline Vector2f operator+(const Vector2f& a, const Vector2f& b) {
 	Vector2f res = a;
 	res += b;
 	return res;
 }
 
-Vector2f operator-(const Vector2f& a, const Vector2f& b) {
+inline Vector2f operator-(const Vector2f& a, const Vector2f& b) {
 	Vector2f res = a;
 	res -= b;
 	return res;
 }
 
-Vector2f operator*(const Vector2f& a, float f) {
+inline Vector2f operator*(const Vector2f& a, float f) {
 	Vector2f res = a;
 	res *= f;
 	return res;
 }
 
-Vector2f operator*(float f, const Vector2f& a) {
+inline Vector2f operator*(float f, const Vector2f& a) {
 	return a * f;
 }

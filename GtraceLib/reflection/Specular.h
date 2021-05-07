@@ -16,7 +16,7 @@ public:
 
 	virtual Vector3f sample(
 		const Ray& ray, const HitRecord& hr,
-		const Vector3f& wo, Vector3f& wi, float u1, float u2, float& pdf) const;
+		const Vector3f& wo, Vector3f& wi, const Point2f& p, float& pdf) const;
 
 private:
 	std::unique_ptr<Fresnel> fresnel;

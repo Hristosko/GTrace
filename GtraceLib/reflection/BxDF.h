@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../math/Vector3f.h"
+#include "../math/Vector2f.h"
 #include "../geometry/Ray.h"
 #include "../HeapAligned.h"
 
@@ -48,7 +49,7 @@ public:
 	 */
 	virtual Vector3f sample(
 		const Ray& ray, const HitRecord& hr, 
-		const Vector3f& wo, Vector3f& wi, float u1, float u2, float& pdf) const = 0;
+		const Vector3f& wo, Vector3f& wi, const Point2f& p, float& pdf) const = 0;
 
 	virtual Vector3f rho(const Ray& ray, const HitRecord& hr, uint32_t nSamples, float* samples = nullptr) const { return Vector3f(0.f); }
 protected:
@@ -62,7 +63,7 @@ public:
 	virtual Vector3f f(const Vector3f& wo, const Vector3f& wi) const;
 	virtual Vector3f sample(
 		const Ray& ray, const HitRecord& hr,
-		const Vector3f& wo, Vector3f& wi, float u1, float u2, float& pdf) const;
+		const Vector3f& wo, Vector3f& wi, const Point2f& p, float& pdf) const;
 
 	virtual Vector3f rho(const Ray& ray, const HitRecord& hr, uint32_t nSamples, float* samples = nullptr) const;
 
