@@ -19,7 +19,7 @@
 namespace gtrace {
 
 void Mesh::parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
-	Ref<Transform> tr = Shape::parseTranformComponents(parser, map);
+	std::shared_ptr<Transform> tr = Shape::parseTranformComponents(parser, map);
 	parser.parseMaterialAndStore(map, "mat", this->mat);
 	bool useNormals;
 	parser.parseBoolAndStore(map, "use_normals", useNormals);
@@ -50,7 +50,7 @@ static void checkIfNormalExists(const std::deque<Vector3f>& data, unsigned idx) 
  * otherwise compute the normals using the verteces
  * @param tr All transformations configured in the scene file
  */
-void Mesh::loadFromObjFile(World& w, const char* path, bool useNormals, Ref<Transform>& tr) {
+void Mesh::loadFromObjFile(World& w, const char* path, bool useNormals, std::shared_ptr<Transform>& tr) {
 	FILE* fp;
 	if (0 != fopen_s(&fp, path, "r")) {
 		LOGERROR("Cannot open file: ", path);

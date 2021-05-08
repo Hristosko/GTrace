@@ -32,7 +32,7 @@ private:
 	OrthonormalBasis localCoordinates; /** The local coordibates and the intersection point, Oz = normal */
 	Vector3f gnormal; /** The normal to the geometry */
 	Color3f R; /** The color computed from the texture */
-	Ref<Transform> worldToObj; /** world to local coordinates Transform */
+	Transform worldToObj; /** world to local coordinates Transform */
 	int nbxdfs; /** number of bxdfs */
 	const BxDF* bxdfs[GTRACE_MAX_BxDF_COUNT]; /** The bxdfs */
 };

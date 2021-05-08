@@ -15,7 +15,7 @@ BSDF::BSDF(const Ray& ray, const HitRecord& hr, const Color3f& r)
 		this->localCoordinates.v(),
 		this->localCoordinates.w()
 	);
-	this->worldToObj = new Transform(m);
+	this->worldToObj = Transform(m);
 }
 
 /**
@@ -43,8 +43,8 @@ int BSDF::numComponents(BxDFType flags) const {
  */
 Color3f BSDF::f(const Vector3f& wo, const Vector3f& wi, BxDFType flags) const {
 	// The vectors in the local coordinates
-	const Vector3f vo = this->worldToObj->transformDirection(wo);
-	const Vector3f vi = this->worldToObj->transformDirection(wi);
+	const Vector3f vo = this->worldToObj.transformDirection(wo);
+	const Vector3f vi = this->worldToObj.transformDirection(wi);
 	Vector3f res(0.f);
 
 	if (dot(wo, this->gnormal) * dot(wi, this->gnormal) < 0.f)

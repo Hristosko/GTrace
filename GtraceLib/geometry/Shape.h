@@ -5,6 +5,7 @@
 #include "../material/Material.h"
 #include "../HeapAligned.h"
 #include "../math/Transform.h"
+#include <memory>
 
 namespace gtrace {
 
@@ -12,7 +13,7 @@ class BBox;
 class Shape : public SceneElement, public HeapAligned<16> {
 public:
 	Shape() = default;
-	Shape(Ref<Transform>& tr) : objectToWorld(tr) {}
+	Shape(std::shared_ptr<Transform>& tr) : objectToWorld(tr) {}
 	virtual ~Shape() {}
 
 	/**
@@ -32,10 +33,10 @@ public:
 	 */
 	virtual BBox bbox() const = 0;
 
-	static Ref<Transform> parseTranformComponents(const SceneParser& parser, std::unordered_map<std::string, std::string>& map);
+	static std::shared_ptr<Transform> parseTranformComponents(const SceneParser& parser, std::unordered_map<std::string, std::string>& map);
 protected:
 	void parseTransform(const SceneParser& parser, std::unordered_map<std::string, std::string>& map);
 protected:
-	Ref<Transform> objectToWorld; /** Transform world coordiates to obj coordinates and vice versa */
+	std::shared_ptr<Transform> objectToWorld; /** Transform world coordiates to obj coordinates and vice versa */
 };
 }

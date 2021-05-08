@@ -1,13 +1,12 @@
 #pragma once
 
 #include "../HeapAligned.h"
-#include "../Ref.h"
 #include "Matrix4x4.h"
 #include "Utils.h"
 
 namespace gtrace {
 
-class Transform : public HeapAligned<32>, public ReferenceCounted {
+class Transform : public HeapAligned<32> {
 public:
 	Transform(const Matrix4x4& mat = Transform::makeIdentity())
 		: T(mat.transposed()), // we store the transposed matrix so that we can eff. transform vectors

@@ -25,7 +25,7 @@ public:
 	virtual void parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) override;
 
 private:
-	void loadFromObjFile(World& w, const char* path, bool useNormals, Ref<Transform>& tr);
+	void loadFromObjFile(World& w, const char* path, bool useNormals, std::shared_ptr<Transform>& tr);
 private:
 	Material* mat; /** The material of the object */
 	std::deque<Vector3f> vertices; /** The vertices */
@@ -37,7 +37,7 @@ private:
  */
 class MeshElement : public Shape {
 public:
-	MeshElement(Ref<Transform>& tr, Mesh* mesh, uint32_t i, uint32_t j, uint32_t k)
+	MeshElement(std::shared_ptr<Transform>& tr, Mesh* mesh, uint32_t i, uint32_t j, uint32_t k)
 		:Shape(tr), mesh(mesh), tr({ i, j, k }) {}
 
 	// not used, cannot be instanciated from the parser
@@ -55,7 +55,7 @@ protected:
  */
 class MeshElementWithNormal : public MeshElement {
 public:
-	MeshElementWithNormal(Ref<Transform>& tr, Mesh* mesh, uint32_t i, uint32_t j, uint32_t k,
+	MeshElementWithNormal(std::shared_ptr<Transform>& tr, Mesh* mesh, uint32_t i, uint32_t j, uint32_t k,
 		uint32_t ni, uint32_t nj, uint32_t nk)
 		: MeshElement(tr, mesh, i, j, k), normals({ ni, nj, nk }) {}
 
