@@ -8,17 +8,18 @@
 int main(int argc, char** argv) {
 	MemoryBench::reset();
 	{
+		World world;
 		const char* inputPath = argv[1];
 		const char* outputPath = argv[2];
-		RendererOutput output;
+		RendererOutput output(world);
 		output.init();
-		SceneParser::parseFile(inputPath);
-		getWorld().buildBVH();
+		SceneParser p(world);
+		p.parseFile(inputPath);
+		world.buildBVH();
 		auto noopUpdater = []() {};
-		Renderer renderer(noopUpdater, output);
+		Renderer renderer(noopUpdater, output, world);
 		renderer.render();
 		output.save(outputPath);
-		getWorld().clear();
 	}
 	const MemoryBench::Data mb = MemoryBench::get();
 	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", (float)mb.totalAllocatedMemory / (1024 * 1024), "MB");
