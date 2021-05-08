@@ -9,7 +9,7 @@ void DirectionalLight::parse(const SceneParser& parser, std::unordered_map<std::
 	this->direction = normalize(this->direction);
 }
 
-Vector3f DirectionalLight::sample(const HitRecord& hr, const Point2f& u, Vector3f& wi, float& pdf) const {
+Color3f DirectionalLight::sample(const HitRecord& hr, const Point2f& u, Vector3f& wi, float& pdf) const {
 	pdf = 1.f;
 	wi = -this->direction;
 	return this->color;

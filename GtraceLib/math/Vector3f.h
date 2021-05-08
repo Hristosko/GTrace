@@ -223,4 +223,7 @@ inline float minElement(const Vector3f& a, float b) {
 	const __m128 vecMin = _mm_min_ps(vec2, rotBy2);
 	return _mm_cvtss_f32(vecMin);
 }
+
+using Color3f = Vector3f;
+
 }
