@@ -4,7 +4,7 @@
 
 namespace gtrace {
 
-Vector3f DirectLightIntegrator::Li(const World& w, const Ray& ray, RandomGenerator& rng, int depth) const {
+Vector3f DirectLightIntegrator::Li(SecondaryRaysStat& stat, const World& w, const Ray& ray, RandomGenerator& rng, int depth) const {
 	HitRecord hr;
 	bool hitsGeometry = w.intersect(ray, hr);
 	if (hitsGeometry == false) return Vector3f(0.f);
@@ -14,11 +14,14 @@ Vector3f DirectLightIntegrator::Li(const World& w, const Ray& ray, RandomGenerat
 		return Vector3f(0.f);
 	}
 	BSDF bsdf = hr.mat->getBSDF(ray, hr);
-	return estimateAllLightSources(w, hr, ray.direction, bsdf, rng);
+	return estimateAllLightSources(stat, w, hr, ray.direction, bsdf, rng);
 }
 
 Vector3f DirectLightIntegrator::estimateFromLightSource(
-	const World& world, const Light* light, const HitRecord& hr, const Vector3f& wo, const BSDF& bsdf, RandomGenerator& rng) {
+	SecondaryRaysStat& stat,
+	const World& world, const Light* light, const HitRecord& hr,
+	const Vector3f& wo, const BSDF& bsdf, RandomGenerator& rng) {
+
 	assert(light != nullptr);
 	Vector3f res(0.f);
 	bool canHitLight = light->canBeHit();
@@ -27,6 +30,7 @@ Vector3f DirectLightIntegrator::estimateFromLightSource(
 	float pdfLight;
 	const Point2f uLight(rng.get(), rng.get());
 	const Vector3f li = light->sample(hr, uLight, wi, pdfLight);
+	stat.addLightSample();
 
 	if (pdfLight > 0.f /*&& !li.isBlack()*/
 		// We can hit the same object so we have to moove the position a bit
@@ -50,12 +54,15 @@ Vector3f DirectLightIntegrator::estimateFromLightSource(
 }
 
 Vector3f DirectLightIntegrator::estimateAllLightSources(
-	const World& world, const HitRecord& hr, const Vector3f& wo, const BSDF& bsdf, RandomGenerator& rng) {
+	SecondaryRaysStat& stat,
+	const World& world, const HitRecord& hr, const Vector3f& wo,
+	const BSDF& bsdf, RandomGenerator& rng) {
+
 	Vector3f res(0.f);
 	const auto& lights = world.getLights();
 
 	for (Light* light : lights) {
-		res += estimateFromLightSource(world, light, hr, wo, bsdf, rng);
+		res += estimateFromLightSource(stat, world, light, hr, wo, bsdf, rng);
 	}
 
 	return res;

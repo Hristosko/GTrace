@@ -39,7 +39,8 @@ public:
 private:
 	void rayTrace(uint32_t ix, uint32_t iy);
 	void rayTraceWithSamples(uint32_t ix, uint32_t iy, uint32_t samples,
-							Vector3f& sum, Vector3f& sumSqr, uint32_t& totalSamples);
+							Vector3f& sum, Vector3f& sumSqr,
+							uint32_t& totalSamples, SecondaryRaysStat& stat);
 	void renderBucket(uint32_t offsetx, uint32_t offsety, uint32_t bucketWidth, uint32_t bucketHeight);
 
 	void updateRenderSurface();

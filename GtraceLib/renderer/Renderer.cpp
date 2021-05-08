@@ -39,13 +39,14 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 	Vector3f sum(0.f);
 	Vector3f sumSqr(0.f);
 	uint32_t totalSamples = 0;
+	SecondaryRaysStat srs;
 
 	const uint32_t maxSubdivs = this->world.getSettings().maxSubdivs;
 	float tresh = this->world.getSettings().stdTreshhold;
 	tresh *= tresh; // we compare it to the variance
 	uint32_t curSubdivs = 1;
 	do {
-		this->rayTraceWithSamples(ix, iy, curSubdivs + 1, sum, sumSqr, totalSamples);
+		this->rayTraceWithSamples(ix, iy, curSubdivs + 1, sum, sumSqr, totalSamples, srs);
 		const float denom = 1.f / totalSamples;
 		res = sum*denom; // the mean value
 		var = sumSqr * denom - res * res;
@@ -54,6 +55,7 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 
 	// Store the results
 	this->stat.updateStat(totalSamples, totalSamples);
+	this->stat.updateStat(srs);
 	{
 		DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
 		ColorResult* ptr = reinterpret_cast<ColorResult*>(
@@ -75,7 +77,8 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 
 void Renderer::rayTraceWithSamples(
 	uint32_t ix, uint32_t iy, uint32_t samples,
-	Vector3f& sum, Vector3f& sumSqr, uint32_t& totalSamples) {
+	Vector3f& sum, Vector3f& sumSqr, uint32_t& totalSamples,
+	SecondaryRaysStat& stat) {
 
 	const int64_t camx = (int64_t)ix - this->world.getSettings().width / 2;
 	const int64_t camy = (int64_t)iy - this->world.getSettings().height / 2;
@@ -91,7 +94,7 @@ void Renderer::rayTraceWithSamples(
 			ray.px = ix;
 			ray.py = iy;
 			ray.renderer = this;
-			const Vector3f color = this->integrator->Li(this->world, ray, this->rng, 0);
+			const Vector3f color = this->integrator->Li(stat, this->world, ray, this->rng, 0);
 			sum += color;
 			sumSqr += (color * color);
 		}
