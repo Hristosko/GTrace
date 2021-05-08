@@ -20,8 +20,12 @@ Point2f concentricSampleDisk(const Point2f& u);
  */
 Vector3f cosineSampleHemisphere(const Point2f& u);
 
+/**
+ * Check if 2 vectors are in the same hemisphere
+ */
 inline bool sameHemisphere(const Vector3f& a, const Vector3f& b) {
     return a.z() * b.z() > 0;
 }
+
 inline float cosineHemispherePdf(float cosTheta) { return cosTheta * PI_1; }
 }
