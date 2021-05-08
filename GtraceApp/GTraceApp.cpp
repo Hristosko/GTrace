@@ -15,12 +15,12 @@ IMPLEMENT_APP(GTraceApp);
 bool GTraceApp::OnInit() {
 	this->frame = new GTraceMainWindow();
 	this->frame->Show();
-	MemoryBench::reset();
+	gtrace::MemoryBench::reset();
 	return true;
 }
 
 int GTraceApp::OnExit() {
-	const MemoryBench::Data mb = MemoryBench::get();
+	const gtrace::MemoryBench::Data mb = gtrace::MemoryBench::get();
 	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", (float)mb.totalAllocatedMemory / (1024 * 1024), "MB");
 	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage, "B ", (float)mb.peakMemoryUsage / (1024 * 1024), "MB");
 	LOGSTAT("Alocations count: ", mb.allocationCount);
@@ -75,14 +75,14 @@ void GTraceMainWindow::OnElementRendered(wxCommandEvent& event) {
 	this->rebuildBufferAndRefresh();
 }
 
-static void renderNewScene(wxWindow* renderSurface, RendererOutput* output, World* world, bool* setWhenReady) {
+static void renderNewScene(wxWindow* renderSurface, gtrace::RendererOutput* output, gtrace::World* world, bool* setWhenReady) {
 		output->init();
 		world->buildBVH();
 		auto frameUpdater = [renderSurface]() {
 			wxCommandEvent* event = new wxCommandEvent(GTRACE_RENDERED_ELEMENT);
 			wxQueueEvent(renderSurface, event);
 		};
-		Renderer renderer(frameUpdater, *output, *world);
+		gtrace::Renderer renderer(frameUpdater, *output, *world);
 		renderer.render();
 		*setWhenReady = true;
 }
@@ -98,7 +98,7 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 	if (openDialog->ShowModal() == wxID_OK) {
 		wxString path = openDialog->GetPath();
 		this->world.clear();
-		SceneParser parser(this->world);
+		gtrace::SceneParser parser(this->world);
 		parser.parseFile(path.c_str());
 
 		std::thread th(renderNewScene, this->renderSurface, &this->output,&this->world, &this->outputReady);
@@ -138,13 +138,13 @@ void GTraceMainWindow::OpenFile(wxCommandEvent& event) {
 
 void GTraceMainWindow::Image(wxCommandEvent& event) {
 	if (this->outputReady == false) return;
-	this->display.setDisplayType(this->world, RendererOutputType::Image);
+	this->display.setDisplayType(this->world, gtrace::RendererOutputType::Image);
 	this->rebuildBufferAndRefresh();
 }
 
 void GTraceMainWindow::StandardDeviation(wxCommandEvent& event) {
 	if (this->outputReady == false) return;
-	this->display.setDisplayType(this->world, RendererOutputType::Variance);
+	this->display.setDisplayType(this->world, gtrace::RendererOutputType::Variance);
 	this->rebuildBufferAndRefresh();
 }
 

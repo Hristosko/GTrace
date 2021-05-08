@@ -29,9 +29,9 @@ private:
 	wxWindow* renderSurface;
 	wxMenuBar* mainMenu;
 	wxBitmap bitmap;
-	World world;
-	RendererOutput output;
-	RendererDisplay display;
+	gtrace::World world;
+	gtrace::RendererOutput output;
+	gtrace::RendererDisplay display;
 };
 
 enum {
