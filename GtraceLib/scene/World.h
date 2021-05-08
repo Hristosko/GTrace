@@ -30,7 +30,7 @@ public:
 	SceneSettings& getSettings() { return this->settings; }
 	const SceneSettings& getSettings() const { return this->settings; }
 
-	Camera* getCamera() { return this->camera.get(); }
+	const Camera& getCamera() const { return *this->camera.get(); }
 	void setCamera(Camera* camera) { this->camera = std::unique_ptr<Camera>(camera); }
 
 	Texture* getTextureByName(const std::string& name);
