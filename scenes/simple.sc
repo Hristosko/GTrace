@@ -1,4 +1,4 @@
-@
+
 PinholeCamera
 eye=(0,0,500)
 look_point=(0,0,0)
@@ -12,10 +12,10 @@ up=(0,1,0)
 look_direction=(0,0,-1)
 height=500
 zoom=2
-
+@
 
 DirectionalLight
-direction=(1,1,-1)
+direction=(0, 0,-1)
 color=(1,1,1)
 
 ColorTexture
