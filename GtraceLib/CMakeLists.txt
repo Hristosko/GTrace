@@ -4,6 +4,7 @@ add_library(${PROJECT_NAME}
     FileUtils.cpp
     Logger.cpp
     MemoryBench.cpp
+    Sampling.cpp
 
     camera/OrthogonalCamera.cpp
     camera/PinholeCamera.cpp
@@ -15,11 +16,19 @@ add_library(${PROJECT_NAME}
     geometry/Sphere.cpp
     geometry/Triangle.cpp
 
+    integrator/DirectLightIntegrator.cpp
+
     light/DirectionalLight.cpp
 
     material/MatteMaterial.cpp
 
     math/OrthonormalBasis.cpp
+    math/Utils.cpp
+
+    reflection/BSDF.cpp
+    reflection/BxDF.cpp
+    reflection/Fresnel.cpp
+    reflection/Specular.cpp
 
     renderer/Renderer.cpp
     renderer/RendererDisplay.cpp
