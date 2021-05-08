@@ -20,7 +20,7 @@ public:
 		right(r),
 		box(box) {}
 
-	static Shape* build(Shape** shapes, uint32_t cnt);
+	static Shape* build(Shape** shapes, size_t cnt);
 
 	virtual ~BVH() override;
 	// not used, cannot be instanciated from the parser

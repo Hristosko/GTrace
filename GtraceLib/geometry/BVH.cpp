@@ -13,9 +13,9 @@ namespace gtrace {
  * (0 for x, 1 for y and 2 for z)
  * @return The number of elemnts in the left part of the split (lesser elemnts)
  */
-static uint32_t split(Shape** shapes, uint32_t cnt, float pivot, int axis) {
-	uint32_t lesser = 0;
-	for (uint32_t i = 0; i < cnt; ++i) {
+static size_t split(Shape** shapes, size_t cnt, float pivot, int axis) {
+	size_t lesser = 0;
+	for (size_t i = 0; i < cnt; ++i) {
 		const BBox bb = shapes[i]->bbox();
 		const float center = (bb.max() + bb.min())[axis] * 0.5f;
 		if (center < pivot) {
@@ -32,7 +32,7 @@ static uint32_t split(Shape** shapes, uint32_t cnt, float pivot, int axis) {
  * @param cnt The number of shapes
  * @param axis The current axis
  */
-static Shape* build(Shape** shapes, uint32_t cnt, int axis) {
+static Shape* build(Shape** shapes, size_t cnt, int axis) {
 	if (cnt == 1) {
 		Shape* res = shapes[0];
 		// transfer ownership
@@ -52,7 +52,7 @@ static Shape* build(Shape** shapes, uint32_t cnt, int axis) {
 		box = BBox::bound(box, shapes[i]->bbox());
 	}
 	const Vector3f pivot = (box.max() - box.min()) * 0.5f;
-	uint32_t middle = split(shapes, cnt, pivot[axis], axis);
+	size_t middle = split(shapes, cnt, pivot[axis], axis);
 
 	return new BVH(
 		build(shapes, middle, (axis + 1) % 3),
@@ -63,7 +63,7 @@ static Shape* build(Shape** shapes, uint32_t cnt, int axis) {
 /**
  * Build a KD Tree, see Shape* build(Shape** shapes, uint32_t cnt, int axis)
  */
-Shape* BVH::build(Shape** shapes, uint32_t cnt) {
+Shape* BVH::build(Shape** shapes, size_t cnt) {
 	LOGINFO("Start building bounding volume hierarchie. Shapes count: ", cnt);
 	Shape* res =  gtrace::build(shapes, cnt, 0);
 	LOGINFO("Finish building bounding volume hierarchie.");
