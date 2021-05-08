@@ -5,6 +5,10 @@
 
 namespace gtrace {
 
+/**
+ * Bounding volume hierarchie. Used to accelerate the  intersection of the rays
+ * with the geometry. Uses a KD Tree.
+ */
 class BVH : public Shape {
 public:
 	BVH(Shape* l, Shape* r)
@@ -24,8 +28,8 @@ public:
 	virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const override;
 	virtual BBox bbox() const override { return this->box; }
 private:
-	Shape* left;
-	Shape* right;
-	BBox box;
+	Shape* left; /** The left subtree */
+	Shape* right; /** The right subtree */
+	BBox box; /** The bbox of the current node */
 };
 }

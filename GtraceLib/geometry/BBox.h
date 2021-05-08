@@ -4,6 +4,9 @@
 #include "../HeapAligned.h"
 namespace gtrace {
 
+/**
+ * Bounding Box (around a more complex geometry or used by the Bounding volume hierarchy)
+ */
 class BBox : public HeapAligned<16> {
 public:
 	BBox() = default;

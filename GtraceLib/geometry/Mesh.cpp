@@ -42,6 +42,14 @@ static void checkIfNormalExists(const std::deque<Vector3f>& data, unsigned idx) 
 		LOGWARNING("Unknown normal: ", idx);
 }
 
+/**
+ * Parse a .obj file and loads the mesh in the world.
+ * @param w The world
+ * @pram path Path to the file
+ * @param useNormals Load the normals from the file if true,
+ * otherwise compute the normals using the verteces
+ * @param tr All transformations configured in the scene file
+ */
 void Mesh::loadFromObjFile(World& w, const char* path, bool useNormals, Ref<Transform>& tr) {
 	FILE* fp;
 	if (0 != fopen_s(&fp, path, "r")) {
@@ -100,11 +108,11 @@ void Mesh::loadFromObjFile(World& w, const char* path, bool useNormals, Ref<Tran
 
 		LOGWARNING("Unrecognized obj data: ", buffer);
 	}
-	LOGINFO("Parsed OBJ file ", path,
-		" Vertecies: ", this->vertices.size(),
-		" Normals: ", this->normals.size(),
-		" Faces: ", faces,
-		" Faces Normals: ", facesNormals);
+	LOGINFO("Parsed OBJ file ", path);
+	LOGINFO("Vertecies: ", this->vertices.size());
+	LOGINFO("Normals: ", this->normals.size());
+	LOGINFO("Faces: ", faces);
+	LOGINFO("Faces Normals: ", facesNormals);
 }
 
 bool MeshElement::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {

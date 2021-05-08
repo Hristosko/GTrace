@@ -3,9 +3,16 @@
 
 namespace gtrace {
 
-///
-/// Quicksort-style split function to split the shapes according to the pivot value and axis
-///
+/**
+ * Split the shapes in two using a pivot element.
+ * The splitting is done alongside a given axis.
+ * @param[in, out] shapes The shapes to be splitted.
+ * @param cnt The number of shapes
+ * @param pivot The pivot element
+ * @param axis The axis along which the splitting should be done
+ * (0 for x, 1 for y and 2 for z)
+ * @return The number of elemnts in the left part of the split (lesser elemnts)
+ */
 static uint32_t split(Shape** shapes, uint32_t cnt, float pivot, int axis) {
 	uint32_t lesser = 0;
 	for (uint32_t i = 0; i < cnt; ++i) {
@@ -19,6 +26,12 @@ static uint32_t split(Shape** shapes, uint32_t cnt, float pivot, int axis) {
 	return lesser;
 }
 
+/**
+ * Build a KD Tree recursively.
+ * @param shapes All shapes that will be part of the tree.
+ * @param cnt The number of shapes
+ * @param axis The current axis
+ */
 static Shape* build(Shape** shapes, uint32_t cnt, int axis) {
 	if (cnt == 1) {
 		Shape* res = shapes[0];
@@ -47,6 +60,9 @@ static Shape* build(Shape** shapes, uint32_t cnt, int axis) {
 		box);
 }
 
+/**
+ * Build a KD Tree, see Shape* build(Shape** shapes, uint32_t cnt, int axis)
+ */
 Shape* BVH::build(Shape** shapes, uint32_t cnt) {
 	LOGINFO("Start building bounding volume hierarchie. Shapes count: ", cnt);
 	Shape* res =  gtrace::build(shapes, cnt, 0);
