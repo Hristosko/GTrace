@@ -1,5 +1,7 @@
 #include "PinholeCamera.h"
 
+namespace gtrace {
+
 void PinholeCamera::parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
 	parser.parseVector3fAndStore(map, "eye", this->eye);
 	parser.parseVector3fAndStore(map, "look_point", this->lookPoint);
@@ -17,4 +19,5 @@ Ray PinholeCamera::castRay(float px, float py) const {
 		zoom * py * uvw.v() -
 		viewPlaneDistance * uvw.w());
 	return Ray(origin, direction);
+}
 }

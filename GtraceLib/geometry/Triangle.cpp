@@ -1,6 +1,8 @@
 #include "Triangle.h"
 #include "BBox.h"
 
+namespace gtrace {
+
 bool Triangle::hit(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Transform* tr,
 	const Ray& ray, float tmin, float tmax,
 	float& beta, float& gamma, float& tval) {
@@ -82,4 +84,5 @@ bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord
 
 BBox Triangle::bbox() const {
 	return Triangle::triangleBBox(this->a, this->b, this->c, this->objectToWorld.get());
+}
 }

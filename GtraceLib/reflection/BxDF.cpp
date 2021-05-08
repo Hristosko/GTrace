@@ -2,6 +2,8 @@
 #include "../math/Utils.h"
 #include "../Sampling.h"
 
+namespace gtrace {
+
 Vector3f BRDFtoBTDF::f(const Vector3f& wo, const Vector3f& wi) const {
     return this->brdf->f(wo, otherHemisphere(wi));
 }
@@ -20,4 +22,5 @@ Vector3f BxDF::sample(const Ray& ray, const HitRecord& hr, const Vector3f& wo, V
     if (wi.z() < 0) wi *= Vector3f(1.f, 1.f, -1.f);
     pdf = sameHemisphere(wo, wi) ? cosineHemispherePdf(fabsf(cosTheta(wi))) : 0.f;
     return this->f(wo, wi);
+}
 }

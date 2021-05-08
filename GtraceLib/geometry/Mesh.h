@@ -5,6 +5,8 @@
 #include "Shape.h"
 #include <deque>
 
+namespace gtrace {
+
 struct MeshTriangle {
 	uint32_t i, j, k;
 };
@@ -49,3 +51,4 @@ public:
 protected:
 	MeshTriangle normals;
 };
+}

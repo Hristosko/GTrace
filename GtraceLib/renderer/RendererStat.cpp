@@ -2,6 +2,8 @@
 #include "../Logger.h"
 #include "../scene/World.h"
 
+namespace gtrace {
+
 void RendererStat::renderBegin() {
 	this->mainSamples = this->rayCasts = 0;
 }
@@ -21,4 +23,5 @@ void RendererStat::renderFinish(const World& w) const {
 	LOGSTAT("Avarage samples per pixel: ", samplesPerPixel);
 	LOGSTAT("Casted rays: ", this->rayCasts);
 	LOGSTAT("Avarage rays per pixel: ", raysPerPixel);
+}
 }

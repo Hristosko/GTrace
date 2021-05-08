@@ -9,6 +9,8 @@
 #include "../integrator/DirectLightIntegrator.h"
 #include <functional>
 
+namespace gtrace {
+
 using UpdateRenderSurfaceFunc = std::function<void()>;
 
 class Renderer {
@@ -49,3 +51,4 @@ private:
 	RandomGenerator rng;
 	RendererStat stat;
 };
+}

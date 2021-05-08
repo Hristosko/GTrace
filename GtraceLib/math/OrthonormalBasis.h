@@ -2,6 +2,8 @@
 
 #include "Vector3f.h"
 
+namespace gtrace {
+
 struct OB_fromU {};
 struct OB_fromV {};
 struct OB_fromW {};
@@ -32,3 +34,4 @@ public:
 private:
 	Vector3f vec[3];
 };
+}

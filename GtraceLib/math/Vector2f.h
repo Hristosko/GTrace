@@ -2,6 +2,8 @@
 
 #include "Vector3f.h"
 
+namespace gtrace {
+
 class Vector2f {
 public:
 	Vector2f() = default;
@@ -52,4 +54,5 @@ inline Vector2f operator*(const Vector2f& a, float f) {
 
 inline Vector2f operator*(float f, const Vector2f& a) {
 	return a * f;
+}
 }

@@ -11,6 +11,8 @@
 #include "SceneSettings.h"
 #include "Parser.h"
 
+namespace gtrace {
+
 class Mesh;
 
 class World {
@@ -52,3 +54,4 @@ private:
 	SceneSettings settings;
 	Ref<Camera> camera;
 };
+}

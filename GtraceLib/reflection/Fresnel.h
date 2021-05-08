@@ -2,6 +2,8 @@
 
 #include "../math/Vector3f.h"
 
+namespace gtrace {
+
 class Fresnel {
 public:
 	virtual ~Fresnel() {}
@@ -13,3 +15,4 @@ protected:
 	static Vector3f approximateEta(const Vector3f& i);
 	static Vector3f approximateK(const Vector3f& i);
 };
+}

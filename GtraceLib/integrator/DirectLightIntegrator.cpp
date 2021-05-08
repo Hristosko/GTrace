@@ -2,6 +2,8 @@
 #include "../Logger.h"
 #include <assert.h>
 
+namespace gtrace {
+
 Vector3f DirectLightIntegrator::Li(const World& w, const Ray& ray, RandomGenerator& rng, int depth) const {
 	HitRecord hr;
 	bool hitsGeometry = w.intersect(ray, hr);
@@ -57,4 +59,5 @@ Vector3f DirectLightIntegrator::estimateAllLightSources(
 	}
 
 	return res;
+}
 }

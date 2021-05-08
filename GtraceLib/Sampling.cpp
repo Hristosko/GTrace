@@ -1,5 +1,7 @@
 #include "Sampling.h"
 
+namespace gtrace {
+
 Point2f concentricSampleDisk(const Point2f& u) {
     // Map uniform random numbers to $[-1,1)^2
     Point2f uOffset = 2.f * u - Vector2f(1, 1);
@@ -29,4 +31,5 @@ Vector3f cosineSampleHemisphere(const Point2f& u) {
     const float y = d.y();
     float z = sqrtf(std::max(0.f, 1 - x * x - y * y));
     return Vector3f(x, y, z);
+}
 }

@@ -4,6 +4,8 @@
 #include <immintrin.h>
 #include <cmath>
 
+namespace gtrace {
+
 union MM128 {
 	__m128 m128;
 	float f[4];
@@ -220,4 +222,5 @@ inline float minElement(const Vector3f& a, float b) {
 	const __m128 rotBy2 = _mm_shuffle_ps(vec2, vec2, _MM_SHUFFLE(1, 0, 3, 2));
 	const __m128 vecMin = _mm_min_ps(vec2, rotBy2);
 	return _mm_cvtss_f32(vecMin);
+}
 }

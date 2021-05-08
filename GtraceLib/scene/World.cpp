@@ -7,6 +7,8 @@
 
 #include <limits>
 
+namespace gtrace {
+
 World::World() : bvh(nullptr) {}
 
 World::~World() {
@@ -122,4 +124,5 @@ bool World::intersect(const Ray& ray) const {
 	if (this->bvh == nullptr) return false;
 	HitRecord rec;
 	return this->intersect(ray, rec);
+}
 }

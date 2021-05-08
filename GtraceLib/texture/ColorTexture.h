@@ -2,6 +2,8 @@
 
 #include "Texture.h"
 
+namespace gtrace {
+
 class ColorTexture : public Texture {
 public:
 	virtual void parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) override {
@@ -15,3 +17,4 @@ public:
 private:
 	Vector3f color;
 };
+}

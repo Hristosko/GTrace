@@ -1,6 +1,8 @@
 #include "BVH.h"
 #include "../Logger.h"
 
+namespace gtrace {
+
 ///
 /// Quicksort-style split function to split the shapes according to the pivot value and axis
 ///
@@ -66,4 +68,5 @@ bool BVH::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec
 	bool ishit1 = this->right->hit(ray, tmin, rec.t, time, rec);
 
 	return ishit || ishit1;
+}
 }

@@ -5,6 +5,8 @@
 
 #define GEOM_EPS 0.0001f
 
+namespace gtrace {
+
 class Renderer;
 class Material;
 
@@ -30,3 +32,4 @@ struct HitRecord {
 	Vector3f position;
 	Material* mat = nullptr;
 };
+}

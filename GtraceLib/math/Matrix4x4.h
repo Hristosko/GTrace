@@ -2,6 +2,8 @@
 
 #include "Vector3f.h"
 
+namespace gtrace {
+
 class Matrix4x4 {
 private:
 	friend class Transform;
@@ -171,4 +173,5 @@ inline Matrix4x4 Matrix4x4::inversed() const {
 	const __m128 CR = _mm_shuffle_ps(Z, W, _MM_SHUFFLE(1, 3, 1, 3));
 	const __m128 DR = _mm_shuffle_ps(Z, W, _MM_SHUFFLE(0, 2, 0, 2));
 	return Matrix4x4(AR, BR, CR, DR);
+}
 }

@@ -16,6 +16,8 @@
 #define OBJ_NORMAL_FORMAT "vn %f %f %f"
 #define OBJ_FACE_FORMAT "f %u//%u %u//%u %u//%u"
 
+namespace gtrace {
+
 void Mesh::parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
 	Ref<Transform> tr = Shape::parseTranformComponents(parser, map);
 	parser.parseMaterialAndStore(map, "mat", this->mat);
@@ -145,4 +147,5 @@ bool MeshElementWithNormal::hit(const Ray& ray, float tmin, float tmax, float ti
 	}
 	if (hasHit) rec.mat = this->mesh->mat;
 	return hasHit;
+}
 }

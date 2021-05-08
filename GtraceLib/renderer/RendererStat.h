@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <mutex>
 
+namespace gtrace {
+
 class World;
 class RendererStat {
 public:
@@ -14,3 +16,4 @@ private:
 	uint32_t mainSamples;
 	uint32_t rayCasts;
 };
+}

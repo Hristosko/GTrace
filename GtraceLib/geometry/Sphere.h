@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Shape.h"
+namespace gtrace {
 
 class Sphere : public Shape {
 public:
@@ -12,3 +13,4 @@ private:
 	float radius;
 	Material* mat;
 };
+}

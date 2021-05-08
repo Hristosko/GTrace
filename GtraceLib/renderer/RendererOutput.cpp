@@ -4,6 +4,8 @@
 #include "../FileUtils.h"
 #include "../Errors.h"
 
+namespace gtrace {
+
 #define CURRENT_VERSION UINT32_C(1)
 
 void RendererOutput::init() {
@@ -99,4 +101,5 @@ void RendererOutput::initVarianceOutput() {
 	const SceneSettings& settings = this->world.getSettings();
 	DataBuffer& buffer = this->getOutput(RendererOutputType::Variance);
 	buffer.init<VarianceResult>((uint64_t)settings.width * settings.height);
+}
 }

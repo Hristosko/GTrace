@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Camera.h"
+namespace gtrace {
 
 class OrthogonalCamera : public Camera {
 public:
@@ -15,3 +16,4 @@ private:
 	float zoom;
 	float height;
 };
+}

@@ -3,6 +3,8 @@
 #include "Texture.h"
 #include "SolidNoise.h"
 
+namespace gtrace {
+
 class NoiseTexture : public Texture {
 public:
 	virtual void parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) override;
@@ -14,3 +16,4 @@ private:
 	Texture* text2;
 	SolidNoise noise;
 };
+}

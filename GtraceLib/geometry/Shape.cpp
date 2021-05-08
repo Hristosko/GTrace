@@ -1,5 +1,7 @@
 #include "Shape.h"
 
+namespace gtrace {
+
 Ref<Transform> Shape::parseTranformComponents(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
 	Vector3f translation, rotation;
 	parser.parseVector3fAndStore(map, "position", translation);
@@ -11,4 +13,6 @@ Ref<Transform> Shape::parseTranformComponents(const SceneParser& parser, std::un
 
 void Shape::parseTransform(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
 	this->objectToWorld = this->parseTranformComponents(parser, map);
+}
+
 }

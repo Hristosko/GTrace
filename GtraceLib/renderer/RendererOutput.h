@@ -2,6 +2,8 @@
 
 #include "DataBuffer.h"
 
+namespace gtrace {
+
 struct ColorResult {
 	char r, g, b;
 };
@@ -35,3 +37,4 @@ private:
 	World& world;
 	DataBuffer outputs[RendererOutputType::Count];
 };
+}

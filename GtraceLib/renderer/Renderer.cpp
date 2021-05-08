@@ -4,6 +4,8 @@
 #include "../Logger.h"
 #include "../scene/World.h"
 
+namespace gtrace {
+
 void Renderer::render() {
 	LOGINFO("Start rendering.");
 	this->stat.renderBegin();
@@ -121,4 +123,5 @@ bool Renderer::ThreadedRenderer::getNextBucket(uint32_t& cx, uint32_t& cy) {
 	cy = this->cury = 0;
 	cx = this->curx = (this->curx + bucketWidth);
 	return this->curx < this->renderer.world.getSettings().width;
+}
 }

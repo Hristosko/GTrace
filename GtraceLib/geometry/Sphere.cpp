@@ -1,6 +1,8 @@
 #include "Sphere.h"
 #include "BBox.h"
 
+namespace gtrace {
+
 void Sphere::parse (const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
 	this->parseTransform(parser, map);
 	parser.parsefloatAndStore(map, "radius", this->radius);
@@ -39,4 +41,5 @@ BBox Sphere::bbox() const {
 	return BBox(
 		center - rad,
 		center + rad);
+}
 }

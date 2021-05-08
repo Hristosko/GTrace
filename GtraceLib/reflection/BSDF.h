@@ -7,6 +7,8 @@
 #include "../Ref.h"
 #include <memory>
 
+namespace gtrace {
+
 #define GTRACE_MAX_BxDF_COUNT 8
 
 class BSDF {
@@ -31,3 +33,4 @@ private:
 	int nbxdfs;
 	std::unique_ptr<BxDF> bxdfs[GTRACE_MAX_BxDF_COUNT];
 };
+}

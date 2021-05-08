@@ -1,5 +1,7 @@
 #pragma once
 
+namespace gtrace {
+
 /**
  * Objects that require extra aligment (Vector3f) should inherit this class.
  */
@@ -13,3 +15,4 @@ public:
 		::operator delete(ptr, std::align_val_t(N));
 	}
 };
+}

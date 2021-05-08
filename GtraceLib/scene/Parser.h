@@ -5,6 +5,8 @@
 
 #include "../math/Vector3f.h"
 
+namespace gtrace {
+
 class Texture;
 class Material;
 class World;
@@ -46,3 +48,4 @@ private:
 	uint32_t curObjLine;
 	World& world;
 };
+}

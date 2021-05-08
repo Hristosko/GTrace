@@ -4,6 +4,8 @@
 #include "Fresnel.h"
 #include <memory>
 
+namespace gtrace {
+
 class SpecularReflection : public BxDF {
 public:
 	SpecularReflection(const Vector3f& r, std::unique_ptr<Fresnel>&& fresnel) :
@@ -22,3 +24,4 @@ private:
 	std::unique_ptr<Fresnel> fresnel;
 	Vector3f R; // scale the reflectance color
 };
+}

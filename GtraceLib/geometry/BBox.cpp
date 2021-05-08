@@ -1,4 +1,5 @@
 #include "BBox.h"
+namespace gtrace {
 
 BBox BBox::bound(const BBox& a, const BBox& b) {
 	return BBox(
@@ -16,4 +17,5 @@ bool BBox::intersect(const Ray& ray, float tmin, float tmax) const {
 	tmin = maxElement(tsmaller, tmin);
 	tmax = minElement(tbigger, tmax);
 	return tmin <= tmax;
+}
 }

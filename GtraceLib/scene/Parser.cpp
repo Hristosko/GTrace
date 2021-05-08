@@ -22,6 +22,8 @@
 #include "../camera/PinholeCamera.h"
 #include "../camera/OrthogonalCamera.h"
 
+namespace gtrace {
+
 SceneElement* SceneParser::getByName(const std::string& name) {
 	if (name == "Triangle")
 		return new Triangle();
@@ -212,4 +214,5 @@ void SceneParser::parseBoolAndStore(std::unordered_map<std::string, std::string>
 		LOGWARNING("Unknown boolean: ", it->second, " object: ", curObject, " line: ", curObjLine, " Setting to default false");
 		res = false;
 	}
+}
 }

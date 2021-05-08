@@ -5,6 +5,8 @@
 #include "Matrix4x4.h"
 #include "Utils.h"
 
+namespace gtrace {
+
 class Transform : public HeapAligned<32>, public ReferenceCounted {
 public:
 	Transform(const Matrix4x4& mat)
@@ -122,3 +124,4 @@ private:
 	Matrix4x4 T; // The matrix that represents the transform
 	Matrix4x4 iT; // The inverse matrix i.e. the inverse transform
 };
+}

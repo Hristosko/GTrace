@@ -7,6 +7,8 @@ namespace MemoryBench {
 
 #ifdef GTRACE_MEMORY_BENCH
 
+namespace gtrace {
+
 struct InternalData {
 	std::atomic<Counter> currentAllocatedMemory;
 	std::atomic<Counter> peakAllocatedMemory;
@@ -71,7 +73,7 @@ void reset() {
 }
 
 /**
- * Accumulates single allocation with the given size. 
+ * Accumulates single allocation with the given size.
  */
 static void increaseMemory(Counter size) {
 	id.allocationCount.fetch_add(1, std::memory_order_relaxed);
@@ -86,7 +88,7 @@ static void increaseMemory(Counter size) {
 
 	// This isn't threadsafe, but should be accurate enough
 	if (cur > peak) id.peakAllocatedMemory.store(cur, std::memory_order_relaxed);
-	
+
 	id.totalAllocatedMemory.fetch_add(size, std::memory_order_relaxed);
 }
 
@@ -175,3 +177,4 @@ void operator delete(void* ptr, std::align_val_t al) {
 
 #endif // _WIN32
 #endif // DEBGTRACE_MEMORY_BENCHUG
+}

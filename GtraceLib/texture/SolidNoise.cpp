@@ -4,6 +4,8 @@
 
 #include "../Random.h"
 
+namespace gtrace {
+
 const Vector3f SolidNoise::grad[SOLID_NOISE_SIZE] = {
 	Vector3f(1,1,0),
 	Vector3f(-1,1,0),
@@ -76,4 +78,5 @@ Vector3f SolidNoise::gamma(int i, int j, int k) const {
 float SolidNoise::knot(int i, int j, int k, const Vector3f& v) const {
 	return omega(v.x())* omega(v.y())* omega(v.z())*
 		dot(gamma(i, j, k), v);
+}
 }

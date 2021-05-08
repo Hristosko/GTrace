@@ -1,5 +1,7 @@
 #include "Fresnel.h"
 
+namespace gtrace {
+
 Vector3f Fresnel::circularyPolariezed(float coso, float cost, const Vector3f& etao, const Vector3f& etat) {
 	const Vector3f paralel = (etat * coso - etao * cost) / (etat * coso + etao * cost);
 	const Vector3f perpendicular = (etao * coso - etat * cost) / (etao * coso + etat * cost);
@@ -29,4 +31,5 @@ Vector3f Fresnel::approximateEta(const Vector3f& i) {
 Vector3f Fresnel::approximateK(const Vector3f& i) {
 	const Vector3f intensity = clamp(i, 0.f, 0.999f);
 	return 2.f * sqrt(intensity / (Vector3f(1.f) - intensity));
+}
 }

@@ -10,6 +10,8 @@
 
 #define SCENE_DEFAULT_BACKGROUND Vector3f(0.f)
 
+namespace gtrace {
+
 struct SceneSettings : public SceneElement {
 	uint32_t width;
 	uint32_t height;
@@ -32,3 +34,4 @@ struct SceneSettings : public SceneElement {
 		parser.parseMaterialAndStore(map, "background", this->background);
 	}
 };
+}

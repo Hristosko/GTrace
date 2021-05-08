@@ -2,6 +2,8 @@
 
 #include "Fresnel.h"
 
+namespace gtrace {
+
 /**
  * Returns 100% of the reflection for all incoming directions.
  */
@@ -11,3 +13,4 @@ public:
 		return Vector3f(1.f);
 	}
 };
+}

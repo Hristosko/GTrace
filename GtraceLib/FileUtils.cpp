@@ -2,6 +2,8 @@
 #include "Errors.h"
 #include "Logger.h"
 
+namespace gtrace {
+
 void readBin(void* buffer, size_t elementSize, size_t elementCount, FILE* fp) {
 	if (fp == nullptr) {
 		LOGERROR("Attempting to read from not existing file.");
@@ -37,4 +39,6 @@ int readLine(char* buffer, int n, FILE* fp) {
 	// remove the new line symbol
 	if (res[size - 1] == '\n') res[--size] = '\0';
 	return size;
+}
+
 }

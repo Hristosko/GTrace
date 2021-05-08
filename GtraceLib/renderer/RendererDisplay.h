@@ -4,6 +4,8 @@
 #include "../scene/World.h"
 #include <memory>
 
+namespace gtrace {
+
 class RendererDisplay {
 public:
 	RendererDisplay(RendererOutput& output);
@@ -17,3 +19,5 @@ private:
 	RendererOutput& output;
 	std::unique_ptr<char[]> pixels;
 };
+
+}

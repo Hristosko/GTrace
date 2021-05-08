@@ -1,7 +1,9 @@
 #include "BSDF.h"
 #include "../Logger.h"
 
-BSDF::BSDF(const Ray& ray, const HitRecord& hr) 
+namespace gtrace {
+
+BSDF::BSDF(const Ray& ray, const HitRecord& hr)
 	: localCoordinates(hr.normal, OB_fromW()), nbxdfs(0), gnormal(hr.normal)
 {
 	const Matrix4x4 m = Transform::makeBasisChange(
@@ -45,4 +47,5 @@ Vector3f BSDF::f(const Vector3f& wo, const Vector3f& wi, BxDFType flags) const {
 	}
 
 	return res;
+}
 }

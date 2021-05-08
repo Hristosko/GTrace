@@ -2,6 +2,8 @@
 
 #include "Integrator.h"
 
+namespace gtrace {
+
 class DirectLightIntegrator : public Integrator {
 public:
 	virtual Vector3f Li(const World& w, const Ray& ray, RandomGenerator& rng, int depth) const override;
@@ -16,3 +18,4 @@ protected:
 		const Vector3f& wo, const BSDF& bsdf,
 		RandomGenerator& rng);
 };
+}

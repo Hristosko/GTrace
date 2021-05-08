@@ -3,6 +3,8 @@
 #include "BxDF.h"
 #include "../math/Utils.h"
 
+namespace gtrace {
+
 class LambertianReflection : public BxDF {
 public:
 	LambertianReflection(const Vector3f& r) : BxDF(BxDFType::Reflection | BxDFType::Specular), R(r * PI_1) {}
@@ -13,3 +15,4 @@ public:
 private:
 	const Vector3f R;
 };
+}

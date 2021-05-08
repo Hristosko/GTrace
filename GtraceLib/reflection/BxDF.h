@@ -5,6 +5,8 @@
 #include "../geometry/Ray.h"
 #include "../HeapAligned.h"
 
+namespace gtrace {
+
 enum class BxDFType : uint16_t {
 	Reflection = 1 << 0,
 	Transmission = 1 << 1,
@@ -70,3 +72,4 @@ public:
 private:
 	BxDF* brdf;
 };
+}

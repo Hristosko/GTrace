@@ -3,6 +3,9 @@
 #define EPSILON 0.001f
 #define EPSILON_SQR EPSILON*EPSILON
 
+namespace gtrace {
+
+
 // Some might not work properly !!!
 
 OrthonormalBasis::OrthonormalBasis(const Vector3f& a, OB_fromU) {
@@ -63,4 +66,5 @@ OrthonormalBasis::OrthonormalBasis(const Vector3f& a, const Vector3f& b, OB_from
 	this->vec[2] = normalize(a);
 	this->vec[0] = normalize(cross(b, a));
 	this->vec[1] = cross(this->vec[2], this->vec[0]);
+}
 }

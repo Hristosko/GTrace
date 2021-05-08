@@ -4,6 +4,8 @@
 #include <vector>
 #include "Logger.h"
 
+namespace gtrace {
+
 class Threaded {
 public:
 	virtual void run(unsigned threadIdx, unsigned numThreads) = 0;
@@ -32,3 +34,4 @@ private:
 	std::vector<std::thread> threads;
 	unsigned numThreads;
 };
+}

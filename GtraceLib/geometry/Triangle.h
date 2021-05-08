@@ -2,6 +2,8 @@
 
 #include "Shape.h"
 
+namespace gtrace {
+
 class Triangle : public Shape {
 public:
 	static bool hit(const Vector3f& a, const Vector3f& b, const Vector3f& c,const Transform* tr,
@@ -22,3 +24,4 @@ private:
 	Vector3f a, b, c;
 	Material* mat;
 };
+}

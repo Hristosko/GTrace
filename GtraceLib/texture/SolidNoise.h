@@ -5,6 +5,8 @@
 
 #define SOLID_NOISE_SIZE 16
 
+namespace gtrace {
+
 class SolidNoise {
 public:
 	SolidNoise();
@@ -18,3 +20,4 @@ private:
 	int8_t phi[SOLID_NOISE_SIZE];
 	static const Vector3f grad[SOLID_NOISE_SIZE];
 };
+}

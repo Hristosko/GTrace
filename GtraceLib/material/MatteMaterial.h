@@ -3,6 +3,8 @@
 #include "Material.h"
 #include "../texture/Texture.h"
 
+namespace gtrace {
+
 class MatteMaterial : public Material {
 public:
 	virtual void parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) override;
@@ -11,3 +13,4 @@ private:
 	Texture* text;
 	float k;
 };
+}

@@ -4,6 +4,8 @@
 #include <time.h>
 #include<mutex>
 
+namespace gtrace {
+
 class Logger {
 public:
 	std::mutex mu;
@@ -70,6 +72,8 @@ inline void log() { getLogger() << '\n'; }
 		log("[DEBUG]  ", __FILE__, ":", __LINE__, " ", getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
 		getLogger().flush(); \
 	}
-#else 
+#else
 #define LOGDEBUG(...) ;
 #endif
+
+}

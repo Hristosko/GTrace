@@ -6,6 +6,8 @@
 #include "../HeapAligned.h"
 #include "../math/Transform.h"
 
+namespace gtrace {
+
 class BBox;
 class Shape : public SceneElement, public HeapAligned<16> {
 public:
@@ -22,3 +24,4 @@ protected:
 protected:
 	Ref<Transform> objectToWorld;
 };
+}

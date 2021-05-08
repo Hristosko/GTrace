@@ -3,6 +3,8 @@
 #include <cstdint>
 #include "Logger.h"
 
+namespace gtrace {
+
 namespace MemoryBench {
 
 using Counter = uint64_t;
@@ -17,3 +19,4 @@ Data get();
 void reset();
 
 };
+}

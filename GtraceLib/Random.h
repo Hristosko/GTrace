@@ -2,6 +2,8 @@
 
 #include <random>
 
+namespace gtrace {
+
 class RandomGenerator {
 public:
 	RandomGenerator() : rd(), gen(rd()), dist(0.f, 1.f) {}
@@ -14,3 +16,4 @@ private:
 	std::mt19937 gen;
 	std::uniform_real_distribution<float> dist;
 };
+}

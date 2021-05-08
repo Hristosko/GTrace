@@ -2,6 +2,7 @@
 
 #include "Ray.h"
 #include "../HeapAligned.h"
+namespace gtrace {
 
 class BBox : public HeapAligned<16> {
 public:
@@ -17,3 +18,4 @@ public:
 private:
 	Vector3f bottom, top;
 };
+}

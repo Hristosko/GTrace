@@ -3,6 +3,8 @@
 #include <memory>
 #include <cstdint>
 
+namespace gtrace {
+
 class DataBuffer {
 public:
 	DataBuffer() : typeSize(0), bufferSize(0), buffer(nullptr) {}
@@ -33,3 +35,4 @@ private:
 	uint64_t bufferSize;
 	std::unique_ptr<char[]> buffer;
 };
+}

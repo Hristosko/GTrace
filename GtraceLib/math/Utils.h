@@ -2,6 +2,8 @@
 
 #include "Vector3f.h"
 
+namespace gtrace {
+
 #define PI   3.14159265359f
 /// 1/PI
 #define PI_1 0.31830988618f
@@ -46,4 +48,5 @@ inline float sinPhi(const Vector3f& vec) {
 
 inline Vector3f otherHemisphere(const Vector3f& vec) {
 	return vec * Vector3f(1.f, 1.f, -1.f);
+}
 }

@@ -1,6 +1,8 @@
 #include "RendererDisplay.h"
 #include "../scene/World.h"
 
+namespace gtrace {
+
 RendererDisplay::RendererDisplay(RendererOutput& output)
 	: curDisplayType(RendererOutputType::Image), output(output) {}
 
@@ -27,4 +29,5 @@ void RendererDisplay::setDisplayType(const World& w, RendererOutputType type) {
 			this->pixels[i] = static_cast<char>(255.f * sqrtf(data[i]));
 		}
 	}
+}
 }

@@ -2,6 +2,8 @@
 
 #include <atomic>
 
+namespace gtrace {
+
 ///
 /// Base class that implements the interface required by Ref.
 /// Used for ref. count of objects
@@ -68,3 +70,4 @@ public:
 private:
 	T* ptr;
 };
+}

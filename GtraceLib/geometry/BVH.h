@@ -3,6 +3,8 @@
 #include "Shape.h"
 #include "BBox.h"
 
+namespace gtrace {
+
 class BVH : public Shape {
 public:
 	BVH(Shape* l, Shape* r)
@@ -26,3 +28,4 @@ private:
 	Shape* right;
 	BBox box;
 };
+}
