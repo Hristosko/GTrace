@@ -10,7 +10,7 @@ public:
 	virtual BBox bbox() const override;
 
 private:
-	float radius;
-	Material* mat;
+	float radius; /** The radius of the sphere */
+	Material* mat; /** The material of the sphere */
 };
 }

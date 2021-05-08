@@ -3,6 +3,16 @@
 
 namespace gtrace {
 
+/**
+ * Utility fiunction used by the triangle and by the meshes for intersectig a triangle with ray.
+ * @param a, b, c The verteces of the triangle
+ * @param tr The transformation of the world coordinates to obj coordinates
+ * @param ray The ray
+ * @param tmin, tmax See Shape::hit
+ * @param beta, gamma Used to calculate the normal for a mesh with normals provided by the user
+ * @param tval The point of intersection (if any)
+ * @return true if there is an intersection, false otherwise
+ */
 bool Triangle::hit(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Transform* tr,
 	const Ray& ray, float tmin, float tmax,
 	float& beta, float& gamma, float& tval) {
@@ -51,6 +61,9 @@ bool Triangle::hit(const Vector3f& a, const Vector3f& b, const Vector3f& c, cons
 	return tval >= tmin && tval <= tmax;
 }
 
+/**
+ * Utility fiunction that returns a bbox for a triangle.
+ */
 BBox Triangle::triangleBBox(const Vector3f& a, const Vector3f& b, const Vector3f& c, const Transform* tr) {
 	const Vector3f A = tr->transform(a);
 	const Vector3f B = tr->transform(b);

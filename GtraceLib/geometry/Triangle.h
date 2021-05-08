@@ -4,6 +4,10 @@
 
 namespace gtrace {
 
+/**
+ * Represents a triangle. Mostrly usefull for meshes as utility fiunctions.
+ * This class enables using the triangle as a standalone object.
+ */
 class Triangle : public Shape {
 public:
 	static bool hit(const Vector3f& a, const Vector3f& b, const Vector3f& c,const Transform* tr,
@@ -21,7 +25,7 @@ public:
 	virtual BBox bbox() const override;
 
 private:
-	Vector3f a, b, c;
-	Material* mat;
+	Vector3f a, b, c; /** The tree vertices of the triangle */
+	Material* mat; /** The material of the triangle */
 };
 }
