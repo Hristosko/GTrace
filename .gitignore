@@ -10,10 +10,10 @@ packages/*
 GtraceConsole/x64/
 GtraceConsole/Release/
 GtraceConsole/Debug/
-GtraceLib/x64/
 GtraceLib/Release/
 GtraceLib/Debug/
-GtraceApp/x64/
+GtraceApp/Release/
+GtraceApp/Debug/
 
 unit_tests/Release
 unit_tests/Debug
