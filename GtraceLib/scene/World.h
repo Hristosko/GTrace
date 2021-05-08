@@ -31,7 +31,7 @@ public:
 	const SceneSettings& getSettings() const { return this->settings; }
 
 	Camera* getCamera() { return this->camera.get(); }
-	void setCamera(Camera* camera) { this->camera = camera; }
+	void setCamera(Camera* camera) { this->camera = std::unique_ptr<Camera>(camera); }
 
 	Texture* getTextureByName(const std::string& name);
 	void addTexture(const std::string& name, Texture* text);
@@ -52,6 +52,6 @@ private:
 	std::vector<Light*> lights;
 	std::vector<Mesh*> meshes;
 	SceneSettings settings;
-	Ref<Camera> camera;
+	std::unique_ptr<Camera> camera;
 };
 }

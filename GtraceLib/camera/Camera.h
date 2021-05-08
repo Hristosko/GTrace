@@ -4,14 +4,13 @@
 #include "../geometry/Ray.h"
 #include "../math/OrthonormalBasis.h"
 #include "../math/Transform.h"
-#include "../Ref.h"
 
 namespace gtrace {
 
 /**
  * Represents a camera.
  */
-class Camera : public SceneElement, public ReferenceCounted {
+class Camera : public SceneElement {
 public:
 	/**
 	 * Cast a ray from the camera.
