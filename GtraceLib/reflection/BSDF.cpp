@@ -34,7 +34,7 @@ Vector3f BSDF::f(const Vector3f& wo, const Vector3f& wi, BxDFType flags) const {
 	const Vector3f vi = this->worldToObj->transformDirection(wi);
 	Vector3f res(0.f);
 
-	if (dot(wo, this->gnormal) * dot(wi, this->gnormal) > 0.f)
+	if (dot(wo, this->gnormal) * dot(wi, this->gnormal) < 0.f)
 		flags = (flags & ~BxDFType::Transmission); // we have reflection
 	else // we have transmission
 		flags = (flags & ~BxDFType::Reflection);

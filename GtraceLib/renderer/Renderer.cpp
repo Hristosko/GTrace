@@ -89,12 +89,14 @@ void Renderer::rayTraceWithSamples(
 			ray.px = ix;
 			ray.py = iy;
 			ray.renderer = this;
+			const Vector3f color = this->integrator->Li(getWorld(), ray, this->rng, 0);
+				/*
 			HitRecord rec;
 			getWorld().intersect(ray, rec);
 
 			const Vector3f color = (rec.mat == nullptr) ?
 				DEFAULT_TEXTURE_VALUE :
-				rec.mat->shade(rec, ray);
+				rec.mat->shade(rec, ray);*/
 			sum += color;
 			sumSqr += (color * color);
 		}

@@ -5,6 +5,8 @@
 #include "../Threaded.h"
 #include "../math/Vector3f.h"
 #include "../Random.h"
+#include "../integrator/Integrator.h"
+#include "../integrator/DirectLightIntegrator.h"
 #include <functional>
 
 using UpdateRenderSurfaceFunc = std::function<void()>;
@@ -28,7 +30,8 @@ private:
 	};
 public:
 	Renderer(UpdateRenderSurfaceFunc updater, RendererOutput& output)
-		: updateRenderSurfaceFunc(updater), output(output) {}
+		: updateRenderSurfaceFunc(updater), output(output),
+		integrator(std::make_unique<DirectLightIntegrator>()) {}
 
 	void render();
 private:
@@ -41,6 +44,7 @@ private:
 private:
 	UpdateRenderSurfaceFunc updateRenderSurfaceFunc;
 	RendererOutput& output;
+	std::unique_ptr<Integrator> integrator;
 	RandomGenerator rng;
 	RendererStat stat;
 };

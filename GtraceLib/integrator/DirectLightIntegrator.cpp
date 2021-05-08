@@ -28,7 +28,7 @@ Vector3f DirectLightIntegrator::estimateFromLightSource(
 
 	if (pdfLight > 0.f /*&& !li.isBlack()*/
 		&& world.intersect(Ray(hr.position, wi))) {
-		const Vector3f f = bsdf.f(wo, wi, BxDFType::AllTypes);
+		const Vector3f f = bsdf.f(wo, wi, BxDFType::All);
 		if (canHitLight == false) {
 			res += f * fabsf(dot(wi, hr.normal)) * li / pdfLight;
 		}
