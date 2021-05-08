@@ -74,6 +74,7 @@ bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord
 		rec.t = tval;
 		rec.mat = this->mat;
 		rec.normal = this->objectToWorld->invTransformDirection(cross(b - a, c - a));
+		if (dot(rec.normal, ray.direction) > 0.f) rec.normal *= Vector3f(-1.f);
 		return true;
 	}
 	return false;
