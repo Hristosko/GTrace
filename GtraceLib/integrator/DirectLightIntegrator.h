@@ -4,7 +4,6 @@
 
 class DirectLightIntegrator : public Integrator {
 public:
-	DirectLightIntegrator(int maxDepth) : maxDepth(maxDepth) {}
 	virtual Vector3f Li(const World& w, const Ray& ray, RandomGenerator& rng, int depth) const override;
 
 protected:
@@ -16,7 +15,4 @@ protected:
 		const World& world, const HitRecord& hr,
 		const Vector3f& wo, const BSDF& bsdf,
 		RandomGenerator& rng);
-
-private:
-	int maxDepth;
 };

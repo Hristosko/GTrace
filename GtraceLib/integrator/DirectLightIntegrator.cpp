@@ -1,8 +1,18 @@
 #include "DirectLightIntegrator.h"
+#include "../Logger.h"
 #include <assert.h>
 
 Vector3f DirectLightIntegrator::Li(const World& w, const Ray& ray, RandomGenerator& rng, int depth) const {
-	return Vector3f();
+	HitRecord hr;
+	bool hitsGeometry = w.intersect(ray, hr);
+	if (hitsGeometry == false) return Vector3f(0.f);
+	if (hr.mat == nullptr)
+	{
+		LOGWARNING("Ray hits the geometry but there is no material.");
+		return Vector3f(0.f);
+	}
+	BSDF bsdf = hr.mat->getBSDF(ray, hr);
+	return estimateAllLightSources(w, hr, ray.direction, bsdf, rng);
 }
 
 Vector3f DirectLightIntegrator::estimateFromLightSource(
@@ -45,4 +55,3 @@ Vector3f DirectLightIntegrator::estimateAllLightSources(
 
 	return res;
 }
-
