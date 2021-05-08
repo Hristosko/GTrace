@@ -7,8 +7,8 @@ ADD_DEFINITIONS(-DUNICODE)
 ADD_DEFINITIONS(-D_UNICODE)
 
 include_directories( ${PROJECT_NAME}
-    ${CMAKE_BINARY_DIR}/../../../sdk/wxWidget/include/msvc
-    ${CMAKE_BINARY_DIR}/../../../sdk/wxWidget/include
+    ${CMAKE_BINARY_DIR}/../../sdk/wxWidget/include/msvc
+    ${CMAKE_BINARY_DIR}/../../sdk/wxWidget/include
 )
 
 add_executable(${PROJECT_NAME} WIN32 ${SRCS})
