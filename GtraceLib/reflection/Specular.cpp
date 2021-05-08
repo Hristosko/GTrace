@@ -1,5 +1,5 @@
 #include "Specular.h"
-#include "../math/Utils.h"
+#include "math/Utils.h"
 
 namespace gtrace {
 

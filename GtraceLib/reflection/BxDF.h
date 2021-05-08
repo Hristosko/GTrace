@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../math/Vector3f.h"
-#include "../math/Vector2f.h"
-#include "../geometry/Ray.h"
-#include "../HeapAligned.h"
+#include "math/Vector3f.h"
+#include "math/Vector2f.h"
+#include "geometry/Ray.h"
+#include "HeapAligned.h"
 
 namespace gtrace {
 

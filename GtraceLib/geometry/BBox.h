@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Ray.h"
-#include "../HeapAligned.h"
+#include "HeapAligned.h"
 namespace gtrace {
 
 /**

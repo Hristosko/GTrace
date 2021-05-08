@@ -1,6 +1,6 @@
 #include "BxDF.h"
-#include "../math/Utils.h"
-#include "../Sampling.h"
+#include "math/Utils.h"
+#include "Sampling.h"
 
 namespace gtrace {
 

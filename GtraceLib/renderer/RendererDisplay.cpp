@@ -1,5 +1,5 @@
 #include "RendererDisplay.h"
-#include "../scene/World.h"
+#include "scene/World.h"
 
 namespace gtrace {
 

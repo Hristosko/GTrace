@@ -1,7 +1,7 @@
 #pragma once
 
 #include "BxDF.h"
-#include "../math/Utils.h"
+#include "math/Utils.h"
 
 namespace gtrace {
 

@@ -1,8 +1,8 @@
 #include "RendererOutput.h"
-#include "../scene/World.h"
-#include "../Logger.h"
-#include "../FileUtils.h"
-#include "../Errors.h"
+#include "scene/World.h"
+#include "Logger.h"
+#include "FileUtils.h"
+#include "Errors.h"
 
 namespace gtrace {
 

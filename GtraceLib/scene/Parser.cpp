@@ -1,7 +1,7 @@
 #include "Parser.h"
-#include "../Logger.h"
-#include "../Errors.h"
-#include "../FileUtils.h"
+#include "Logger.h"
+#include "Errors.h"
+#include "FileUtils.h"
 #include "World.h"
 
 #define DELIMER '='
@@ -12,15 +12,15 @@
 #define FALSE_STRING "false"
 #define TRUE_STRING "true"
 
-#include "../geometry/Triangle.h"
-#include "../geometry/Sphere.h"
-#include "../geometry/Mesh.h"
-#include "../texture/ColorTexture.h"
-#include "../texture/NoiseTexture.h"
-#include "../material/MatteMaterial.h"
-#include "../light/DirectionalLight.h"
-#include "../camera/PinholeCamera.h"
-#include "../camera/OrthogonalCamera.h"
+#include "geometry/Triangle.h"
+#include "geometry/Sphere.h"
+#include "geometry/Mesh.h"
+#include "texture/ColorTexture.h"
+#include "texture/NoiseTexture.h"
+#include "material/MatteMaterial.h"
+#include "light/DirectionalLight.h"
+#include "camera/PinholeCamera.h"
+#include "camera/OrthogonalCamera.h"
 
 namespace gtrace {
 

@@ -2,11 +2,11 @@
 
 #include "RendererOutput.h"
 #include "RendererStat.h"
-#include "../Threaded.h"
-#include "../math/Vector3f.h"
-#include "../Random.h"
-#include "../integrator/Integrator.h"
-#include "../integrator/DirectLightIntegrator.h"
+#include "Threaded.h"
+#include "math/Vector3f.h"
+#include "Random.h"
+#include "integrator/Integrator.h"
+#include "integrator/DirectLightIntegrator.h"
 #include <functional>
 
 namespace gtrace {

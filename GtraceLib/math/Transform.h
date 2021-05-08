@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../HeapAligned.h"
+#include "HeapAligned.h"
 #include "Matrix4x4.h"
 #include "Utils.h"
 

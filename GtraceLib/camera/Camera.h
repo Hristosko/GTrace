@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../scene/Parser.h"
-#include "../geometry/Ray.h"
-#include "../math/OrthonormalBasis.h"
-#include "../math/Transform.h"
+#include "scene/Parser.h"
+#include "geometry/Ray.h"
+#include "math/OrthonormalBasis.h"
+#include "math/Transform.h"
 
 namespace gtrace {
 

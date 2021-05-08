@@ -1,12 +1,12 @@
 #pragma once
 #include <vector>
 
-#include "../geometry/Shape.h"
-#include "../texture/Texture.h"
-#include "../material/Material.h"
-#include "../light/Light.h"
+#include "geometry/Shape.h"
+#include "texture/Texture.h"
+#include "material/Material.h"
+#include "light/Light.h"
 
-#include "../camera/Camera.h"
+#include "camera/Camera.h"
 
 #include "SceneSettings.h"
 #include "Parser.h"

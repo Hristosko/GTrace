@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../math/Vector3f.h"
-#include "../material/Material.h"
+#include "math/Vector3f.h"
+#include "material/Material.h"
 #include "Shape.h"
 #include <deque>
 

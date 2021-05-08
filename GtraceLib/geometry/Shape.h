@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Ray.h"
-#include "../scene/Parser.h"
-#include "../material/Material.h"
-#include "../HeapAligned.h"
-#include "../math/Transform.h"
+#include "scene/Parser.h"
+#include "material/Material.h"
+#include "HeapAligned.h"
+#include "math/Transform.h"
 #include <memory>
 
 namespace gtrace {

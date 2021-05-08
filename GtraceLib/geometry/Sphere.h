@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Shape.h"
+
 namespace gtrace {
 
 class Sphere : public Shape {

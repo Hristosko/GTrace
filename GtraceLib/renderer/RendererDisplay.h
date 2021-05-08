@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RendererOutput.h"
-#include "../scene/World.h"
+#include "scene/World.h"
 #include <memory>
 
 namespace gtrace {

@@ -1,5 +1,5 @@
 #include "BSDF.h"
-#include "../Logger.h"
+#include "Logger.h"
 
 namespace gtrace {
 

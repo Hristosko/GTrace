@@ -3,7 +3,7 @@
 #include<unordered_map>
 #include <string>
 
-#include "../math/Vector3f.h"
+#include "math/Vector3f.h"
 
 namespace gtrace {
 

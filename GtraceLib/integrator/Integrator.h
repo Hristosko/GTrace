@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../scene/World.h"
-#include "../Random.h"
+#include "scene/World.h"
+#include "Random.h"
 
 namespace gtrace {
 

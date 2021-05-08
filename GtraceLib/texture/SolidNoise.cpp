@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-#include "../Random.h"
+#include "Random.h"
 
 namespace gtrace {
 

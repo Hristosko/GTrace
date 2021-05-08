@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Material.h"
-#include "../texture/Texture.h"
-#include "../reflection/Lambertian.h"
+#include "texture/Texture.h"
+#include "reflection/Lambertian.h"
 
 namespace gtrace {
 

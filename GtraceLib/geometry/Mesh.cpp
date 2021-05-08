@@ -1,11 +1,11 @@
 #include "Mesh.h"
 #include "BBox.h"
-#include "../Logger.h"
-#include "../Errors.h"
-#include "../StringUtils.h"
-#include "../FileUtils.h"
+#include "Logger.h"
+#include "Errors.h"
+#include "StringUtils.h"
+#include "FileUtils.h"
 #include "Triangle.h"
-#include "../scene/World.h"
+#include "scene/World.h"
 
 #define OBJ_FILE_EXTENSION ".obj"
 

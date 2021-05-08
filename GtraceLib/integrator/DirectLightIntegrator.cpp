@@ -1,5 +1,5 @@
 #include "DirectLightIntegrator.h"
-#include "../Logger.h"
+#include "Logger.h"
 #include <assert.h>
 
 namespace gtrace {

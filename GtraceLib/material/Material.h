@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../scene/Parser.h"
-#include "../geometry/Ray.h"
-#include "../reflection/BSDF.h"
+#include "scene/Parser.h"
+#include "geometry/Ray.h"
+#include "reflection/BSDF.h"
 
 namespace gtrace {
 

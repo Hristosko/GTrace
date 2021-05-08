@@ -1,6 +1,6 @@
 #include "RendererStat.h"
-#include "../Logger.h"
-#include "../scene/World.h"
+#include "Logger.h"
+#include "scene/World.h"
 
 namespace gtrace {
 

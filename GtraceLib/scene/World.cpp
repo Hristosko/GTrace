@@ -1,9 +1,9 @@
 #include "World.h"
 
-#include "../Logger.h"
-#include "../geometry/Triangle.h"
-#include "../geometry/Mesh.h"
-#include "../geometry/BVH.h"
+#include "Logger.h"
+#include "geometry/Triangle.h"
+#include "geometry/Mesh.h"
+#include "geometry/BVH.h"
 
 #include <limits>
 

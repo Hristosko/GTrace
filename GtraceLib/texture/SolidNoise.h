@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include "../math/Vector3f.h"
+#include "math/Vector3f.h"
 
 #define SOLID_NOISE_SIZE 16
 

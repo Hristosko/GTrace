@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Light.h"
-#include "../math/Vector2f.h"
+#include "math/Vector2f.h"
 
 namespace gtrace {
 

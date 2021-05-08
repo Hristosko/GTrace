@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../scene/Parser.h"
-#include "../HeapAligned.h"
-#include "../math/Vector2f.h"
+#include "scene/Parser.h"
+#include "HeapAligned.h"
+#include "math/Vector2f.h"
 
 #define DEFAULT_TEXTURE_VALUE Vector3f(0.5f)
 
