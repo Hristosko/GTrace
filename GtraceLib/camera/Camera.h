@@ -7,8 +7,16 @@
 
 namespace gtrace {
 
+/**
+ * Represents a camera.
+ */
 class Camera : public SceneElement, public ReferenceCounted {
 public:
+	/**
+	 * Cast a ray from the camera.
+	 * @param px The x coordinate of the pixel (point)
+	 * @param py The y coordinate
+	 */
 	virtual Ray castRay(float px, float py) const = 0;
 };
 

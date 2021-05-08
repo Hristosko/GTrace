@@ -10,10 +10,10 @@ public:
 
 	virtual Ray castRay(float px, float py) const override;
 private:
-	Vector3f direction;
-	Vector3f up;
-	OrthonormalBasis uvw;
-	float zoom;
-	float height;
+	Vector3f direction; /** The axis the camera is looking along */
+	Vector3f up; /** The up axis (Oy) of the camear */
+	OrthonormalBasis uvw; /** The OrthonormalBasis of the camera space */
+	float zoom; /** Zoom coefficiat */
+	float height; /** The position ot the center of the camera (along the direction axis)= heigh * (-direction)*/
 };
 }
