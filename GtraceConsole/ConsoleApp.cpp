@@ -6,22 +6,22 @@
 #include "Logger.h"
 
 int main(int argc, char** argv) {
-	MemoryBench::reset();
+	gtrace::MemoryBench::reset();
 	{
-		World world;
+		gtrace::World world;
 		const char* inputPath = argv[1];
 		const char* outputPath = argv[2];
-		RendererOutput output(world);
+		gtrace::RendererOutput output(world);
 		output.init();
-		SceneParser p(world);
+		gtrace::SceneParser p(world);
 		p.parseFile(inputPath);
 		world.buildBVH();
 		auto noopUpdater = []() {};
-		Renderer renderer(noopUpdater, output, world);
+		gtrace::Renderer renderer(noopUpdater, output, world);
 		renderer.render();
 		output.save(outputPath);
 	}
-	const MemoryBench::Data mb = MemoryBench::get();
+	const gtrace::MemoryBench::Data mb = gtrace::MemoryBench::get();
 	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", (float)mb.totalAllocatedMemory / (1024 * 1024), "MB");
 	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage, "B ", (float)mb.peakMemoryUsage / (1024 * 1024), "MB");
 	LOGSTAT("Alocations count: ", mb.allocationCount);

@@ -3,11 +3,12 @@
 #include <algorithm> // std:::max
 #include <atomic>
 
+namespace gtrace {
+
 namespace MemoryBench {
 
 #ifdef GTRACE_MEMORY_BENCH
 
-namespace gtrace {
 
 struct InternalData {
 	std::atomic<Counter> currentAllocatedMemory;
@@ -131,6 +132,7 @@ void reset() {}
 #endif //GTRACE_MEMORY_BENCH
 }
 
+}
 
 // Override operator new and delete
 // Only Windows is supported
@@ -140,41 +142,41 @@ void reset() {}
 void* operator new(std::size_t size) {
 	void* res = malloc(size);
 	if (res == NULL) throw std::bad_alloc();
-	MemoryBench::allocateMemory(res);
+	gtrace::MemoryBench::allocateMemory(res);
 	return res;
 }
 
 void* operator new[](std::size_t size) {
 	void* res = malloc(size);
 	if (res == NULL) throw std::bad_alloc();
-	MemoryBench::allocateMemory(res);
+	gtrace::MemoryBench::allocateMemory(res);
 	return res;
 }
 
 void operator delete(void* ptr) {
 	if (ptr == nullptr) return;
-	MemoryBench::freeMemory(ptr);
+	gtrace::MemoryBench::freeMemory(ptr);
 	free(ptr);
 }
 
 void operator delete[](void* ptr) {
 	if (ptr == nullptr) return;
-	MemoryBench::freeMemory(ptr);
+	gtrace::MemoryBench::freeMemory(ptr);
 	free(ptr);
 }
 
 void* operator new(std::size_t size, std::align_val_t al) {
 	void* res = _aligned_malloc(size, (size_t)al);
-	MemoryBench::allocateMemory(res, (size_t)al);
+	gtrace::MemoryBench::allocateMemory(res, (size_t)al);
 	return res;
 }
 
 void operator delete(void* ptr, std::align_val_t al) {
 	if (ptr == nullptr) return;
-	MemoryBench::freeMemory(ptr, (size_t)al);
+	gtrace::MemoryBench::freeMemory(ptr, (size_t)al);
 	_aligned_free(ptr);
 }
 
 #endif // _WIN32
 #endif // DEBGTRACE_MEMORY_BENCHUG
-}
+
