@@ -4,7 +4,7 @@
 
 class PinholeCamera : public Camera {
 public:
-	virtual void parse(std::unordered_map<std::string, std::string>& map) override;
+	virtual void parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) override;
 
 	virtual Ray castRay(float px, float py) const override;
 private:

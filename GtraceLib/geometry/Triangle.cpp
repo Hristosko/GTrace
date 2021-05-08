@@ -58,12 +58,12 @@ BBox Triangle::triangleBBox(const Vector3f& a, const Vector3f& b, const Vector3f
 	return BBox(bottom, top);
 }
 
-void Triangle::parse(std::unordered_map<std::string, std::string>& map) {
-	SceneParser::parseVector3fAndStore(map, "a", this->a);
-	SceneParser::parseVector3fAndStore(map, "b", this->b);
-	SceneParser::parseVector3fAndStore(map, "c", this->c);
-	SceneParser::parseMaterialAndStore(map, "mat", this->mat);
-	this->parseTransform(map);
+void Triangle::parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
+	parser.parseVector3fAndStore(map, "a", this->a);
+	parser.parseVector3fAndStore(map, "b", this->b);
+	parser.parseVector3fAndStore(map, "c", this->c);
+	parser.parseMaterialAndStore(map, "mat", this->mat);
+	this->parseTransform(parser, map);
 
 }
 

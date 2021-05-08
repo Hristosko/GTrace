@@ -20,10 +20,10 @@ void RendererOutput::save(const char* path) {
 	FileRAII fpRAII(fp);
 	const uint32_t version = CURRENT_VERSION;
 	writeBin(&version, sizeof(version), 1, fp);
-	
+
 	// write image size
-	const uint32_t width = getWorld().getSettings().width;
-	const uint32_t height = getWorld().getSettings().height;
+	const uint32_t width = this->world.getSettings().width;
+	const uint32_t height = this->world.getSettings().height;
 
 	writeBin(&width, sizeof(uint32_t), 1, fp);
 	writeBin(&height, sizeof(uint32_t), 1, fp);
@@ -58,8 +58,8 @@ void RendererOutput::open(const char* path) {
 	readBin(&width, sizeof(width), 1, fp);
 	readBin(&height, sizeof(height), 1, fp);
 	LOGINFO("scene width: ", width, " scene height: ", height);
-	getWorld().getSettings().width = width;
-	getWorld().getSettings().height = height;
+	this->world.getSettings().width = width;
+	this->world.getSettings().height = height;
 	uint32_t size = width * height;
 	this->init();
 
@@ -90,13 +90,13 @@ void RendererOutput::open(const char* path) {
 }
 
 void RendererOutput::initImageOutput() {
-	const SceneSettings& settings = getWorld().getSettings();
+	const SceneSettings& settings = this->world.getSettings();
 	DataBuffer& buffer = this->getOutput(RendererOutputType::Image);
 	buffer.init<ColorResult>((uint64_t)settings.width * settings.height);
 }
 
 void RendererOutput::initVarianceOutput() {
-	const SceneSettings& settings = getWorld().getSettings();
+	const SceneSettings& settings = this->world.getSettings();
 	DataBuffer& buffer = this->getOutput(RendererOutputType::Variance);
 	buffer.init<VarianceResult>((uint64_t)settings.width * settings.height);
 }

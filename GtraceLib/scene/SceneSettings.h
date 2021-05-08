@@ -24,11 +24,11 @@ struct SceneSettings : public SceneElement {
 		stdTreshhold(SCENE_DEFAULT_STD_TRESHHOLD),
 		background(nullptr) {}
 
-	void parse(std::unordered_map<std::string, std::string>& map) override {
-		SceneParser::parseuint32AndStore(map, "width", this->width);
-		SceneParser::parseuint32AndStore(map, "height", this->height);
-		SceneParser::parseuint32AndStore(map, "max_subdivs", this->maxSubdivs);
-		SceneParser::parsefloatAndStore(map, "std_treshhold", this->stdTreshhold);
-		SceneParser::parseMaterialAndStore(map, "background", this->background);
+	void parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) override {
+		parser.parseuint32AndStore(map, "width", this->width);
+		parser.parseuint32AndStore(map, "height", this->height);
+		parser.parseuint32AndStore(map, "max_subdivs", this->maxSubdivs);
+		parser.parsefloatAndStore(map, "std_treshhold", this->stdTreshhold);
+		parser.parseMaterialAndStore(map, "background", this->background);
 	}
 };

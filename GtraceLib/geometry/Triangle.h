@@ -14,7 +14,7 @@ public:
 	Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c)
 		: a(a), b(b), c(c), mat(nullptr) {}
 
-	virtual void parse(std::unordered_map<std::string, std::string>& map) override;
+	virtual void parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) override;
 	virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const override;
 	virtual BBox bbox() const override;
 

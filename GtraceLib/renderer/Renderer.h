@@ -29,8 +29,8 @@ private:
 		std::mutex mut;
 	};
 public:
-	Renderer(UpdateRenderSurfaceFunc updater, RendererOutput& output)
-		: updateRenderSurfaceFunc(updater), output(output),
+	Renderer(UpdateRenderSurfaceFunc updater, RendererOutput& output, World& w)
+		: updateRenderSurfaceFunc(updater), output(output), world(w),
 		integrator(std::make_unique<DirectLightIntegrator>()) {}
 
 	void render();
@@ -39,11 +39,12 @@ private:
 	void rayTraceWithSamples(uint32_t ix, uint32_t iy, uint32_t samples,
 							Vector3f& sum, Vector3f& sumSqr, uint32_t& totalSamples);
 	void renderBucket(uint32_t offsetx, uint32_t offsety, uint32_t bucketWidth, uint32_t bucketHeight);
-	
+
 	void updateRenderSurface();
 private:
 	UpdateRenderSurfaceFunc updateRenderSurfaceFunc;
 	RendererOutput& output;
+	World& world;
 	std::unique_ptr<Integrator> integrator;
 	RandomGenerator rng;
 	RendererStat stat;

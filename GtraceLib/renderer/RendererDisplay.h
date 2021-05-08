@@ -1,6 +1,7 @@
 #pragma once
 
 #include "RendererOutput.h"
+#include "../scene/World.h"
 #include <memory>
 
 class RendererDisplay {
@@ -9,7 +10,7 @@ public:
 
 	char* getPixels();
 
-	void setDisplayType(RendererOutputType type);
+	void setDisplayType(const World& w, RendererOutputType type);
 
 private:
 	RendererOutputType curDisplayType;

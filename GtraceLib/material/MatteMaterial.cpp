@@ -3,9 +3,9 @@
 #include "../scene/World.h"
 #include "../reflection/Lambertian.h"
 
-void MatteMaterial::parse(std::unordered_map<std::string, std::string>& map) {
-	SceneParser::parseTextureAndStore(map, "text", this->text);
-	SceneParser::parsefloatAndStore(map, "k", this->k);
+void MatteMaterial::parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
+	parser.parseTextureAndStore(map, "text", this->text);
+	parser.parsefloatAndStore(map, "k", this->k);
 }
 
 BSDF MatteMaterial::getBSDF(const Ray& ray, const HitRecord& hr) const {

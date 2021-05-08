@@ -35,6 +35,7 @@ GTraceMainWindow::GTraceMainWindow()
 	: outputReady(false),
 	wxFrame(nullptr, wxID_ANY, "GTrace", wxPoint(10, 10), wxSize(DEFAULT_WIDTH, DEFAULT_HEIGHT)),
 	renderSurface(nullptr),
+	output(world),
 	display(output)
 {
 	this->renderSurface = new wxWindow(this, wxID_ANY, wxDefaultPosition, wxSize(DEFAULT_WIDTH, DEFAULT_HEIGHT));
@@ -61,9 +62,7 @@ GTraceMainWindow::GTraceMainWindow()
 	LOGINFO("GTrace Main Window created.");
 }
 
-GTraceMainWindow::~GTraceMainWindow() {
-	getWorld().clear();
-}
+GTraceMainWindow::~GTraceMainWindow() {}
 
 void GTraceMainWindow::OnPaint(wxPaintEvent& event) {
 	wxPaintDC dc(this->renderSurface);
@@ -76,14 +75,14 @@ void GTraceMainWindow::OnElementRendered(wxCommandEvent& event) {
 	this->rebuildBufferAndRefresh();
 }
 
-static void renderNewScene(wxWindow* renderSurface, RendererOutput* output, bool* setWhenReady) {
+static void renderNewScene(wxWindow* renderSurface, RendererOutput* output, World* world, bool* setWhenReady) {
 		output->init();
-		getWorld().buildBVH();
+		world->buildBVH();
 		auto frameUpdater = [renderSurface]() {
 			wxCommandEvent* event = new wxCommandEvent(GTRACE_RENDERED_ELEMENT);
 			wxQueueEvent(renderSurface, event);
 		};
-		Renderer renderer(frameUpdater, *output);
+		Renderer renderer(frameUpdater, *output, *world);
 		renderer.render();
 		*setWhenReady = true;
 }
@@ -98,10 +97,11 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 
 	if (openDialog->ShowModal() == wxID_OK) {
 		wxString path = openDialog->GetPath();
-		getWorld().clear();
-		SceneParser::parseFile(path.c_str());
+		this->world.clear();
+		SceneParser parser(this->world);
+		parser.parseFile(path.c_str());
 
-		std::thread th(renderNewScene, this->renderSurface, &this->output, &this->outputReady);
+		std::thread th(renderNewScene, this->renderSurface, &this->output,&this->world, &this->outputReady);
 		th.detach();
 	}
 }
@@ -138,13 +138,13 @@ void GTraceMainWindow::OpenFile(wxCommandEvent& event) {
 
 void GTraceMainWindow::Image(wxCommandEvent& event) {
 	if (this->outputReady == false) return;
-	this->display.setDisplayType(RendererOutputType::Image);
+	this->display.setDisplayType(this->world, RendererOutputType::Image);
 	this->rebuildBufferAndRefresh();
 }
 
 void GTraceMainWindow::StandardDeviation(wxCommandEvent& event) {
 	if (this->outputReady == false) return;
-	this->display.setDisplayType(RendererOutputType::Variance);
+	this->display.setDisplayType(this->world, RendererOutputType::Variance);
 	this->rebuildBufferAndRefresh();
 }
 
@@ -177,4 +177,3 @@ void GTraceMainWindow::rebuildBufferAndRefresh() {
 	this->renderSurface->Refresh();
 	this->renderSurface->Update();
 }
-

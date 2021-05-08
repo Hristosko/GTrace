@@ -22,11 +22,12 @@ public:
 
 	void addElemenet(SceneElement* el, const std::unordered_map<std::string, std::string>& map);
 	void add(Shape* shape);
-	
+
 	const std::vector<Shape*>& getShapes() const { return this->shapes; }
 	const std::vector<Light*>& getLights() const { return this->lights; }
 	SceneSettings& getSettings() { return this->settings; }
-	
+	const SceneSettings& getSettings() const { return this->settings; }
+
 	Camera* getCamera() { return this->camera.get(); }
 	void setCamera(Camera* camera) { this->camera = camera; }
 
@@ -51,5 +52,3 @@ private:
 	SceneSettings settings;
 	Ref<Camera> camera;
 };
-
-World& getWorld();

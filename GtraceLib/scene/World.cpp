@@ -123,8 +123,3 @@ bool World::intersect(const Ray& ray) const {
 	HitRecord rec;
 	return this->intersect(ray, rec);
 }
-
-World& getWorld() {
-	static World w;
-	return w;
-}

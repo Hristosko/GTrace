@@ -16,8 +16,10 @@ enum RendererOutputType : uint16_t {
 	Count
 };
 
+class World;
 class RendererOutput {
 public:
+	RendererOutput(World& w) : world(w) {}
 	DataBuffer& getOutput(RendererOutputType type) {
 		return this->outputs[type];
 	}
@@ -30,5 +32,6 @@ private:
 	void initImageOutput();
 	void initVarianceOutput();
 private:
+	World& world;
 	DataBuffer outputs[RendererOutputType::Count];
 };

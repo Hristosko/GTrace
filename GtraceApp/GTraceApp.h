@@ -3,6 +3,7 @@
 #include "wx/wx.h"
 #include "renderer/RendererOutput.h"
 #include "renderer/RendererDisplay.h"
+#include "scene/World.h"
 #include "MemoryBench.h"
 
 class GTraceMainWindow : public wxFrame {
@@ -28,6 +29,7 @@ private:
 	wxWindow* renderSurface;
 	wxMenuBar* mainMenu;
 	wxBitmap bitmap;
+	World world;
 	RendererOutput output;
 	RendererDisplay display;
 };

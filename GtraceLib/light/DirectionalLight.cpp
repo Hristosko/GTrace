@@ -1,8 +1,8 @@
 #include "DirectionalLight.h"
 
-void DirectionalLight::parse(std::unordered_map<std::string, std::string>& map) {
-	SceneParser::parseVector3fAndStore(map, "direction", this->direction);
-	SceneParser::parseVector3fAndStore(map, "color", this->color);
+void DirectionalLight::parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
+	parser.parseVector3fAndStore(map, "direction", this->direction);
+	parser.parseVector3fAndStore(map, "color", this->color);
 
 	this->direction = normalize(this->direction);
 }

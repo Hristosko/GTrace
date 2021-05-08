@@ -16,17 +16,18 @@
 #define OBJ_NORMAL_FORMAT "vn %f %f %f"
 #define OBJ_FACE_FORMAT "f %u//%u %u//%u %u//%u"
 
-void Mesh::parse(std::unordered_map<std::string, std::string>& map) {
-	Ref<Transform> tr = Shape::parseTranformComponents(map);
-	SceneParser::parseMaterialAndStore(map, "mat", this->mat);
+void Mesh::parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
+	Ref<Transform> tr = Shape::parseTranformComponents(parser, map);
+	parser.parseMaterialAndStore(map, "mat", this->mat);
 	bool useNormals;
-	SceneParser::parseBoolAndStore(map, "use_normals", useNormals);
+	parser.parseBoolAndStore(map, "use_normals", useNormals);
 	auto it = map.find("file");
 	if (it == map.end()) {
 		LOGERROR("Mesh source file is not specified.");
 		throw ParseError();
 	}
-	if (endsWith(it->second, OBJ_FILE_EXTENSION)) this->loadFromObjFile(it->second.c_str(), useNormals, tr);
+	if (endsWith(it->second, OBJ_FILE_EXTENSION))
+		this->loadFromObjFile(parser.getWorld(), it->second.c_str(), useNormals, tr);
 }
 
 static void checkIfVertexExists(const std::deque<Vector3f>& data, unsigned idx) {
@@ -39,7 +40,7 @@ static void checkIfNormalExists(const std::deque<Vector3f>& data, unsigned idx) 
 		LOGWARNING("Unknown normal: ", idx);
 }
 
-void Mesh::loadFromObjFile(const char* path, bool useNormals, Ref<Transform>& tr) {
+void Mesh::loadFromObjFile(World& w, const char* path, bool useNormals, Ref<Transform>& tr) {
 	FILE* fp;
 	if (0 != fopen_s(&fp, path, "r")) {
 		LOGERROR("Cannot open file: ", path);
@@ -74,7 +75,7 @@ void Mesh::loadFromObjFile(const char* path, bool useNormals, Ref<Transform>& tr
 			checkIfVertexExists(this->vertices, i);
 			checkIfVertexExists(this->vertices, j);
 			checkIfVertexExists(this->vertices, k);
-			
+
 			if (useNormals) {
 				++facesNormals;
 				checkIfNormalExists(this->normals, ni);
@@ -85,13 +86,13 @@ void Mesh::loadFromObjFile(const char* path, bool useNormals, Ref<Transform>& tr
 					MeshElementWithNormal(tr, this,
 						i-1, j-1, k-1,
 						ni-1, nj-1, nk-1);
-				getWorld().add(el);
+				w.add(el);
 				continue;
 			}
 			// add the new triangle to the world
 			// The indexing in the obj file starts from 1
 			MeshElement* el = new MeshElement(tr, this, i-1, j-1, k-1);
-			getWorld().add(el);
+			w.add(el);
 			continue;
 		}
 

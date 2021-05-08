@@ -15,12 +15,12 @@ char* RendererDisplay::getPixels() {
 	return reinterpret_cast<char*>(this->output.getOutput(RendererOutputType::Image).getBuffer());
 }
 
-void RendererDisplay::setDisplayType(RendererOutputType type) {
+void RendererDisplay::setDisplayType(const World& w, RendererOutputType type) {
 	if (type == this->curDisplayType) return;
 	this->curDisplayType = type;
 	if (type == RendererOutputType::Image) return;
 	if (type == RendererOutputType::Variance) {
-		uint32_t size = 3 * getWorld().getSettings().width * getWorld().getSettings().height;
+		uint32_t size = 3 * w.getSettings().width * w.getSettings().height;
 		this->pixels = std::make_unique<char[]>(size);
 		float* data = reinterpret_cast<float*>(this->output.getOutput(RendererOutputType::Variance).getBuffer());
 		for (uint32_t i = 0; i < size; ++i) {
@@ -28,4 +28,3 @@ void RendererDisplay::setDisplayType(RendererOutputType type) {
 		}
 	}
 }
-

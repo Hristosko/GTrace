@@ -13,8 +13,8 @@ void RendererStat::updateStat(uint32_t samples, uint32_t rays) {
 	this->mut.unlock();
 }
 
-void RendererStat::renderFinish() const {
-	const float denom = (float)getWorld().getSettings().width * getWorld().getSettings().height;
+void RendererStat::renderFinish(const World& w) const {
+	const float denom = (float)w.getSettings().width * w.getSettings().height;
 	const float samplesPerPixel = ((float)this->mainSamples) / denom;
 	const float raysPerPixel = ((float)this->rayCasts) / denom;
 	LOGSTAT("Taken samples: ", this->mainSamples);

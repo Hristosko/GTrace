@@ -1,10 +1,10 @@
 #include "Sphere.h"
 #include "BBox.h"
 
-void Sphere::parse(std::unordered_map<std::string, std::string>& map) {
-	this->parseTransform(map);
-	SceneParser::parsefloatAndStore(map, "radius", this->radius);
-	SceneParser::parseMaterialAndStore(map, "mat", this->mat);
+void Sphere::parse (const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
+	this->parseTransform(parser, map);
+	parser.parsefloatAndStore(map, "radius", this->radius);
+	parser.parseMaterialAndStore(map, "mat", this->mat);
 }
 
 bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
@@ -40,4 +40,3 @@ BBox Sphere::bbox() const {
 		center - rad,
 		center + rad);
 }
-
