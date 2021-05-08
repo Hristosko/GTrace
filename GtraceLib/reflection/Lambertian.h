@@ -7,12 +7,10 @@ namespace gtrace {
 
 class LambertianReflection : public BxDF {
 public:
-	LambertianReflection(const Vector3f& r) : BxDF(BxDFType::Reflection | BxDFType::Specular), R(r * PI_1) {}
+	LambertianReflection() : BxDF(BxDFType::Reflection | BxDFType::Specular) {}
 
-	virtual Vector3f f(const Vector3f& wo, const Vector3f& wi) const {
-		return R;
+	virtual Color3f f(const Color3f& r, const Vector3f& wo, const Vector3f& wi) const {
+		return r * PI_1;
 	}
-private:
-	const Vector3f R;
 };
 }

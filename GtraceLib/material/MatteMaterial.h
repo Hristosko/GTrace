@@ -2,6 +2,7 @@
 
 #include "Material.h"
 #include "../texture/Texture.h"
+#include "../reflection/Lambertian.h"
 
 namespace gtrace {
 
@@ -11,6 +12,6 @@ public:
 	virtual BSDF getBSDF(const Ray& ray, const HitRecord& hr) const override;
 private:
 	Texture* text;
-	float k;
+	LambertianReflection lambertian;
 };
 }

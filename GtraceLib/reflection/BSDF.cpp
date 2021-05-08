@@ -3,8 +3,12 @@
 
 namespace gtrace {
 
-BSDF::BSDF(const Ray& ray, const HitRecord& hr)
-	: localCoordinates(hr.normal, OB_fromW()), nbxdfs(0), gnormal(hr.normal)
+/**
+ * Constructor.
+ * Computes the local coordinates and the coordinates transformations.
+ */
+BSDF::BSDF(const Ray& ray, const HitRecord& hr, const Color3f& r)
+	: localCoordinates(hr.normal, OB_fromW()), R(r), nbxdfs(0), gnormal(hr.normal)
 {
 	const Matrix4x4 m = Transform::makeBasisChange(
 		this->localCoordinates.u(),
@@ -14,7 +18,10 @@ BSDF::BSDF(const Ray& ray, const HitRecord& hr)
 	this->worldToObj = new Transform(m);
 }
 
-void BSDF::add(std::unique_ptr<BxDF>&& bxdf) {
+/**
+ * Add new BxDF.
+ */
+void BSDF::add(const BxDF* bxdf) {
 	if (this->nbxdfs >= GTRACE_MAX_BxDF_COUNT)
 	{
 		LOGERROR("Exceeding max BxDFs per BSDF.");
@@ -30,7 +37,11 @@ int BSDF::numComponents(BxDFType flags) const {
 	return n;
 }
 
-Vector3f BSDF::f(const Vector3f& wo, const Vector3f& wi, BxDFType flags) const {
+/**
+ * See BxDF::f.
+ * Computes it for all added bxdf that match the flags.
+ */
+Color3f BSDF::f(const Vector3f& wo, const Vector3f& wi, BxDFType flags) const {
 	// The vectors in the local coordinates
 	const Vector3f vo = this->worldToObj->transformDirection(wo);
 	const Vector3f vi = this->worldToObj->transformDirection(wi);
@@ -43,7 +54,7 @@ Vector3f BSDF::f(const Vector3f& wo, const Vector3f& wi, BxDFType flags) const {
 
 	for (int i = 0; i < this->nbxdfs; ++i) {
 		if (BSDF::matchesFlags(*this->bxdfs[i], flags))
-			res += this->bxdfs[i]->f(vo, vi);
+			res += this->bxdfs[i]->f(this->R, vo, vi);
 	}
 
 	return res;

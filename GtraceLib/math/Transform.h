@@ -9,7 +9,7 @@ namespace gtrace {
 
 class Transform : public HeapAligned<32>, public ReferenceCounted {
 public:
-	Transform(const Matrix4x4& mat)
+	Transform(const Matrix4x4& mat = Transform::makeIdentity())
 		: T(mat.transposed()), // we store the transposed matrix so that we can eff. transform vectors
 		  iT(mat.inversed().transposed()) {}
 
@@ -86,6 +86,10 @@ public:
 			_mm_setr_ps(w.x(), w.y(), w.z(), 0.f),
 			_mm_setr_ps(  0.f,   0.f,   0.f, 1.f)
 		);
+	}
+
+	static Matrix4x4 makeIdentity() {
+		return Transform::makeScale(1.f);
 	}
 
 	static Matrix4x4 makeRotation(float x, float y, float z) {
