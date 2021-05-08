@@ -4,7 +4,7 @@
 
 namespace gtrace {
 
-Vector3f DirectLightIntegrator::Li(SecondaryRaysStat& stat, const World& w, const Ray& ray, RandomGenerator& rng, int depth) const {
+Color3f DirectLightIntegrator::Li(SecondaryRaysStat& stat, const World& w, const Ray& ray, RandomGenerator& rng, int depth) const {
 	HitRecord hr;
 	bool hitsGeometry = w.intersect(ray, hr);
 	if (hitsGeometry == false) return Vector3f(0.f);
@@ -17,7 +17,18 @@ Vector3f DirectLightIntegrator::Li(SecondaryRaysStat& stat, const World& w, cons
 	return estimateAllLightSources(stat, w, hr, ray.direction, bsdf, rng);
 }
 
-Vector3f DirectLightIntegrator::estimateFromLightSource(
+/**
+ * Estimate the ligh contribution of a light source.
+ * @param[out] stat Static about the used secondary rays.
+ * @param world The wold
+ * @param ligh The light source
+ * @param hr The intersection point with the geometry
+ * @param wo The ray that is leaving the suface
+ * @param bsdf The bsdf returned by the material
+ * @param rng RNG used to create samples
+ * @return The contribution of the light source
+ */
+Color3f DirectLightIntegrator::estimateFromLightSource(
 	SecondaryRaysStat& stat,
 	const World& world, const Light* light, const HitRecord& hr,
 	const Vector3f& wo, const BSDF& bsdf, RandomGenerator& rng) {
@@ -53,7 +64,17 @@ Vector3f DirectLightIntegrator::estimateFromLightSource(
 	return res;
 }
 
-Vector3f DirectLightIntegrator::estimateAllLightSources(
+/**
+ * Estimate the ligh contribution of all light sources.
+ * @param[out] stat Static about the used secondary rays.
+ * @param world The wold
+ * @param hr The intersection point with the geometry
+ * @param wo The ray that is leaving the suface
+ * @param bsdf The bsdf returned by the material
+ * @param rng RNG used to create samples
+ * @return The contribution of the light sources
+ */
+Color3f DirectLightIntegrator::estimateAllLightSources(
 	SecondaryRaysStat& stat,
 	const World& world, const HitRecord& hr, const Vector3f& wo,
 	const BSDF& bsdf, RandomGenerator& rng) {
