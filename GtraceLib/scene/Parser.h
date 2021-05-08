@@ -21,7 +21,7 @@ public:
 class SceneParser
 {
 public:
-	SceneParser(World& w) : world(w) {}
+	SceneParser(World& w) : world(w), curObjLine(0) {}
 	void parseFile(const char* path);
 
 	Vector3f parseVector3f(const std::string& str) const;
