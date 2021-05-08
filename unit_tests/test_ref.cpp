@@ -1,6 +1,8 @@
 #include "gtest/gtest.h"
 #include "Ref.h"
 
+using namespace gtrace;
+
 static int cnt;
 struct RefTester : ReferenceCounted {
 	RefTester() { ++cnt; }

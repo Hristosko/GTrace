@@ -2,6 +2,8 @@
 #include "Utils.h"
 #include "math/Utils.h"
 
+using namespace gtrace;
+
 TEST(Vector3f, maxElement) {
 	{
 		const Vector3f v(1, 2, 3);

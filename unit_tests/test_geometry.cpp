@@ -2,6 +2,8 @@
 #include "Utils.h"
 
 #include "geometry/BBox.h"
+
+using namespace gtrace;
 TEST(BBox, bound) {
 	BBox a(Vector3f(0.f), Vector3f(1.f));
 	BBox b(Vector3f(-1.f), Vector3f(0.f));
