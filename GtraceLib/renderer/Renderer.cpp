@@ -92,7 +92,6 @@ void Renderer::rayTraceWithSamples(
 			HitRecord rec;
 			getWorld().intersect(ray, rec);
 
-			rec.position = ray.origin + rec.t * ray.direction;
 			const Vector3f color = (rec.mat == nullptr) ?
 				DEFAULT_TEXTURE_VALUE :
 				rec.mat->shade(rec, ray);

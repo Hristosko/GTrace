@@ -113,7 +113,9 @@ void World::buildBVH() {
 
 bool World::intersect(const Ray& ray, HitRecord& rec, float time) const {
 	if (this->bvh == nullptr) return false;
-	return this->bvh->hit(ray, 0.f, std::numeric_limits<float>::max(), time, rec);
+	bool res =  this->bvh->hit(ray, 0.f, std::numeric_limits<float>::max(), time, rec);
+	if (res) rec.position = ray.pointAt(rec.t);
+	return res;
 }
 
 bool World::intersect(const Ray& ray) const {
