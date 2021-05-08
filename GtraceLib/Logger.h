@@ -40,28 +40,28 @@ inline void log() { getLogger() << '\n'; }
 #define LOGSTAT(...) \
 	{ \
 		std::lock_guard<std::mutex> lock(gtrace::getLogger().mu); \
-		gtrace::log("[STAT]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
+		gtrace::log("[STAT]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
 		gtrace::getLogger().flush(); \
 	}
 
 #define LOGINFO(...) \
 	{ \
 		std::lock_guard<std::mutex> lock(gtrace::getLogger().mu); \
-		gtrace::log("[INFO]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
+		gtrace::log("[INFO]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
 		gtrace::getLogger().flush(); \
 	}
 
 #define LOGWARNING(...) \
 	{ \
 		std::lock_guard<std::mutex> lock(gtrace::getLogger().mu); \
-		gtrace::log("[WARN]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
+		gtrace::log("[WARN]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
 		gtrace::getLogger().flush(); \
 	}
 
 #define LOGERROR(...) \
 	{ \
 		std::lock_guard<std::mutex> lock(gtrace::getLogger().mu); \
-		gtrace::log("[ERROR]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
+		gtrace::log("[ERROR]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
 		gtrace::getLogger().flush(); \
 	}
 
@@ -69,7 +69,7 @@ inline void log() { getLogger() << '\n'; }
 #define LOGDEBUG(...) \
 	{ \
 		std::lock_guard<std::mutex> lock(gtrace::getLogger().mu); \
-		log("[DEBUG]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__, '\n', '\n'); \
+		log("[DEBUG]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
 		gtrace::getLogger().flush(); \
 	}
 #else

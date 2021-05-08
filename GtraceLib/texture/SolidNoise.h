@@ -7,6 +7,9 @@
 
 namespace gtrace {
 
+/**
+ * Implementation of solid noise.
+ */
 class SolidNoise {
 public:
 	SolidNoise();
@@ -17,7 +20,7 @@ private:
 	Vector3f gamma(int i, int j, int k) const;
 	float knot(int i, int j, int k, const Vector3f& v) const;
 private:
-	int8_t phi[SOLID_NOISE_SIZE];
+	int8_t phi[SOLID_NOISE_SIZE]; /** shuffled integers from  0 to SOLID_NOISE_SIZE*/
 	static const Vector3f grad[SOLID_NOISE_SIZE];
 };
 }

@@ -11,10 +11,10 @@ void NoiseTexture::parse(const SceneParser& parser, std::unordered_map<std::stri
 	parser.parseTextureAndStore(map, "text2", this->text2);
 }
 
-Vector3f NoiseTexture::getValue(const Vector2f& uv, const Vector3f& p) const {
+Color3f NoiseTexture::getValue(const Ray& ray, const Vector2f& uv, const Vector3f& p) const {
 	const float t = (1.f + this->noise.perlinNoise(p * this->scale)) * 0.5f;
-	const Vector3f c1 = getTextureValue(this->text1, uv, p);
-	const Vector3f c2 = getTextureValue(this->text2, uv, p);
+	const Color3f c1 = getTextureValue(this->text1, ray, uv, p);
+	const Color3f c2 = getTextureValue(this->text2, ray, uv, p);
 	return t * c1 + (1.f - t) * c2;
 }
 }

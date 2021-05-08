@@ -12,7 +12,7 @@ void MatteMaterial::parse(const SceneParser& parser, std::unordered_map<std::str
 
 BSDF MatteMaterial::getBSDF(const Ray& ray, const HitRecord& hr) const {
 	BSDF res(ray, hr);
-	const Vector3f r = getTextureValue(this->text, Vector2f(), hr.position);
+	const Color3f r = getTextureValue(this->text, ray, Vector2f(), hr.position);
 	res.add(std::make_unique<LambertianReflection>(r));
 	return res;
 }

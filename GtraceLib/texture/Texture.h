@@ -8,14 +8,26 @@
 
 namespace gtrace {
 
+struct Ray;
 class Texture : public SceneElement, public HeapAligned<16> {
 public:
-	virtual Vector3f getValue(const Vector2f& uv, const Vector3f& p) const = 0;
+	/**
+	 * Evaluate the texture at a given point.
+	 * @param ray The ray we are tracing
+	 * @param uv uv mapped coordinate
+	 * @param p The coordinate of the intersaction
+	 * @return The value of the texture at the point
+	 */
+	virtual Color3f getValue(const Ray& ray, const Vector2f& uv, const Vector3f& p) const = 0;
 };
 
-inline Vector3f getTextureValue(const Texture* text, const Vector2f& uv, const Vector3f& p) {
+/**
+ * Evaluate a textute that can also be nullptr.
+ * If the texture wasn't specified in the scene file -> return DEFAULT_TEXTURE_VALUE
+ */
+inline Vector3f getTextureValue(const Texture* text, const Ray& ray, const Vector2f& uv, const Vector3f& p) {
 	return (text == nullptr) ?
 		DEFAULT_TEXTURE_VALUE :
-		text->getValue(uv, p);
+		text->getValue(ray, uv, p);
 }
 }
