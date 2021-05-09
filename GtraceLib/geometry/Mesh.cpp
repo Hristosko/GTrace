@@ -116,6 +116,8 @@ void Mesh::loadFromObjFile(World& w, const char* path, bool useNormals, std::sha
 }
 
 bool MeshElement::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
+	if (rec.shape == this) return false;
+
 	float tval, beta, gamma;
 	bool hasHit = false;
 	const Vector3f a(this->mesh->vertices[tr.i]);
@@ -123,10 +125,9 @@ bool MeshElement::hit(const Ray& ray, float tmin, float tmax, float time, HitRec
 	const Vector3f c(this->mesh->vertices[tr.k]);
 	if (Triangle::hit(a, b, c, this->objectToWorld.get(), ray, tmin, tmax, beta, gamma, tval)) {
 		hasHit = true;
-		tmax = rec.t = tval;
+		rec.update(tval, this->mesh->mat, this);
 		rec.normal = this->objectToWorld->transformDirection((cross(b - a, c - a)));
 	}
-	if (hasHit) rec.mat = this->mesh->mat;
 	return hasHit;
 }
 
@@ -138,6 +139,8 @@ BBox MeshElement::bbox() const {
 }
 
 bool MeshElementWithNormal::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
+	if (rec.shape == this) return false;
+
 	float tval, beta, gamma;
 	bool hasHit = false;
 	const Vector3f a(this->mesh->vertices[tr.i]);
@@ -145,7 +148,7 @@ bool MeshElementWithNormal::hit(const Ray& ray, float tmin, float tmax, float ti
 	const Vector3f c(this->mesh->vertices[tr.k]);
 	if (Triangle::hit(a, b, c, this->objectToWorld.get(), ray, tmin, tmax, beta, gamma, tval)) {
 		hasHit = true;
-		tmax = rec.t = tval;
+		rec.update(tval, this->mesh->mat, this);
 		const float alpha = 1.f - beta - gamma;
 		// interpolate the normals of the model
 		rec.normal = this->mesh->normals[normals.i] * alpha
@@ -153,7 +156,6 @@ bool MeshElementWithNormal::hit(const Ray& ray, float tmin, float tmax, float ti
 			+ this->mesh->normals[normals.k] * gamma;
 		rec.normal = this->objectToWorld->transformDirection(rec.normal);
 	}
-	if (hasHit) rec.mat = this->mesh->mat;
 	return hasHit;
 }
 }
