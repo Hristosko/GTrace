@@ -15,7 +15,7 @@ struct Data {
 	Counter freeCount;
 #ifdef __unix__
 	Counter totalRequestedMemory;
-#endif
+#endif // __unix__
 };
 
 Data get();

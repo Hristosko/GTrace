@@ -41,23 +41,20 @@ static Counter getHeapMemory(void* ptr) {
 #ifdef _WIN32
 	return _msize(ptr);
 #endif // _WIN32
-#ifdef __linux__
+#ifdef __unix__
 	return *(reinterpret_cast<Counter*>(ptr) - 1);
-#endif // __linux__
+#endif // __unix__
 }
 
 /**
  * Same as getHeapMemory(void* ptr) but for aligned allocation,
  * see HeapAligned.h
  */
+ #ifdef _WIN32
 static Counter getHeapMemory(void* ptr, size_t alignment) {
-#ifdef _WIN32
 	return _aligned_msize(ptr, alignment, 0 /* the whole struct is alligned like this */);
-#endif // _WIN32
-#ifdef __linux__
-	return *(reinterpret_cast<Counter*>(ptr) - 1);
-#endif // __linux__
 }
+#endif // _WIN32
 
 /**
  * Get the currently accumulated data.
@@ -70,7 +67,7 @@ Data get() {
 		id.freeCount
 #ifdef __unix__
 		,id.totalRequestedMemory
-#endif
+#endif //__unix__
 };
 }
 
@@ -89,7 +86,7 @@ void logData() {
 	const Data mb = get();
 #ifdef __unix__
 	LOGSTAT("Total requested memory: ", mb.totalRequestedMemory, "B ", (float)mb.totalRequestedMemory / (1024 * 1024), "MB");
-#endif
+#endif // __unix__
 	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", (float)mb.totalAllocatedMemory / (1024 * 1024), "MB");
 	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage, "B ", (float)mb.peakMemoryUsage / (1024 * 1024), "MB");
 	LOGSTAT("Alocations count: ", mb.allocationCount);
@@ -134,6 +131,13 @@ static void freeMemory(void* ptr) {
 	decreaseMemory(size);
 }
 
+#ifdef __unix__
+static void requestMemory(Counter size) {
+	id.totalRequestedMemory.fetch_add(size, std::memory_order_relaxed);
+}
+#endif //__unix__
+
+#ifdef _WIN32
 static void allocateMemory(void* ptr, size_t alignment) {
 	const Counter size = getHeapMemory(ptr, alignment);
 	increaseMemory(size);
@@ -143,6 +147,7 @@ static void freeMemory(void* ptr, size_t alignment) {
 	const Counter size = getHeapMemory(ptr, alignment);
 	decreaseMemory(size);
 }
+#endif //_WIN32
 
 #else
 
@@ -160,14 +165,15 @@ void logData();
 }
 
 // Override operator new and delete
-// Only Windows is supported
 #ifdef GTRACE_MEMORY_BENCH
-#ifdef _WIN32
 
 void* operator new(std::size_t size) {
 	void* res = malloc(size);
 	if (res == NULL) throw std::bad_alloc();
 	gtrace::MemoryBench::allocateMemory(res);
+#ifdef __unix__
+	gtrace::MemoryBench::requestMemory(size);
+#endif //__unix
 	return res;
 }
 
@@ -175,6 +181,9 @@ void* operator new[](std::size_t size) {
 	void* res = malloc(size);
 	if (res == NULL) throw std::bad_alloc();
 	gtrace::MemoryBench::allocateMemory(res);
+#ifdef __unix__
+	gtrace::MemoryBench::requestMemory(size);
+#endif //__unix
 	return res;
 }
 
@@ -190,6 +199,7 @@ void operator delete[](void* ptr) {
 	free(ptr);
 }
 
+#ifdef _WIN32
 void* operator new(std::size_t size, std::align_val_t al) {
 	void* res = _aligned_malloc(size, (size_t)al);
 	gtrace::MemoryBench::allocateMemory(res, (size_t)al);
@@ -201,6 +211,6 @@ void operator delete(void* ptr, std::align_val_t al) {
 	gtrace::MemoryBench::freeMemory(ptr, (size_t)al);
 	_aligned_free(ptr);
 }
-
 #endif // _WIN32
+
 #endif // DEBGTRACE_MEMORY_BENCHUG
