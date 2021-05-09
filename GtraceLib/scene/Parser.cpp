@@ -71,8 +71,8 @@ void SceneParser::makeElement(World& w, const std::string& obj, std::unordered_m
 }
 
 void SceneParser::parseFile(const char* path) {
-	FILE* fp;
-	if (0 != fopen_s(&fp, path, "r")) {
+	FILE* fp = fopen(path, "r");
+	if (fp == nullptr) {
 		LOGERROR("Cannot open file: ", path);
 		throw FileError();
 	}
@@ -129,7 +129,7 @@ Vector3f SceneParser::parseVector3f(const std::string& str) const {
 		throw ParseError();
 	}
 	float x, y, z;
-	int res = sscanf_s(str.c_str(), "(%f, %f, %f)", &x, &y, &z);
+	int res = sscanf(str.c_str(), "(%f, %f, %f)", &x, &y, &z);
 	if (res < 3) {
 		LOGERROR("Parsing Vector3f: unknown format; line: ", curObjLine);
 		throw ParseError();
@@ -139,7 +139,7 @@ Vector3f SceneParser::parseVector3f(const std::string& str) const {
 
 uint32_t SceneParser::parseuint32(const std::string& str) const {
 	uint32_t x;
-	int res = sscanf_s(str.c_str(), "%lo", &x);
+	int res = sscanf(str.c_str(), "%u", &x);
 	if (res < 1) {
 		LOGERROR("Parsing uint32_t failed; line: ", curObjLine);
 		throw ParseError();
@@ -149,7 +149,7 @@ uint32_t SceneParser::parseuint32(const std::string& str) const {
 
 float SceneParser::parsefloat(const std::string& str) const {
 	float x;
-	int res = sscanf_s(str.c_str(), "%f", &x);
+	int res = sscanf(str.c_str(), "%f", &x);
 	if (res < 1) {
 		LOGERROR("Parsing float failed; line: ", curObjLine);
 		throw ParseError();

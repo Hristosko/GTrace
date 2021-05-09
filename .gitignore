@@ -4,6 +4,7 @@ x64/*
 *.grt
 *.log
 *.obj
+*.a
 packages/*
 .vs/
 

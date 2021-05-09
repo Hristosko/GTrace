@@ -14,8 +14,8 @@ void RendererOutput::init() {
 }
 
 void RendererOutput::save(const char* path) {
-	FILE* fp;
-	if (0 != fopen_s(&fp, path, "wb")) {
+	FILE* fp = fopen(path, "wb");
+	if (fp == nullptr) {
 		LOGERROR("Cannot open file: ", path);
 		throw FileError();
 	}
@@ -45,8 +45,8 @@ void RendererOutput::save(const char* path) {
 }
 
 void RendererOutput::open(const char* path) {
-	FILE* fp;
-	if (0 != fopen_s(&fp, path, "rb")) {
+	FILE* fp = fopen(path, "rb");
+	if (fp == nullptr) {
 		LOGERROR("Cannot open file: ", path);
 		throw FileError();
 	}
