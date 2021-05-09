@@ -29,13 +29,13 @@ Logger& operator<<(Logger& logger, const T& val) {
 Logger& getLogger();
 uint64_t getTimestamp();
 
+inline void log() { getLogger() << '\n'; }
 template<typename T, typename... Args>
 void log(const T& val, const Args& ... args) {
 	Logger& logger = getLogger();
 	logger << val;
 	log(args...);
 }
-inline void log() { getLogger() << '\n'; }
 
 #define LOGSTAT(...) \
 	{ \
