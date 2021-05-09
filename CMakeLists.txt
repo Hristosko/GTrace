@@ -6,7 +6,7 @@ add_subdirectory(GtraceLib)
 add_subdirectory(GtraceConsole)
 add_subdirectory(unit_tests)
 
-if(WIN32)
+if(MSVC)
     # only supported for windows for now
     add_subdirectory(GtraceApp)
 endif()
