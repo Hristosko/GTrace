@@ -51,8 +51,8 @@ static void checkIfNormalExists(const std::deque<Vector3f>& data, unsigned idx) 
  * @param tr All transformations configured in the scene file
  */
 void Mesh::loadFromObjFile(World& w, const char* path, bool useNormals, std::shared_ptr<Transform>& tr) {
-	FILE* fp;
-	if (0 != fopen_s(&fp, path, "r")) {
+	FILE* fp = fopen(path, "r");
+	if (fp == nullptr) {
 		LOGERROR("Cannot open file: ", path);
 		throw FileError();
 	}
