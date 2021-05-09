@@ -16,6 +16,9 @@ struct InternalData {
 	std::atomic<Counter> totalAllocatedMemory;
 	std::atomic<Counter> allocationCount;
 	std::atomic<Counter> freeCount;
+#ifdef linux
+	std::atomic<Counter> totalRequestedMemory;
+#endif
 
 	InternalData() :
 		currentAllocatedMemory(0),
@@ -179,4 +182,3 @@ void operator delete(void* ptr, std::align_val_t al) {
 
 #endif // _WIN32
 #endif // DEBGTRACE_MEMORY_BENCHUG
-
