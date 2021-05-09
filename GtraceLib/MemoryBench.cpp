@@ -1,4 +1,5 @@
 #include "MemoryBench.h"
+#include "Logger.h"
 
 #include <algorithm> // std:::max
 #include <atomic>
@@ -16,7 +17,7 @@ struct InternalData {
 	std::atomic<Counter> totalAllocatedMemory;
 	std::atomic<Counter> allocationCount;
 	std::atomic<Counter> freeCount;
-#ifdef linux
+#ifdef __unix__
 	std::atomic<Counter> totalRequestedMemory;
 #endif
 
@@ -62,7 +63,15 @@ static Counter getHeapMemory(void* ptr, size_t alignment) {
  * Get the currently accumulated data.
  */
 Data get() {
-	return { id.totalAllocatedMemory, id.peakAllocatedMemory, id.allocationCount , id.freeCount };
+	return {
+		id.totalAllocatedMemory,
+		id.peakAllocatedMemory,
+		id.allocationCount,
+		id.freeCount
+#ifdef __unix__
+		,id.totalRequestedMemory
+#endif
+};
 }
 
 /**
@@ -74,6 +83,17 @@ void reset() {
 	id.totalAllocatedMemory.store(0, std::memory_order_relaxed);
 	id.allocationCount.store(0, std::memory_order_relaxed);
 	id.freeCount.store(0, std::memory_order_relaxed);
+}
+
+void logData() {
+	const Data mb = get();
+#ifdef __unix__
+	LOGSTAT("Total requested memory: ", mb.totalRequestedMemory, "B ", (float)mb.totalRequestedMemory / (1024 * 1024), "MB");
+#endif
+	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", (float)mb.totalAllocatedMemory / (1024 * 1024), "MB");
+	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage, "B ", (float)mb.peakMemoryUsage / (1024 * 1024), "MB");
+	LOGSTAT("Alocations count: ", mb.allocationCount);
+	LOGSTAT("Freed allocations count: ", mb.freeCount);
 }
 
 /**
@@ -131,6 +151,8 @@ Data get() {
 }
 
 void reset() {}
+
+void logData();
 
 #endif //GTRACE_MEMORY_BENCH
 }

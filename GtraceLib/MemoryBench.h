@@ -13,10 +13,14 @@ struct Data {
 	Counter peakMemoryUsage;
 	Counter allocationCount;
 	Counter freeCount;
+#ifdef __unix__
+	Counter totalRequestedMemory;
+#endif
 };
 
 Data get();
 void reset();
+void logData();
 
 };
 }

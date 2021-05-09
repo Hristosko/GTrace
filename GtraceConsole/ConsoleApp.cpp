@@ -21,10 +21,6 @@ int main(int argc, char** argv) {
 		renderer.render();
 		output.save(outputPath);
 	}
-	const gtrace::MemoryBench::Data mb = gtrace::MemoryBench::get();
-	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", (float)mb.totalAllocatedMemory / (1024 * 1024), "MB");
-	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage, "B ", (float)mb.peakMemoryUsage / (1024 * 1024), "MB");
-	LOGSTAT("Alocations count: ", mb.allocationCount);
-	LOGSTAT("Freed allocations count: ", mb.freeCount);
+	gtrace::MemoryBench::logData();
 	return 0;
 }
