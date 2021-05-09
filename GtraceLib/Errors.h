@@ -12,4 +12,6 @@ struct FileWriteError : FileError {};
 
 struct FileReadError: FileError {};
 
+struct InvalidEnumError : GTraceError {};
+
 }

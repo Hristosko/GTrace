@@ -34,7 +34,7 @@ int readLine(char* buffer, int n, FILE* fp) {
 	char* res = fgets(buffer, n, fp);
 	if (res == 0) return -1;
 	size_t size = strlen(buffer);
-	if (size > n) {
+	if (static_cast<int>(size) > n) {
 		LOGERROR("Too long line. Maximum length is: ", n);
 		throw FileReadError();
 	}

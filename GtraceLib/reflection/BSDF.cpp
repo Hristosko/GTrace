@@ -8,7 +8,7 @@ namespace gtrace {
  * Computes the local coordinates and the coordinates transformations.
  */
 BSDF::BSDF(const Ray& ray, const HitRecord& hr, const Color3f& r)
-	: localCoordinates(hr.normal, OB_fromW()), R(r), nbxdfs(0), gnormal(hr.normal)
+	: localCoordinates(hr.normal, OB_fromW()), gnormal(hr.normal), R(r), nbxdfs(0)
 {
 	const Matrix4x4 m = Transform::makeBasisChange(
 		this->localCoordinates.u(),

@@ -1,5 +1,6 @@
 #include "RendererDisplay.h"
 #include "scene/World.h"
+#include "Errors.h"
 
 namespace gtrace {
 
@@ -13,6 +14,8 @@ char* RendererDisplay::getPixels() {
 		return reinterpret_cast<char*>(this->output.getOutput(RendererOutputType::Image).getBuffer());
 	case RendererOutputType::Variance:
 		return this->pixels.get();
+	default:
+		throw InvalidEnumError();
 	}
 	return reinterpret_cast<char*>(this->output.getOutput(RendererOutputType::Image).getBuffer());
 }

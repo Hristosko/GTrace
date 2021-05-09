@@ -1,5 +1,3 @@
-#pragma warning(disable : 4996)
-
 #include "Renderer.h"
 #include "Logger.h"
 #include "scene/World.h"

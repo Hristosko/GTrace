@@ -44,8 +44,8 @@ protected:
 private:
 	/// Store the current object name in global variable
 	/// so that we are able to log in warnings, error etc.
-	std::string curObject;
-	uint32_t curObjLine;
 	World& world;
+	uint32_t curObjLine;
+	std::string curObject;
 };
 }
