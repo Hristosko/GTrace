@@ -35,4 +35,5 @@ unit_tests/GTaceUnitTests.dir/
 unit_tests/google-test/googletest-build/
 unit_tests/google-test/googletest-download/
 unit_tests/google-test/googletest-src/
-out/
+GtraceConsole/GTaceConsole
+unit_tests/GTaceUnitTests
