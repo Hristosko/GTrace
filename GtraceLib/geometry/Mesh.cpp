@@ -67,19 +67,19 @@ void Mesh::loadFromObjFile(World& w, const char* path, bool useNormals, std::sha
 	uint32_t faces = 0, facesNormals = 0;
 	while ((len = readLine(buffer, OBJ_MAX_LINE_LENGTH, fp)) >= 0) {
 		if (len == 0 || buffer[0] == OBJ_COMMENT) continue;
-		res = sscanf_s(buffer, OBJ_VERTEX_FORMAT, &a, &b, &c);
+		res = sscanf(buffer, OBJ_VERTEX_FORMAT, &a, &b, &c);
 		if (res == 3) {
 			this->vertices.push_back(Vector3f(a, b, c));
 			continue;
 		}
 
-		res = sscanf_s(buffer, OBJ_NORMAL_FORMAT, &a, &b, &c);
+		res = sscanf(buffer, OBJ_NORMAL_FORMAT, &a, &b, &c);
 		if (res == 3) {
 			if (useNormals) this->normals.push_back(Vector3f(a, b, c));
 			continue;
 		}
 
-		res = sscanf_s(buffer, OBJ_FACE_FORMAT, &i, &ni, &j, &nj, &k, &nk);
+		res = sscanf(buffer, OBJ_FACE_FORMAT, &i, &ni, &j, &nj, &k, &nk);
 		if (res == 6) {
 			++faces;
 			checkIfVertexExists(this->vertices, i);
