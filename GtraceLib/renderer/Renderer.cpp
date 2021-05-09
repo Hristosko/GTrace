@@ -11,8 +11,8 @@ void Renderer::render() {
 	ThreadManager tman(std::thread::hardware_concurrency());
 	tman.run(&tr);
 
-	this->stat.renderFinish(this->world);
 	LOGINFO("Finish rendering.");
+	this->stat.renderFinish(this->world);
 	this->updateRenderSurface();
 }
 
