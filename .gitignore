@@ -23,6 +23,7 @@ unit_tests/x64
 *.vcxproj*
 *sln
 
+*Makefile
 *.cmake
 CMakeCache.txt
 CMakeFiles/

@@ -58,3 +58,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 endif(MSVC)
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC GTRACE_MEMORY_BENCH)
+
+if(NOT MSVC)
+target_link_libraries(${PROJECT_NAME} pthread stdc++)
+endif()

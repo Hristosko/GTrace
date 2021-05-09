@@ -1,6 +1,8 @@
 #include "FileUtils.h"
 #include "Errors.h"
 #include "Logger.h"
+#include <string.h>
+
 
 namespace gtrace {
 
@@ -31,10 +33,10 @@ void writeBin(const void* buffer, size_t elementSize, size_t elementCount, FILE*
 int readLine(char* buffer, int n, FILE* fp) {
 	char* res = fgets(buffer, n, fp);
 	if (res == 0) return -1;
-	size_t size = strnlen_s(buffer, n);
-	if (size == n && buffer[n - 1] != '\0') {
+	size_t size = strlen(buffer);
+	if (size > n) {
 		LOGERROR("Too long line. Maximum length is: ", n);
-		throw FileWriteError();
+		throw FileReadError();
 	}
 	// remove the new line symbol
 	if (res[size - 1] == '\n') res[--size] = '\0';
