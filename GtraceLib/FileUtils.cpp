@@ -40,6 +40,7 @@ int readLine(char* buffer, int n, FILE* fp) {
 	}
 	// remove the new line symbol
 	if (res[size - 1] == '\n') res[--size] = '\0';
+	if (res[size - 1] == '\r') res[--size] = '\0';
 	return static_cast<int>(size);
 }
 
