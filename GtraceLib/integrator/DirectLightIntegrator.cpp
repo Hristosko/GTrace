@@ -43,11 +43,14 @@ Color3f DirectLightIntegrator::estimateFromLightSource(
 	const Vector3f li = light->sample(hr, uLight, wi, pdfLight);
 	stat.addLightSample();
 
+	// make new record for the next interation
+	// inherite some data from the old record
+	HitRecord rec = HitRecord::make(hr);
 	if (pdfLight > 0.f /*&& !li.isBlack()*/
 		// We can hit the same object so we have to moove the position a bit
 		// perhaps bump mapping will fix this?
 		// if not think of better approach
-		&& !world.intersect(Ray(hr.position + Vector3f(0.001f)*hr.normal, wi))) {
+		&& !world.intersect(Ray(hr.position, wi), rec)) {
 		const Vector3f f = bsdf.f(wo, wi, BxDFType::All);
 		if (canHitLight == false) {
 			res += f * fabsf(dot(wi, hr.normal)) * li / pdfLight;

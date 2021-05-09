@@ -10,6 +10,7 @@ void Sphere::parse (const SceneParser& parser, std::unordered_map<std::string, s
 }
 
 bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
+	if (rec.shape == this) return false;
 	const Vector3f origin = objectToWorld->invTransform(ray.origin);
 	const Vector3f direction = objectToWorld->invTransformDirection(ray.direction);
 	const float a = dot(direction, direction);
@@ -26,10 +27,9 @@ bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& 
 		if (t < tmin || t > tmax) return false;
 
 		// we have a hit
-		rec.t = t; // TODO: not sure if t has to be calc. in world space
 		rec.normal = origin + t * direction;
 		rec.normal = this->objectToWorld->transformDirection(rec.normal);
-		rec.mat = this->mat;
+		rec.update(t, this->mat, this);
 		return true;
 	}
 	return false;

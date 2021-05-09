@@ -9,6 +9,7 @@ namespace gtrace {
 
 class Renderer;
 class Material;
+class Shape;
 
 struct Ray {
 	uint32_t px, py;
@@ -27,9 +28,22 @@ struct Ray {
 };
 
 struct HitRecord {
-	float t;
+	float t = 0.f;
 	Vector3f normal;
 	Vector3f position;
 	Material* mat = nullptr;
+	const Shape* shape = nullptr;
+
+	static HitRecord make(const HitRecord& hr) {
+		HitRecord newRec;
+		newRec.shape = hr.shape;
+		return newRec;
+	}
+
+	void update(float t, Material* mat, const Shape* shape) {
+		this->t = t;
+		this->mat = mat;
+		this->shape = shape;
+	}
 };
 }

@@ -83,11 +83,11 @@ void Triangle::parse(const SceneParser& parser, std::unordered_map<std::string, 
 }
 
 bool Triangle::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
+	if (rec.shape == this) return false;
 	float tval, beta, gamma;
 
 	if (Triangle::hit(a, b, c, this->objectToWorld.get(), ray, tmin, tmax, beta, gamma, tval)) {
-		rec.t = tval;
-		rec.mat = this->mat;
+		rec.update(tval, this->mat, this);
 		rec.normal = this->objectToWorld->invTransformDirection(cross(b - a, c - a));
 		if (dot(rec.normal, ray.direction) > 0.f) rec.normal *= Vector3f(-1.f);
 		return true;
