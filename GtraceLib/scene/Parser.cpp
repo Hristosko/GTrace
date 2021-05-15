@@ -24,32 +24,6 @@
 
 namespace gtrace {
 
-SceneElement* SceneParser::getByName(const std::string& name) {
-	if (name == "Triangle")
-		return new Triangle();
-	if (name == "Sphere")
-		return new Sphere();
-	if (name == "Mesh")
-		return new Mesh();
-	if (name == "ColorTexture")
-		return new ColorTexture();
-	if (name == "NoiseTexture")
-		return new NoiseTexture();
-	if (name == "MatteMaterial")
-		return new MatteMaterial();
-	if (name == "DirectionalLight")
-		return new DirectionalLight();
-	if (name == "PinholeCamera")
-		return new PinholeCamera();
-	if (name == "OrthogonalCamera")
-		return new OrthogonalCamera();
-	if (name == "Settings")
-		return &this->world.getSettings();
-
-	LOGERROR("Parsing unknown scene element: ", name, " length: ", name.size());
-	throw ParseError();
-}
-
 static void split(const char* src, size_t len, std::string& a, std::string& b) {
 	std::string* cur = &a;
 	for (size_t i = 0; i < len; ++i) {
@@ -87,7 +61,12 @@ SceneParser::SceneParser(World& w)
 	} {}
 
 void SceneParser::makeElement(World& w, const std::string& obj, std::unordered_map<std::string, std::string>& fields) {
-	SceneElement* el = getByName(obj);
+	auto it = this->elementFactory.find(obj);
+	if (it == this->elementFactory.cend()) {
+		LOGERROR("Parsing unknown scene element: ", obj, " length: ", obj.size());
+		throw ParseError();
+	}
+	SceneElement* el = it->second();
 	el->parse(*this, fields);
 	w.addElemenet(el, fields);
 	fields.clear();
