@@ -1,7 +1,8 @@
 #pragma once
 
-#include<unordered_map>
+#include <unordered_map>
 #include <string>
+#include <memory>
 
 #include "math/Vector3f.h"
 
@@ -21,7 +22,7 @@ public:
 class SceneParser
 {
 public:
-	SceneParser(World& w) : world(w), curObjLine(0) {}
+	SceneParser(World& w);
 	void parseFile(const char* path);
 
 	Vector3f parseVector3f(const std::string& str) const;
@@ -41,11 +42,13 @@ protected:
 	void makeElement(World& w, const std::string& obj, std::unordered_map<std::string, std::string>& fields);
 	SceneElement* getByName(const std::string& name);
 
+	typedef /*std::unique_ptr<*/SceneElement*/*>*/(*ElementCreator)();
 private:
+	World& world;
 	/// Store the current object name in global variable
 	/// so that we are able to log in warnings, error etc.
-	World& world;
 	uint32_t curObjLine;
 	std::string curObject;
+	const std::unordered_map<std::string, ElementCreator> elementFactory;
 };
 }

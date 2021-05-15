@@ -63,6 +63,29 @@ static void split(const char* src, size_t len, std::string& a, std::string& b) {
 	}
 }
 
+template<typename T>
+/*std::unique_ptr<*/SceneElement*/*>*/ createElement() {
+	return new T();//std::make_unique<T>();
+}
+
+#define ElementCreatorMappedCustomName(Name, TypeName) { #Name, createElement<TypeName> }
+#define ElementCreatorMapped(Name) ElementCreatorMappedCustomName(Name, Name)
+
+SceneParser::SceneParser(World& w)
+	: world(w), curObjLine(0),
+	elementFactory {
+		ElementCreatorMapped(Triangle),
+		ElementCreatorMapped(Sphere),
+		ElementCreatorMapped(Mesh),
+		ElementCreatorMapped(ColorTexture),
+		ElementCreatorMapped(NoiseTexture),
+		ElementCreatorMapped(MatteMaterial),
+		ElementCreatorMapped(DirectionalLight),
+		ElementCreatorMapped(PinholeCamera),
+		ElementCreatorMapped(OrthogonalCamera),
+		ElementCreatorMappedCustomName(Settings, SceneSettings),
+	} {}
+
 void SceneParser::makeElement(World& w, const std::string& obj, std::unordered_map<std::string, std::string>& fields) {
 	SceneElement* el = getByName(obj);
 	el->parse(*this, fields);
