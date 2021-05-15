@@ -37,9 +37,13 @@ static void split(const char* src, size_t len, std::string& a, std::string& b) {
 	}
 }
 
+
+/**
+* Utility function and macros for creating the elementFactory.
+*/
 template<typename T>
-/*std::unique_ptr<*/SceneElement*/*>*/ createElement() {
-	return new T();//std::make_unique<T>();
+std::unique_ptr<SceneElement> createElement() {
+	return std::make_unique<T>();
 }
 
 #define ElementCreatorMappedCustomName(Name, TypeName) { #Name, createElement<TypeName> }
@@ -66,9 +70,9 @@ void SceneParser::makeElement(World& w, const std::string& obj, std::unordered_m
 		LOGERROR("Parsing unknown scene element: ", obj, " length: ", obj.size());
 		throw ParseError();
 	}
-	SceneElement* el = it->second();
+	std::unique_ptr<SceneElement> el = it->second();
 	el->parse(*this, fields);
-	w.addElemenet(el, fields);
+	w.addElemenet(std::move(el), fields);
 	fields.clear();
 }
 

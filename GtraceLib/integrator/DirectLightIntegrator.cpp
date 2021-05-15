@@ -85,8 +85,8 @@ Color3f DirectLightIntegrator::estimateAllLightSources(
 	Vector3f res(0.f);
 	const auto& lights = world.getLights();
 
-	for (Light* light : lights) {
-		res += estimateFromLightSource(stat, world, light, hr, wo, bsdf, rng);
+	for (const auto& light : lights) {
+		res += estimateFromLightSource(stat, world, light.get(), hr, wo, bsdf, rng);
 	}
 
 	return res;

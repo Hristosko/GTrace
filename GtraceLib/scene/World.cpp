@@ -2,75 +2,70 @@
 
 #include "Logger.h"
 #include "geometry/Triangle.h"
-#include "geometry/Mesh.h"
 #include "geometry/BVH.h"
 
 #include <limits>
 
 namespace gtrace {
 
-World::World() : bvh(nullptr) {}
-
-World::~World() {
-	this->clear();
-}
+World::World() : settings(std::make_unique<SceneSettings>()) {}
 
 void World::clear() {
-	delete this->bvh;
 	this->bvh = nullptr;
-
-	for (Mesh* mesh : this->meshes) delete mesh;
-	this->meshes.clear();
-
-	for (Shape* shape : this->shapes) delete shape;
-	this->shapes.clear();
-
-	for (Light* light : this->lights) delete light;
-	this->lights.clear();
-
-	for (auto& it : this->materials) delete it.second;
-	this->materials.clear();
-
-	for (auto& it : this->textures) {
-		delete it.second;
-	}
 	this->textures.clear();
-	camera = nullptr;
+	this->materials.clear();
+	this->shapes.clear();
+	this->lights.clear();
+	this->meshes.clear();
+	this->settings = nullptr;
+	this->camera = nullptr;
 }
 
-void World::addElemenet(SceneElement* el, const std::unordered_map<std::string, std::string>& map) {
+/**
+ * Implement a dynamic_cast fuction for unique pointers.
+ * NOTE: It will use a default deleter for the new poiter.
+ */
+template <typename To, typename From>
+std::unique_ptr<To> dynamic_unique_cast(std::unique_ptr<From>&& p)
+{
+	if (To* cast = dynamic_cast<To*>(p.get()))
+	{
+		std::unique_ptr<To> result(cast);
+		p.release();
+		return result;
+	}
+	return std::unique_ptr<To>(nullptr);
+}
+
+void World::addElemenet(std::unique_ptr<SceneElement>&& el, const std::unordered_map<std::string, std::string>& map) {
 	// The mesh will store its elements as shapes, the mesh is only kept alive here
-	if (Mesh* x = dynamic_cast<Mesh*>(el)) {
-		this->meshes.push_back(x);
+	if (auto x = dynamic_unique_cast<Mesh>(std::move(el))) {
+		this->meshes.push_back(std::move(x));
 	}
-	else if (Shape* x = dynamic_cast<Shape*>(el)) {
-		this->add(x);
+	else if (auto x = dynamic_unique_cast<Shape>(std::move(el))) {
+		this->shapes.push_back(std::move(x));
 	}
-	else if (Texture * x = dynamic_cast<Texture*>(el)) {
+	else if (auto x = dynamic_unique_cast<Texture>(std::move(el))) {
 		auto it = map.find("name");
 		if (it == map.end()) {
 			LOGWARNING("Unnamed texture.");
 		}
 		else {
-			this->addTexture(it->second, x);
+			this->addTexture(it->second, std::move(x));
 		}
-	} else if (Material * x = dynamic_cast<Material*>(el)) {
+	} else if (auto x = dynamic_unique_cast<Material>(std::move(el))) {
 		auto it = map.find("name");
 		if (it == map.end()) {
 			LOGWARNING("Unnamed material.");
 		}
 		else {
-			this->addMaterial(it->second, x);
+			this->addMaterial(it->second, std::move(x));
 		}
-	} else if(Light* x = dynamic_cast<Light*>(el)) {
-		this->lights.push_back(x);
-	} else if (Camera* x = dynamic_cast<Camera*>(el)) {
-		this->setCamera(x);
+	} else if (auto x = dynamic_unique_cast<Light>(std::move(el))) {
+		this->lights.push_back(std::move(x));
+	} else if (auto x = dynamic_unique_cast<Camera>(std::move(el))) {
+		this->setCamera(std::move(x));
 	}
-}
-
-void World::add(Shape* shape) {
-	this->shapes.push_back(shape);
 }
 
 Texture* World::getTextureByName(const std::string& name) {
@@ -79,15 +74,15 @@ Texture* World::getTextureByName(const std::string& name) {
 		LOGERROR("Searching for unexisting texture: ", name);
 		throw std::out_of_range("texture not faund");
 	}
-	return it->second;
+	return it->second.get();
 }
 
-void World::addTexture(const std::string& name, Texture* text) {
+void World::addTexture(const std::string& name, std::unique_ptr<Texture>&& text) {
 	auto it = this->textures.find(name);
 	if (it != this->textures.end()) {
 		LOGWARNING("Overwriting texture: ", name);
 	}
-	this->textures[name] = text;
+	this->textures[name] = std::move(text);
 }
 
 Material* World::getMaterialByName(const std::string& name) {
@@ -96,19 +91,18 @@ Material* World::getMaterialByName(const std::string& name) {
 		LOGERROR("Searching for unexisting mateial: ", name);
 		throw std::out_of_range("material not faund");
 	}
-	return it->second;
+	return it->second.get();
 }
 
-void World::addMaterial(const std::string& name, Material* mat) {
+void World::addMaterial(const std::string& name, std::unique_ptr<Material>&& mat) {
 	auto it = this->materials.find(name);
 	if (it != this->materials.end()) {
 		LOGWARNING("Overwriting material: ", name);
 	}
-	this->materials[name] = mat;
+	this->materials[name] = std::move(mat);
 }
 
 void World::buildBVH() {
-	delete this->bvh;
 	this->bvh = BVH::build(this->shapes.data(), this->shapes.size());
 	this->shapes.clear();
 }

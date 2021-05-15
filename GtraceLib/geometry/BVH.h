@@ -11,25 +11,24 @@ namespace gtrace {
  */
 class BVH : public Shape {
 public:
-	BVH(Shape* l, Shape* r)
-		: left(l),
-		right(r),
-		box(BBox::bound(l->bbox(), r->bbox())) {}
-	BVH(Shape* l, Shape* r, const BBox& box)
-		: left(l),
-		right(r),
+	BVH(std::unique_ptr<Shape>&& l, std::unique_ptr<Shape>&& r)
+		: left(std::move(l)),
+		right(std::move(r)),
+		box(BBox::bound(left->bbox(), right->bbox())) {}
+	BVH(std::unique_ptr<Shape>&& l, std::unique_ptr<Shape>&& r, const BBox& box)
+		: left(std::move(l)),
+		right(std::move(r)),
 		box(box) {}
 
-	static Shape* build(Shape** shapes, size_t cnt);
+	static std::unique_ptr<Shape> build(std::unique_ptr<Shape>* shapes, size_t cnt);
 
-	virtual ~BVH() override;
 	// not used, cannot be instanciated from the parser
 	virtual void parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) override {}
 	virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const override;
 	virtual BBox bbox() const override { return this->box; }
 private:
-	Shape* left; /** The left subtree */
-	Shape* right; /** The right subtree */
+	std::unique_ptr<Shape> left; /** The left subtree */
+	std::unique_ptr<Shape> right; /** The right subtree */
 	BBox box; /** The bbox of the current node */
 };
 }

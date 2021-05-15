@@ -3,6 +3,12 @@
 
 namespace gtrace {
 
+static void swapWithMove(std::unique_ptr<Shape>& a, std::unique_ptr<Shape>& b) {
+	std::unique_ptr<Shape> c = std::move(a);
+	a = std::move(b);
+	b = std::move(c);
+}
+
 /**
  * Split the shapes in two using a pivot element.
  * The splitting is done alongside a given axis.
@@ -13,13 +19,13 @@ namespace gtrace {
  * (0 for x, 1 for y and 2 for z)
  * @return The number of elemnts in the left part of the split (lesser elemnts)
  */
-static size_t split(Shape** shapes, size_t cnt, float pivot, int axis) {
+static size_t split(std::unique_ptr<Shape>* shapes, size_t cnt, float pivot, int axis) {
 	size_t lesser = 0;
 	for (size_t i = 0; i < cnt; ++i) {
 		const BBox bb = shapes[i]->bbox();
 		const float center = (bb.max() + bb.min())[axis] * 0.5f;
 		if (center < pivot) {
-			std::swap(shapes[i], shapes[lesser++]);
+			swapWithMove(shapes[i], shapes[lesser++]);
 		}
 	}
 	if (lesser == 0 || lesser == cnt) lesser = (cnt / 2);
@@ -32,18 +38,15 @@ static size_t split(Shape** shapes, size_t cnt, float pivot, int axis) {
  * @param cnt The number of shapes
  * @param axis The current axis
  */
-static Shape* build(Shape** shapes, size_t cnt, int axis) {
+static std::unique_ptr<Shape> build(std::unique_ptr<Shape>* shapes, size_t cnt, int axis) {
 	if (cnt == 1) {
-		Shape* res = shapes[0];
-		// transfer ownership
-		shapes[0] = nullptr;
+		std::unique_ptr<Shape> res = std::move(shapes[0]);
 		return res;
 	}
 	if (cnt == 2) {
-		BVH* res = new BVH(shapes[0], shapes[1]);
-		shapes[0] = nullptr;
-		shapes[1] = nullptr;
-		return res;
+		return std::make_unique<BVH>(
+			std::move(shapes[0]),
+			std::move(shapes[1]));
 	}
 
 	// find the midpoint of the bounding box according the given axis
@@ -54,7 +57,7 @@ static Shape* build(Shape** shapes, size_t cnt, int axis) {
 	const Vector3f pivot = (box.max() - box.min()) * 0.5f;
 	size_t middle = split(shapes, cnt, pivot[axis], axis);
 
-	return new BVH(
+	return std::make_unique<BVH>(
 		build(shapes, middle, (axis + 1) % 3),
 		build(&shapes[middle], cnt - middle, (axis + 1) % 3),
 		box);
@@ -63,16 +66,11 @@ static Shape* build(Shape** shapes, size_t cnt, int axis) {
 /**
  * Build a KD Tree, see Shape* build(Shape** shapes, uint32_t cnt, int axis)
  */
-Shape* BVH::build(Shape** shapes, size_t cnt) {
+std::unique_ptr<Shape> BVH::build(std::unique_ptr<Shape>* shapes, size_t cnt) {
 	LOGINFO("Start building bounding volume hierarchie. Shapes count: ", cnt);
-	Shape* res =  gtrace::build(shapes, cnt, 0);
+	std::unique_ptr<Shape> res =  gtrace::build(shapes, cnt, 0);
 	LOGINFO("Finish building bounding volume hierarchie.");
 	return res;
-}
-
-BVH::~BVH() {
-	delete this->left;
-	delete this->right;
 }
 
 bool BVH::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {

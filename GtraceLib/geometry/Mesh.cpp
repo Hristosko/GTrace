@@ -92,17 +92,14 @@ void Mesh::loadFromObjFile(World& w, const char* path, bool useNormals, std::sha
 				checkIfNormalExists(this->normals, nj);
 				checkIfNormalExists(this->normals, nk);
 
-				MeshElementWithNormal* el = new
-					MeshElementWithNormal(tr, this,
-						i-1, j-1, k-1,
-						ni-1, nj-1, nk-1);
-				w.add(el);
+				w.add(std::make_unique<MeshElementWithNormal>(tr, this,
+					i-1, j-1, k-1,
+					ni-1, nj-1, nk-1));
 				continue;
 			}
 			// add the new triangle to the world
 			// The indexing in the obj file starts from 1
-			MeshElement* el = new MeshElement(tr, this, i-1, j-1, k-1);
-			w.add(el);
+			w.add(std::make_unique<MeshElement>(tr, this, i-1, j-1, k-1));
 			continue;
 		}
 

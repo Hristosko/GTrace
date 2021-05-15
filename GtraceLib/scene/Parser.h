@@ -42,13 +42,14 @@ protected:
 	void makeElement(World& w, const std::string& obj, std::unordered_map<std::string, std::string>& fields);
 	SceneElement* getByName(const std::string& name);
 
-	typedef /*std::unique_ptr<*/SceneElement*/*>*/(*ElementCreator)();
+	typedef std::unique_ptr<SceneElement>(*ElementCreator)();
 private:
 	World& world;
 	/// Store the current object name in global variable
 	/// so that we are able to log in warnings, error etc.
 	uint32_t curObjLine;
 	std::string curObject;
+	/** map the names of the objects in the scene file to functions that will create object of the specified type */
 	const std::unordered_map<std::string, ElementCreator> elementFactory;
 };
 }
