@@ -17,7 +17,7 @@ void World::clear() {
 	this->shapes.clear();
 	this->lights.clear();
 	this->meshes.clear();
-	this->settings = nullptr;
+	this->settings = std::make_unique<SceneSettings>();
 	this->camera = nullptr;
 }
 
