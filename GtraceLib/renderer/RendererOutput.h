@@ -5,7 +5,7 @@
 namespace gtrace {
 
 struct ColorResult {
-	char r, g, b;
+	float r, g, b;
 };
 
 struct VarianceResult {

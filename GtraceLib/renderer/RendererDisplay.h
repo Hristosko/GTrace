@@ -13,6 +13,7 @@ public:
 	char* getPixels();
 
 	void setDisplayType(const World& w, RendererOutputType type);
+	void updateDisplay(const World& w);
 
 private:
 	RendererOutputType curDisplayType;

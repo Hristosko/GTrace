@@ -72,6 +72,7 @@ void GTraceMainWindow::OnPaint(wxPaintEvent& event) {
 }
 
 void GTraceMainWindow::OnElementRendered(wxCommandEvent& event) {
+	this->display.updateDisplay(this->world);
 	this->rebuildBufferAndRefresh();
 }
 
@@ -100,6 +101,8 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 		this->world.clear();
 		gtrace::SceneParser parser(this->world);
 		parser.parseFile(path.c_str());
+
+		this->display.setDisplayType(this->world, gtrace::RendererOutputType::Image);
 
 		std::thread th(renderNewScene, this->renderSurface, &this->output,&this->world, &this->outputReady);
 		th.detach();
@@ -131,6 +134,7 @@ void GTraceMainWindow::OpenFile(wxCommandEvent& event) {
 		wxString path = openDialog->GetPath();
 		this->outputReady = false;
 		this->output.open(path.c_str());
+		this->display.updateDisplay(this->world);
 		this->outputReady = true;
 		this->rebuildBufferAndRefresh();
 	}
@@ -150,6 +154,8 @@ void GTraceMainWindow::StandardDeviation(wxCommandEvent& event) {
 
 void GTraceMainWindow::rebuildBufferAndRefresh() {
 	char* pixelData = this->display.getPixels();
+	if (pixelData == nullptr) return;
+
 	wxBitmap b(DEFAULT_WIDTH, DEFAULT_HEIGHT, 24);
 	wxNativePixelData data(b);
 

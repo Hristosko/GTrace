@@ -58,9 +58,9 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 		DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
 		ColorResult* ptr = reinterpret_cast<ColorResult*>(
 			buffer.ptrByIdx((uint64_t)iy * this->world.getSettings().width + (uint64_t)ix));
-		ptr->r = static_cast<char>(255.f * res.x());
-		ptr->g = static_cast<char>(255.f * res.y());
-		ptr->b = static_cast<char>(255.f * res.z());
+		ptr->r = res.x();
+		ptr->g = res.y();
+		ptr->b = res.z();
 	}
 
 	{

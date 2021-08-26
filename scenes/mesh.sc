@@ -36,5 +36,6 @@ std_treshhold=0.01
 Mesh
 mat=mat_green
 use_normals=true
-file=/mnt/c/code/GTrace/scenes/bunny.obj
+#file=/mnt/c/code/GTrace/scenes/bunny.obj
+file=C:\code\GTrace\scenes\bunny.obj
 rotation=(0,-90,0)
