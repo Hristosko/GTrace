@@ -4,13 +4,26 @@
 #include "FileUtils.h"
 #include "Errors.h"
 
+#include<assert.h>
+
 namespace gtrace {
 
 #define CURRENT_VERSION UINT32_C(1)
 
+void gtrace::RendererOutput::OutputBuffer::init(uint32_t w, uint32_t h) {
+	{
+		DataBuffer& buffer = outputs[RendererOutputType::Image];
+		buffer.init<ColorResult>((uint64_t)w * h);
+	}
+	{
+		DataBuffer& buffer = outputs[RendererOutputType::Variance];
+		buffer.init<VarianceResult>((uint64_t)w* h);
+	}
+}
+
 void RendererOutput::init() {
-	this->initImageOutput();
-	this->initVarianceOutput();
+	const SceneSettings& settings = this->world.getSettings();
+	this->buff.init(settings.width, settings.height);
 }
 
 void RendererOutput::save(const char* path) {
@@ -36,12 +49,12 @@ void RendererOutput::save(const char* path) {
 	// write image
 	cnt = RendererOutputType::Image;
 	writeBin(&cnt, sizeof(cnt), 1, fp);
-	writeBin(outputs[RendererOutputType::Image].getBuffer(), sizeof(ColorResult), width * height, fp);
+	writeBin(buff.outputs[RendererOutputType::Image].getBuffer(), sizeof(ColorResult), width * height, fp);
 
 	//write variance
 	cnt = RendererOutputType::Variance;
 	writeBin(&cnt, sizeof(cnt), 1, fp);
-	writeBin(outputs[RendererOutputType::Variance].getBuffer(), sizeof(VarianceResult), width * height, fp);
+	writeBin(buff.outputs[RendererOutputType::Variance].getBuffer(), sizeof(VarianceResult), width * height, fp);
 }
 
 void RendererOutput::open(const char* path) {
@@ -91,15 +104,31 @@ void RendererOutput::open(const char* path) {
 	}
 }
 
-void RendererOutput::initImageOutput() {
-	const SceneSettings& settings = this->world.getSettings();
-	DataBuffer& buffer = this->getOutput(RendererOutputType::Image);
-	buffer.init<ColorResult>((uint64_t)settings.width * settings.height);
+RendererOutput::OutputBuffer RendererOutput::getOutputBuffer(uint32_t w, uint32_t h) {
+	OutputBuffer buff;
+	buff.init(w, h);
+	return buff;
 }
 
-void RendererOutput::initVarianceOutput() {
-	const SceneSettings& settings = this->world.getSettings();
-	DataBuffer& buffer = this->getOutput(RendererOutputType::Variance);
-	buffer.init<VarianceResult>((uint64_t)settings.width * settings.height);
+void RendererOutput::update(const OutputBuffer& b,
+	uint32_t offsetw, uint32_t offseth,
+	uint32_t sizew, uint32_t sizeh) {
+
+	const uint32_t worldWidth = this->world.getSettings().width;
+	for (uint32_t ih = 0; ih < sizeh; ++ih) {
+		const uint64_t realih = (uint64_t)ih + offseth;
+		assert(realih < this->world.getSettings().height);
+		for (uint32_t iw = 0; iw < sizew; ++iw) {
+			const uint64_t realiw = (uint64_t)iw + offsetw;
+			assert(realiw < this->world.getSettings().width);
+
+			const uint64_t pos = (uint64_t)ih * worldWidth + iw;
+			const uint64_t srcPos = (uint64_t)ih * offsetw + iw;
+
+			this->buff.outputs[RendererOutputType::Image].copyValue<ColorResult>(pos, b.outputs[RendererOutputType::Image], srcPos);
+			this->buff.outputs[RendererOutputType::Variance].copyValue<VarianceResult>(pos, b.outputs[RendererOutputType::Variance], srcPos);
+		}
+	}
 }
+
 }
