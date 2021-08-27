@@ -10,7 +10,7 @@ namespace gtrace {
 
 #define CURRENT_VERSION UINT32_C(1)
 
-void gtrace::RendererOutput::OutputBuffer::init(uint32_t w, uint32_t h) {
+void RendererOutput::OutputBuffer::init(uint32_t w, uint32_t h) {
 	{
 		DataBuffer& buffer = outputs[RendererOutputType::Image];
 		buffer.init<ColorResult>((uint64_t)w * h);
@@ -122,8 +122,8 @@ void RendererOutput::update(const OutputBuffer& b,
 			const uint64_t realiw = (uint64_t)iw + offsetw;
 			assert(realiw < this->world.getSettings().width);
 
-			const uint64_t pos = (uint64_t)ih * worldWidth + iw;
-			const uint64_t srcPos = (uint64_t)ih * offsetw + iw;
+			const uint64_t pos = (uint64_t)realih * worldWidth + realiw;
+			const uint64_t srcPos = (uint64_t)ih * sizew + iw;
 
 			this->buff.outputs[RendererOutputType::Image].copyValue<ColorResult>(pos, b.outputs[RendererOutputType::Image], srcPos);
 			this->buff.outputs[RendererOutputType::Variance].copyValue<VarianceResult>(pos, b.outputs[RendererOutputType::Variance], srcPos);

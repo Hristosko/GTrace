@@ -29,11 +29,9 @@ public:
 
 	template<typename T>
 	void copyValue(uint64_t pos, const DataBuffer& src, uint64_t srcPos) {
-		{
-			T* dest = reinterpret_cast<T*>(this->ptrByIdx(pos));
-			const T* src = reinterpret_cast<const T*>(src.ptrByIdx(srcPos));
-			*dest = *src;
-		}
+		T* destPtr = reinterpret_cast<T*>(this->ptrByIdx(pos));
+		const T* srcPtr = reinterpret_cast<const T*>(src.ptrByIdx(srcPos));
+		*destPtr = *srcPtr;
 	}
 
 	void init(uint16_t typeS, uint64_t bufferS) {

@@ -17,20 +17,23 @@ void Renderer::render() {
 }
 
 void Renderer::renderBucket(uint32_t offsetx, uint32_t offsety, uint32_t bucketWidth, uint32_t bucketHeight) {
+	RendererOutput::OutputBuffer buff = RendererOutput::getOutputBuffer(bucketWidth, bucketHeight);
 	for (uint32_t iy = 0; iy < bucketHeight; ++iy) {
 		const uint32_t realiy = iy + offsety;
 		for (uint32_t ix = 0; ix < bucketWidth; ++ix) {
 			const uint32_t realix = ix + offsetx;
-			this->rayTrace(realix, realiy);
+			this->rayTrace(realix, realiy, buff, ix, iy, bucketWidth);
 		}
 	}
+	this->output.update(buff, offsetx, offsety, bucketWidth, bucketHeight);
 }
 
 void Renderer::updateRenderSurface() {
 	this->updateRenderSurfaceFunc();
 }
 
-void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
+void Renderer::rayTrace(uint32_t realix, uint32_t realiy,
+	RendererOutput::OutputBuffer& buff, uint32_t localix, uint32_t localiy, uint32_t localWidth) {
 	Vector3f res;
 	Vector3f var;
 
@@ -44,7 +47,7 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 	tresh *= tresh; // we compare it to the variance
 	uint32_t curSubdivs = 1;
 	do {
-		this->rayTraceWithSamples(ix, iy, curSubdivs + 1, sum, sumSqr, totalSamples, srs);
+		this->rayTraceWithSamples(realix, realiy, curSubdivs + 1, sum, sumSqr, totalSamples, srs);
 		const float denom = 1.f / totalSamples;
 		res = sum*denom; // the mean value
 		var = sumSqr * denom - res * res;
@@ -54,19 +57,18 @@ void Renderer::rayTrace(uint32_t ix, uint32_t iy) {
 	// Store the results
 	this->stat.updateStat(totalSamples, totalSamples);
 	this->stat.updateStat(srs);
+	uint64_t pos = (uint64_t)localiy * localWidth + localix;
 	{
-		DataBuffer& buffer = this->output.getOutput(RendererOutputType::Image);
-		ColorResult* ptr = reinterpret_cast<ColorResult*>(
-			buffer.ptrByIdx((uint64_t)iy * this->world.getSettings().width + (uint64_t)ix));
+		DataBuffer& buffer = buff.outputs[RendererOutputType::Image];
+		ColorResult* ptr = reinterpret_cast<ColorResult*>(buffer.ptrByIdx(pos));
 		ptr->r = res.x();
 		ptr->g = res.y();
 		ptr->b = res.z();
 	}
 
 	{
-		DataBuffer& buffer = this->output.getOutput(RendererOutputType::Variance);
-		VarianceResult* ptr = reinterpret_cast<VarianceResult*>(
-			buffer.ptrByIdx((uint64_t)iy * this->world.getSettings().width + (uint64_t)ix));
+		DataBuffer& buffer = buff.outputs[RendererOutputType::Variance];
+		VarianceResult* ptr = reinterpret_cast<VarianceResult*>(buffer.ptrByIdx(pos));
 		ptr->x = var.x();
 		ptr->y = var.y();
 		ptr->z = var.z();
