@@ -25,10 +25,12 @@ void Renderer::renderBucket(uint32_t offsetx, uint32_t offsety, uint32_t bucketW
 			this->rayTrace(realix, realiy, buff, ix, iy, bucketWidth);
 		}
 	}
+	std::unique_lock<std::mutex> lock(this->outputUpdateMutex);
 	this->output.update(buff, offsetx, offsety, bucketWidth, bucketHeight);
 }
 
 void Renderer::updateRenderSurface() {
+	std::unique_lock<std::mutex> lock(this->outputUpdateMutex);
 	this->updateRenderSurfaceFunc();
 }
 

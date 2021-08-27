@@ -47,6 +47,7 @@ private:
 	void updateRenderSurface();
 private:
 	UpdateRenderSurfaceFunc updateRenderSurfaceFunc;
+	std::mutex outputUpdateMutex;
 	RendererOutput& output;
 	World& world;
 	std::unique_ptr<Integrator> integrator;
