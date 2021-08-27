@@ -22,7 +22,7 @@ public:
 
 	const void* ptrByIdx(uint64_t idx) const {
 		if (idx >= this->bufferSize || !this->buffer) return nullptr;
-		char* res = reinterpret_cast<char*>(this->buffer.get());
+		const char* res = reinterpret_cast<const char*>(this->buffer.get());
 		res += (this->typeSize * idx);
 		return res;
 	}
