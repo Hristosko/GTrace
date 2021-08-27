@@ -15,17 +15,7 @@ IMPLEMENT_APP(GTraceApp);
 bool GTraceApp::OnInit() {
 	this->frame = new GTraceMainWindow();
 	this->frame->Show();
-	gtrace::MemoryBench::reset();
 	return true;
-}
-
-int GTraceApp::OnExit() {
-	const gtrace::MemoryBench::Data mb = gtrace::MemoryBench::get();
-	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", (float)mb.totalAllocatedMemory / (1024 * 1024), "MB");
-	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage, "B ", (float)mb.peakMemoryUsage / (1024 * 1024), "MB");
-	LOGSTAT("Alocations count: ", mb.allocationCount);
-	LOGSTAT("Freed allocations count: ", mb.freeCount);
-	return 0;
 }
 
 #define DEFAULT_WIDTH 800
@@ -77,15 +67,16 @@ void GTraceMainWindow::OnElementRendered(wxCommandEvent& event) {
 }
 
 static void renderNewScene(wxWindow* renderSurface, gtrace::RendererOutput* output, gtrace::World* world, bool* setWhenReady) {
-		output->init();
-		world->buildBVH();
-		auto frameUpdater = [renderSurface]() {
-			wxCommandEvent* event = new wxCommandEvent(GTRACE_RENDERED_ELEMENT);
-			wxQueueEvent(renderSurface, event);
-		};
-		gtrace::Renderer renderer(frameUpdater, *output, *world);
-		renderer.render();
-		*setWhenReady = true;
+	output->init();
+	world->buildBVH();
+	auto frameUpdater = [renderSurface]() {
+		wxCommandEvent* event = new wxCommandEvent(GTRACE_RENDERED_ELEMENT);
+		wxQueueEvent(renderSurface, event);
+	};
+	gtrace::Renderer renderer(frameUpdater, *output, *world);
+	renderer.render();
+	*setWhenReady = true;
+	gtrace::MemoryBench::logData();
 }
 
 void GTraceMainWindow::NewFile(wxCommandEvent& event) {
@@ -96,6 +87,7 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 		wxFD_OPEN, wxDefaultPosition
 	));
 
+	gtrace::MemoryBench::reset();
 	if (openDialog->ShowModal() == wxID_OK) {
 		wxString path = openDialog->GetPath();
 		this->world.clear();
