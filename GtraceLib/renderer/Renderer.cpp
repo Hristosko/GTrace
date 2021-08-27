@@ -16,6 +16,18 @@ void Renderer::render() {
 	this->updateRenderSurface();
 }
 
+static uint32_t devideAndCeil(uint32_t a, uint32_t b) {
+	uint32_t d = a/b;
+	if (d*b < a) ++d;
+	return d;
+}
+
+uint32_t Renderer::totalBucketsCount() const {
+	const uint32_t lines = devideAndCeil(this->world.getSettings().width, ThreadedRenderer::bucketWidth);
+	const uint32_t rows = devideAndCeil(this->world.getSettings().height, ThreadedRenderer::bucketHeight);
+	return lines*rows;
+}
+
 void Renderer::renderBucket(uint32_t offsetx, uint32_t offsety, uint32_t bucketWidth, uint32_t bucketHeight) {
 	RendererOutput::OutputBuffer buff = RendererOutput::getOutputBuffer(bucketWidth, bucketHeight);
 	for (uint32_t iy = 0; iy < bucketHeight; ++iy) {
