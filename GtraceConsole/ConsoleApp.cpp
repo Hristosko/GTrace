@@ -5,7 +5,13 @@
 #include "MemoryBench.h"
 #include "Logger.h"
 
+#include <stdio.h>
+
 int main(int argc, char** argv) {
+	if (argc != 3) {
+		printf("ARG1 scene, ARG2 output file\n");
+		return 1;
+	}
 	gtrace::MemoryBench::reset();
 	{
 		gtrace::World world;
