@@ -137,7 +137,7 @@ bool Renderer::ThreadedRenderer::getNextBucket(uint32_t& cx, uint32_t& cy) {
 		return true;
 	}
 	// go to the start of the next row of buckets
-	cy = this->cury = 0;
+	cy = 0; this->cury = bucketHeight;
 	cx = this->curx = (this->curx + bucketWidth);
 	return this->curx < this->renderer.world.getSettings().width;
 }
