@@ -49,7 +49,7 @@ public:
 	 * @param wi The ray that hit the surface
 	 * @return The reflected light
 	 */
-	virtual Color3f f(const Color3f& r, const Vector3f& wo, const Vector3f& wi) const = 0;
+	virtual Color3f f(const Color3f& r, const Vector3f& wo, const Vector3f& wi) const { return Vector3f(0.f); }
 	/**
 	 * Compute the direction of the incomming light (wi) given the outgoing direction.
 	 * Uses a cosine distr in the hemisphere
