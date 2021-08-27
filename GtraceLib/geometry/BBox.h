@@ -7,7 +7,7 @@ namespace gtrace {
 /**
  * Bounding Box (around a more complex geometry or used by the Bounding volume hierarchy)
  */
-class BBox : public HeapAligned<16> {
+class BBox : public HeapAlignedType<Vector3f> {
 public:
 	BBox() = default;
 	BBox(const Vector3f& bottom, const Vector3f& top)

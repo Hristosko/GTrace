@@ -35,7 +35,7 @@ inline BxDFType operator~(BxDFType a) {
 	return static_cast<BxDFType>(~static_cast<uint16_t>(a));
 }
 
-class BxDF : public HeapAligned<16> {
+class BxDF : public HeapAlignedType<Vector3f> {
 public:
 	friend class BRDFtoBTDF;
 	friend class BSDF;

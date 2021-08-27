@@ -18,4 +18,7 @@ public:
 	}
 #endif
 };
+
+template<typename T>
+class HeapAlignedType : public HeapAligned<alignof(T)> {};
 }

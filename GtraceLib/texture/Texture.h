@@ -9,7 +9,7 @@
 namespace gtrace {
 
 struct Ray;
-class Texture : public SceneElement, public HeapAligned<16> {
+class Texture : public SceneElement, public HeapAlignedType<Vector3f> {
 public:
 	/**
 	 * Evaluate the texture at a given point.

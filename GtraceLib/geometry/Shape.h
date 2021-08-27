@@ -10,7 +10,7 @@
 namespace gtrace {
 
 class BBox;
-class Shape : public SceneElement, public HeapAligned<16> {
+class Shape : public SceneElement, public HeapAlignedType<Vector3f> {
 public:
 	Shape() = default;
 	Shape(std::shared_ptr<Transform>& tr) : objectToWorld(tr) {}

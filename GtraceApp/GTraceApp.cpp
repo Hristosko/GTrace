@@ -67,6 +67,7 @@ void GTraceMainWindow::OnElementRendered(wxCommandEvent& event) {
 }
 
 static void renderNewScene(wxWindow* renderSurface, gtrace::RendererOutput* output, gtrace::World* world, bool* setWhenReady) {
+	gtrace::MemoryBench::reset();
 	output->init();
 	world->buildBVH();
 	auto frameUpdater = [renderSurface]() {
@@ -87,7 +88,6 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 		wxFD_OPEN, wxDefaultPosition
 	));
 
-	gtrace::MemoryBench::reset();
 	if (openDialog->ShowModal() == wxID_OK) {
 		wxString path = openDialog->GetPath();
 		this->world.clear();

@@ -10,7 +10,7 @@ namespace gtrace {
 /**
  * Represents a light source.
  */
-class Light : public SceneElement, public HeapAligned<16> {
+class Light : public SceneElement, public HeapAlignedType<Vector3f> {
 public:
 	/**
      * Sample the source. Find a ray that can hit the given point.
