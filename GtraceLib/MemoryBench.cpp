@@ -34,8 +34,7 @@ static InternalData id;
 /**
  * Return the size of the allocated memory.
  * For Windows this will return the requested memory,
- * for Linux - the actual size on the heap (not tested here)
- * TODO: implement both for windows at least
+ * for Linux - the actual size on the heap
  */
 static Counter getHeapMemory(void* ptr) {
 #ifdef _WIN32
@@ -61,12 +60,12 @@ static Counter getHeapMemory(void* ptr, size_t alignment) {
  */
 Data get() {
 	return {
-		id.totalAllocatedMemory,
-		id.peakAllocatedMemory,
-		id.allocationCount,
-		id.freeCount
+		id.totalAllocatedMemory.load(std::memory_order::memory_order_relaxed),
+		id.peakAllocatedMemory.load(std::memory_order::memory_order_relaxed),
+		id.allocationCount.load(std::memory_order::memory_order_relaxed),
+		id.freeCount.load(std::memory_order::memory_order_relaxed)
 #ifdef __unix__
-		,id.totalRequestedMemory
+		,id.totalRequestedMemory.load(std::memory_order::memory_order_relaxed)
 #endif //__unix__
 };
 }
@@ -102,13 +101,10 @@ static void increaseMemory(Counter size) {
 
 	Counter peak = id.peakAllocatedMemory.load(std::memory_order_relaxed);
 	Counter cur = id.currentAllocatedMemory.load(std::memory_order_relaxed);
-	while (id.currentAllocatedMemory.load(std::memory_order_relaxed) <= cur
-		&& peak < cur) {
-		id.peakAllocatedMemory.compare_exchange_weak(peak, cur, std::memory_order_relaxed, std::memory_order_relaxed);
-	}
 
-	// This isn't threadsafe, but should be accurate enough
-	if (cur > peak) id.peakAllocatedMemory.store(cur, std::memory_order_relaxed);
+	while (peak < cur &&
+		id.peakAllocatedMemory.compare_exchange_weak(peak, cur, std::memory_order_relaxed, std::memory_order_relaxed))
+	{}
 
 	id.totalAllocatedMemory.fetch_add(size, std::memory_order_relaxed);
 }

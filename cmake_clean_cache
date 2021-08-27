@@ -1,0 +1,2 @@
+rm ./CMakeCache.txt
+rm ./unit_tests/google-test/googletest-download/CMakeCache.txt

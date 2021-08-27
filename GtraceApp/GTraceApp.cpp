@@ -15,17 +15,7 @@ IMPLEMENT_APP(GTraceApp);
 bool GTraceApp::OnInit() {
 	this->frame = new GTraceMainWindow();
 	this->frame->Show();
-	gtrace::MemoryBench::reset();
 	return true;
-}
-
-int GTraceApp::OnExit() {
-	const gtrace::MemoryBench::Data mb = gtrace::MemoryBench::get();
-	LOGSTAT("Total alocated memory: ", mb.totalAllocatedMemory, "B ", (float)mb.totalAllocatedMemory / (1024 * 1024), "MB");
-	LOGSTAT("Peak memory usage: ", mb.peakMemoryUsage, "B ", (float)mb.peakMemoryUsage / (1024 * 1024), "MB");
-	LOGSTAT("Alocations count: ", mb.allocationCount);
-	LOGSTAT("Freed allocations count: ", mb.freeCount);
-	return 0;
 }
 
 #define DEFAULT_WIDTH 800
@@ -72,19 +62,22 @@ void GTraceMainWindow::OnPaint(wxPaintEvent& event) {
 }
 
 void GTraceMainWindow::OnElementRendered(wxCommandEvent& event) {
+	this->display.updateDisplay(this->world);
 	this->rebuildBufferAndRefresh();
 }
 
 static void renderNewScene(wxWindow* renderSurface, gtrace::RendererOutput* output, gtrace::World* world, bool* setWhenReady) {
-		output->init();
-		world->buildBVH();
-		auto frameUpdater = [renderSurface]() {
-			wxCommandEvent* event = new wxCommandEvent(GTRACE_RENDERED_ELEMENT);
-			wxQueueEvent(renderSurface, event);
-		};
-		gtrace::Renderer renderer(frameUpdater, *output, *world);
-		renderer.render();
-		*setWhenReady = true;
+	gtrace::MemoryBench::reset();
+	output->init();
+	world->buildBVH();
+	auto frameUpdater = [renderSurface]() {
+		wxCommandEvent* event = new wxCommandEvent(GTRACE_RENDERED_ELEMENT);
+		wxQueueEvent(renderSurface, event);
+	};
+	gtrace::Renderer renderer(frameUpdater, *output, *world);
+	renderer.render();
+	*setWhenReady = true;
+	gtrace::MemoryBench::logData();
 }
 
 void GTraceMainWindow::NewFile(wxCommandEvent& event) {
@@ -100,6 +93,8 @@ void GTraceMainWindow::NewFile(wxCommandEvent& event) {
 		this->world.clear();
 		gtrace::SceneParser parser(this->world);
 		parser.parseFile(path.c_str());
+
+		this->display.setDisplayType(this->world, gtrace::RendererOutputType::Image);
 
 		std::thread th(renderNewScene, this->renderSurface, &this->output,&this->world, &this->outputReady);
 		th.detach();
@@ -131,6 +126,7 @@ void GTraceMainWindow::OpenFile(wxCommandEvent& event) {
 		wxString path = openDialog->GetPath();
 		this->outputReady = false;
 		this->output.open(path.c_str());
+		this->display.updateDisplay(this->world);
 		this->outputReady = true;
 		this->rebuildBufferAndRefresh();
 	}
@@ -150,6 +146,8 @@ void GTraceMainWindow::StandardDeviation(wxCommandEvent& event) {
 
 void GTraceMainWindow::rebuildBufferAndRefresh() {
 	char* pixelData = this->display.getPixels();
+	if (pixelData == nullptr) return;
+
 	wxBitmap b(DEFAULT_WIDTH, DEFAULT_HEIGHT, 24);
 	wxNativePixelData data(b);
 

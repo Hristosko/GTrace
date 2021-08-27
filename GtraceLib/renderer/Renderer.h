@@ -37,7 +37,8 @@ public:
 
 	void render();
 private:
-	void rayTrace(uint32_t ix, uint32_t iy);
+	void rayTrace(uint32_t realix, uint32_t realiy,
+		RendererOutput::OutputBuffer& buff, uint32_t localix, uint32_t localiy, uint32_t localWidth);
 	void rayTraceWithSamples(uint32_t ix, uint32_t iy, uint32_t samples,
 							Vector3f& sum, Vector3f& sumSqr,
 							uint32_t& totalSamples, SecondaryRaysStat& stat);
@@ -46,6 +47,7 @@ private:
 	void updateRenderSurface();
 private:
 	UpdateRenderSurfaceFunc updateRenderSurfaceFunc;
+	std::mutex outputUpdateMutex;
 	RendererOutput& output;
 	World& world;
 	std::unique_ptr<Integrator> integrator;

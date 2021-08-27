@@ -6,7 +6,7 @@
 
 namespace gtrace {
 
-class Transform : public HeapAligned<32> {
+class Transform : public HeapAlignedType<Matrix4x4> {
 public:
 	Transform(const Matrix4x4& mat = Transform::makeIdentity())
 		: T(mat.transposed()), // we store the transposed matrix so that we can eff. transform vectors

@@ -5,7 +5,7 @@
 namespace gtrace {
 
 struct ColorResult {
-	char r, g, b;
+	float r, g, b;
 };
 
 struct VarianceResult {
@@ -23,18 +23,24 @@ class RendererOutput {
 public:
 	RendererOutput(World& w) : world(w) {}
 	DataBuffer& getOutput(RendererOutputType type) {
-		return this->outputs[type];
+		return this->buff.outputs[type];
 	}
 	void init();
 
 	void save(const char* path);
 	void open(const char* path);
 
-private:
-	void initImageOutput();
-	void initVarianceOutput();
+	struct OutputBuffer {
+		DataBuffer outputs[RendererOutputType::Count];
+
+		void init(uint32_t w, uint32_t h);
+	};
+
+	static OutputBuffer getOutputBuffer(uint32_t w, uint32_t h);
+	void update(const OutputBuffer& b, uint32_t offsetw, uint32_t offseth, uint32_t sizew, uint32_t sizeh);
+
 private:
 	World& world;
-	DataBuffer outputs[RendererOutputType::Count];
+	OutputBuffer buff;
 };
 }
