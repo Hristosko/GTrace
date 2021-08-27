@@ -17,6 +17,7 @@ class Renderer {
 private:
 	class ThreadedRenderer : public Threaded {
 	public:
+		friend Renderer;
 		ThreadedRenderer(Renderer& r) : renderer(r), curx(0), cury(0) {}
 		void run(unsigned threadIdx, unsigned numThreads) override;
 		bool getNextBucket(uint32_t& cx, uint32_t& cy);
@@ -36,6 +37,8 @@ public:
 		integrator(std::make_unique<DirectLightIntegrator>()) {}
 
 	void render();
+
+	uint32_t totalBucketsCount() const;
 private:
 	void rayTrace(uint32_t realix, uint32_t realiy,
 		RendererOutput::OutputBuffer& buff, uint32_t localix, uint32_t localiy, uint32_t localWidth);
