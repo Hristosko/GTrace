@@ -14,6 +14,7 @@
 
 #include "geometry/Triangle.h"
 #include "geometry/Sphere.h"
+#include "geometry/Plane.h"
 #include "geometry/Mesh.h"
 #include "texture/ColorTexture.h"
 #include "texture/NoiseTexture.h"
@@ -54,6 +55,7 @@ SceneParser::SceneParser(World& w)
 	elementFactory {
 		ElementCreatorMapped(Triangle),
 		ElementCreatorMapped(Sphere),
+		ElementCreatorMapped(Plane),
 		ElementCreatorMapped(Mesh),
 		ElementCreatorMapped(ColorTexture),
 		ElementCreatorMapped(NoiseTexture),

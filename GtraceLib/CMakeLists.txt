@@ -13,6 +13,7 @@ add_library(${PROJECT_NAME}
     geometry/BBox.cpp
     geometry/BVH.cpp
     geometry/Mesh.cpp
+    geometry/Plane.cpp
     geometry/Shape.cpp
     geometry/Sphere.cpp
     geometry/Triangle.cpp
