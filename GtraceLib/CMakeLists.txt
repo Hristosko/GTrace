@@ -1,3 +1,4 @@
+cmake_minimum_required(VERSION 3.5)
 project(GTraceLib)
 
 add_library(${PROJECT_NAME}
@@ -69,5 +70,5 @@ endif()
 target_compile_definitions(${PROJECT_NAME} PUBLIC GTRACE_MEMORY_BENCH)
 
 if(NOT MSVC)
-target_link_libraries(${PROJECT_NAME} pthread stdc++)
+    target_link_libraries(${PROJECT_NAME} pthread stdc++)
 endif()

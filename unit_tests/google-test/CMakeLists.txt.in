@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0)
+cmake_minimum_required(VERSION 3.5)
 
 project(googletest-download NONE)
 
@@ -9,7 +9,7 @@ include(ExternalProject)
 # commit after 9469fb687d040b60c8749b7617fee4e77c7f6409
 # Note: This is after the release of v1.8
 ExternalProject_Add(googletest
-  URL               https://github.com/google/googletest/archive/dea0216d0c6bc5e63cf5f6c8651cd268668032ec.tar.gz
+  URL               https://github.com/google/googletest/archive/e2239ee6043f73722e7aa812a459f54a28552929.tar.gz
   SOURCE_DIR        "${CMAKE_CURRENT_BINARY_DIR}/googletest-src"
   BINARY_DIR        "${CMAKE_CURRENT_BINARY_DIR}/googletest-build"
   CONFIGURE_COMMAND ""

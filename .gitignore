@@ -3,3 +3,4 @@ build
 gtrace.log
 *.grt
 scenes/*.obj
+*.exe
