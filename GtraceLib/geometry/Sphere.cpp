@@ -4,9 +4,9 @@
 namespace gtrace {
 
 Sphere::Sphere(float radius, Material* material) :
-	Shape(std::make_shared<Transform>()),
-	radius(radius),
-	mat(material) {}
+    Shape(std::make_shared<Transform>()),
+    radius(radius),
+    mat(material) {}
 
 void Sphere::parse (const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
     this->parseTransform(parser, map);

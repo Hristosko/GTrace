@@ -72,11 +72,17 @@ public:
 
     bool operator<=(const Vector3f& a) const {
         const __m128 comp = _mm_cmple_ps(this->vec, a.vec);
-        return _mm_movemask_ps(comp) == 0xF;
+        const int x = _mm_movemask_ps(comp);
+        return (x&0x7) == 0x7; // ignore the last element
     }
     bool operator<(const Vector3f& a) const {
         const __m128 comp = _mm_cmplt_ps(this->vec, a.vec);
-        return _mm_movemask_ps(comp) >= 0x7; // we aren't intersted in the 4th element
+        const int x = _mm_movemask_ps(comp);
+        return (x&0x7) == 0x7; // ignore the last element
+    }
+
+    bool operator>=(const Vector3f& a) const {
+        return (a <= *this);
     }
 
     bool isAtLeastOneGreaterThan(float a) const {
