@@ -8,8 +8,8 @@ TEST(BBox, bound) {
     BBox a(Vector3f(0.f), Vector3f(1.f));
     BBox b(Vector3f(-1.f), Vector3f(0.f));
     BBox c = BBox::bound(a, b);
-    EXPECT_TRUE(compare(c.min(), Vector3f(-1.f)));
-    EXPECT_TRUE(compare(c.max(), Vector3f(1.f)));
+    ASSERT_EQ(c.min(), Vector3f(-1.f));
+    ASSERT_EQ(c.max(), Vector3f(1.f));
 }
 
 TEST(BBox, intersect) {
