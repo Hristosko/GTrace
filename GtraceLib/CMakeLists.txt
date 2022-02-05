@@ -1,48 +1,24 @@
 cmake_minimum_required(VERSION 3.5)
 project(GTraceLib)
 
-add_library(${PROJECT_NAME}
-    FileUtils.cpp
-    Logger.cpp
-    MemoryBench.cpp
-    Sampling.cpp
-
-    camera/OrthogonalCamera.cpp
-    camera/PinholeCamera.cpp
-
-    geometry/BBox.cpp
-    geometry/BVH.cpp
-    geometry/Mesh.cpp
-    geometry/Plane.cpp
-    geometry/Shape.cpp
-    geometry/Sphere.cpp
-    geometry/Triangle.cpp
-
-    integrator/DirectLightIntegrator.cpp
-
-    light/DirectionalLight.cpp
-
-    material/MatteMaterial.cpp
-
-    math/OrthonormalBasis.cpp
-    math/Utils.cpp
-
-    reflection/BSDF.cpp
-    reflection/BxDF.cpp
-    reflection/Fresnel.cpp
-    reflection/Specular.cpp
-
-    renderer/Renderer.cpp
-    renderer/RendererDisplay.cpp
-    renderer/RendererOutput.cpp
-    renderer/RendererStat.cpp
-
-    scene/Parser.cpp
-    scene/World.cpp
-
-    texture/NoiseTexture.cpp
-    texture/SolidNoise.cpp
+file(GLOB files
+    "*.cpp"
+    "camera/*.cpp"
+    "geometry/*.cpp"
+    "integrator/*.cpp"
+    "light/*.cpp"
+    "material/*.cpp"
+    "math/*.cpp"
+    "reflection/*.cpp"
+    "renderer/*.cpp"
+    "scene/*.cpp"
+    "texture/*.cpp"
 )
+
+add_library(${PROJECT_NAME}
+	${files}
+)
+
 
 add_library(sub::gtrace ALIAS ${PROJECT_NAME})
 
