@@ -38,18 +38,20 @@ def compile():
     with cd(build_dir):
         subprocess.run(['make'])
 
-def run_tests():
-    subprocess.run([build_directory() + '/unit_tests/GTaceUnitTests'])
+def run_tests(filter):
+    gtest_filter = '--gtest_filter=*' + filter + '*'
+    subprocess.run([build_directory() + '/unit_tests/GTaceUnitTests', gtest_filter])
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('action', choices=['clean', 'make', 'rebuild', 'test'])
+    parser.add_argument('--only', default='*')
     args = parser.parse_args()
-
+    print(args)
     actions = {
         'clean' : lambda: shutil.rmtree(build_directory()),
         'make' : compile,
         'rebuild': lambda: [shutil.rmtree(build_directory()), compile()],
-        'test' : run_tests,
+        'test' : lambda: run_tests(args.only),
     }
     actions[args.action]()
