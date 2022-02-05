@@ -4,7 +4,6 @@
 #include "math/OrthonormalBasis.h"
 #include "math/Transform.h"
 #include "geometry/Ray.h"
-#include "Ref.h"
 
 namespace gtrace {
 

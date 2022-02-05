@@ -12,7 +12,17 @@ add_subdirectory(google-test)
 enable_testing()
 
 # Add a testing executable
-add_executable(GTaceUnitTests test_ref.cpp test_geometry.cpp test_math.cpp)
+file(GLOB files
+    "*.cpp"
+    "geometry/*.cpp"
+    "math/*.cpp"
+)
+
+add_executable(GTaceUnitTests ${files})
+
+target_include_directories( ${PROJECT_NAME}
+    PUBLIC ${PROJECT_SOURCE_DIR}/.
+)
 
 target_link_libraries(GTaceUnitTests
     sub::gtrace
