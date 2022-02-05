@@ -4,18 +4,18 @@
 namespace gtrace {
 
 void Plane::parse (const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
-	this->parseTransform(parser, map);
-	parser.parsefloatAndStore(map, "x", this->x);
-	parser.parsefloatAndStore(map, "y", this->y);
+    this->parseTransform(parser, map);
+    parser.parsefloatAndStore(map, "x", this->x);
+    parser.parsefloatAndStore(map, "y", this->y);
     this->x *= 0.5f;
     this->y *= 0.5f;
-	parser.parseMaterialAndStore(map, "mat", this->mat);
+    parser.parseMaterialAndStore(map, "mat", this->mat);
 }
 
 bool Plane::hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const {
-	if (rec.shape == this) return false;
+    if (rec.shape == this) return false;
     const Vector3f origin = objectToWorld->invTransform(ray.origin);
-	const Vector3f direction = objectToWorld->invTransformDirection(ray.direction);
+    const Vector3f direction = objectToWorld->invTransformDirection(ray.direction);
 
     if (direction.z() == 0) return false;
     const float t = -origin.z() / direction.z();

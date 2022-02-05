@@ -52,9 +52,6 @@ TEST(Triangle, bbox)
     for (const auto& v : edges)
     {
         EXPECT_LE(v, bbox.max());
-        std::cout << v.x() << " " << v.y() << " " << v.z() << std::endl;
-        std::cout << bbox.min().x() << " " << bbox.min().y() << " " << bbox.min().z() << std::endl;
-        //EXPECT_GE(v, bbox.min());
-        EXPECT_LE(bbox.min(), v);
+        EXPECT_GE(v, bbox.min());
     }
 }
