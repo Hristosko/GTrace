@@ -3,6 +3,10 @@
 
 namespace gtrace {
 
+Plane::Plane(float x, float y) :
+    Shape(std::make_shared<Transform>()),
+    x(x * 0.5f), y(y * 0.5f), mat(nullptr) {}
+
 void Plane::parse (const SceneParser& parser, std::unordered_map<std::string, std::string>& map) {
     this->parseTransform(parser, map);
     parser.parsefloatAndStore(map, "x", this->x);

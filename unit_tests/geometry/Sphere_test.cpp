@@ -2,6 +2,7 @@
 #include "TestUtils.h"
 
 #include "geometry/Sphere.h"
+#include "geometry/BBox.h"
 
 using namespace gtrace;
 
@@ -10,6 +11,7 @@ TEST(Sphere, intersect_axis)
     const Sphere s(1.f);
     const Ray ray(Vector3f(2.f, 0.f, 0.f), Vector3f(-1.f, 0.f, 0.f));
     HitRecord rec;
+    ASSERT_TRUE(s.bbox().intersect(ray, 0.f, 1000.f));
     ASSERT_TRUE(s.hit(ray, 0.f, 1000.f, 0.f, rec));
     ASSERT_EQ(rec.normal, Vector3f(1.f, 0.f, 0.f)); // outwards
     ASSERT_NEAR(rec.t, 1.f, EPS);
@@ -33,6 +35,7 @@ TEST(Sphere, random_ray_towards_the_center)
     const Ray ray(origin, normalize(direction));
 
     HitRecord rec;
+    ASSERT_TRUE(s.bbox().intersect(ray, 0.f, 1000.f));
     ASSERT_TRUE(s.hit(ray, 0.f, 1000.f, 0.f, rec));
     ASSERT_NEAR(rec.normal.length(), 1.f, EPS);
 
