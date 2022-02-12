@@ -18,9 +18,12 @@ std::string asString<bool>(bool x) {
 
 class PerformanceProfilerBase {
 public:
+    using Clock = std::chrono::high_resolution_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
     PerformanceProfilerBase(const char* name) : name(name) {}
 
     const std::string& getName() const { return name; }
+
 protected:
     static constexpr const char* defaultName = "DefaultPerformanceProfiler";
     std::string name;
@@ -30,8 +33,6 @@ template<typename ReturnType>
 class PerformanceProfiler : PerformanceProfilerBase {
 public:
     using Type = ReturnType;
-    using Clock = std::chrono::high_resolution_clock;
-    using TimePoint = std::chrono::time_point<Clock>;
 
     PerformanceProfiler(const char* name = defaultName) : PerformanceProfilerBase(name) {}
 
@@ -89,54 +90,94 @@ private:
     std::array<PerformanceStat, size()> stats;
 };
 
-template<typename Profiler>
-class ProfilerRun {
+template<>
+class PerformanceProfiler<void> : PerformanceProfilerBase {
 public:
-    using EnterHandler = void(*)(ProfilerRun& run);
-    using ExitHandler = void(*)(ProfilerRun& run, typename Profiler::Type value);
+    PerformanceProfiler(const char* name = defaultName) : PerformanceProfilerBase(name) {}
 
-    enum State : bool {
-        Disabled,
-        Enabled
-    };
-
-    static void enterEnabled(ProfilerRun& run) {
-        run.start = Profiler::Clock::now();
+    void update(const TimePoint& start, const TimePoint& end) {
+        const auto time = std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
+        stat.add(1, time);
     }
 
-    static void exitEnabled(ProfilerRun& run, typename Profiler::Type value) {
-        typename Profiler::TimePoint end = Profiler::Clock::now();
-        run.profiler.update(value, run.start, end);
+    Performance perf() const {
+        return stat.perf();
     }
 
-    static void enterDisabled(ProfilerRun& run) {}
-
-    static void exitDisabled(ProfilerRun& run, typename Profiler::Type value) {}
-
-    ProfilerRun(Profiler& p, State state) : profiler(p)
-    {
-        if (state == State::Disabled)
-        {
-            onEnter = enterDisabled;
-            onExit = exitDisabled;
-        }
-        else
-        {
-            onEnter = enterEnabled;
-            onExit = exitEnabled;
-        }
+    std::string toString() const {
+        return name + perf().toString();
     }
 
-    void enter() { onEnter(*this); }
-    typename Profiler::Type exit(typename Profiler::Type value) {
+    void reset() {
+        stat.reset();
+    }
+
+private:
+    PerformanceStat stat;
+};
+
+template<typename T>
+struct ProfilerRunBase {
+    using EnterHandler = void(*)(ProfilerRunBase& run);
+
+    static void enterEnabled(ProfilerRunBase& run) {
+        run.start = PerformanceProfilerBase::Clock::now();
+    }
+    static void enterDisabled(ProfilerRunBase& run) {}
+
+    EnterHandler onEnter;
+    PerformanceProfilerBase::TimePoint start;
+    PerformanceProfiler<T>* profiler;
+};
+
+template<typename T>
+struct ProfilerRun : public ProfilerRunBase<T> {
+    using ExitHandler = void(*)(ProfilerRun& run, T value);
+
+    static void exitEnabled(ProfilerRun& run, T value) {
+        PerformanceProfilerBase::TimePoint end = PerformanceProfilerBase::Clock::now();
+        run.profiler->update(value, run.start, end);
+    }
+    static void exitDisabled(ProfilerRun& run, T value) {}
+
+    void enter() { ProfilerRunBase<T>::onEnter(*this); }
+    T exit(T value) {
         onExit(*this, value);
         return value;
     }
-private:
-    EnterHandler onEnter;
+
     ExitHandler onExit;
-    Profiler& profiler;
-    typename Profiler::TimePoint start;
 };
+
+template<>
+struct ProfilerRun<void> : public ProfilerRunBase<void> {
+    using ExitHandler = void(*)(ProfilerRun& run);
+
+    static void exitEnabled(ProfilerRun& run) {
+        PerformanceProfilerBase::TimePoint end = PerformanceProfilerBase::Clock::now();
+        run.profiler->update(run.start, end);
+    }
+    static void exitDisabled(ProfilerRun& run) {}
+
+    void enter() { ProfilerRunBase<void>::onEnter(*this); }
+    void exit() { onExit(*this); }
+
+    ExitHandler onExit;
+};
+
+template<typename T>
+ProfilerRun<T> makeProfileRun(PerformanceProfiler<T>* profiler) {
+    ProfilerRun<T> run;
+    run.profiler = profiler;
+    if (profiler) {
+        run.onEnter = ProfilerRun<T>::enterEnabled;
+        run.onExit = ProfilerRun<T>::exitEnabled;
+    }
+    else {
+        run.onEnter = ProfilerRun<T>::enterDisabled;
+        run.onExit = ProfilerRun<T>::exitDisabled;
+    }
+    return run;
+}
 
 }

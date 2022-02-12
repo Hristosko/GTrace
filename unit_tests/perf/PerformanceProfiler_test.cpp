@@ -9,10 +9,10 @@ using namespace gtrace;
 class PerformanceProfilerTest : public Test {
 public:
     using TestPerformanceProfiler = PerformanceProfiler<int8_t>;
-    using TestProfilerRun = ProfilerRun<TestPerformanceProfiler>;
+    using TestProfilerRun = ProfilerRun<int8_t>;
 
     TestProfilerRun getProfilerRun() {
-        auto run = TestProfilerRun(profiler, TestProfilerRun::State::Enabled);
+        auto run = makeProfileRun(&profiler);
         run.enter();
         return run;
     }
@@ -41,7 +41,7 @@ TEST_F(PerformanceProfilerTest, Init) {
 TEST_F(PerformanceProfilerTest, ProfilerRunDisabled) {
     const auto expectedResult = 26;
     const auto runTime = 1000;
-    auto run = TestProfilerRun(profiler, TestProfilerRun::State::Disabled);
+    auto run = makeProfileRun<int8_t>(nullptr);
     run.enter();
 
     simulateWork(runTime);
@@ -52,6 +52,7 @@ TEST_F(PerformanceProfilerTest, ProfilerRunDisabled) {
     EXPECT_EQ(0, perf.count);
     EXPECT_EQ(0, perf.time);
 }
+
 TEST_F(PerformanceProfilerTest, ProfilerRun) {
     const auto expectedResult = 26;
     const auto runTime = 10000;
@@ -103,6 +104,58 @@ TEST_F(PerformanceProfilerTest, MultiThreaded) {
     const auto perf = profiler.perf(result);
     EXPECT_EQ(numThreads, perf.count);
     EXPECT_GE(perf.time, runTime * numThreads);
+}
 
-    //std::cout << profiler.toString();
+class PerformanceProfilerVoidTest : public Test {
+public:
+    using TestPerformanceProfiler = PerformanceProfiler<void>;
+    using TestProfilerRun = ProfilerRun<void>;
+
+    TestProfilerRun getProfilerRun() {
+        auto run = makeProfileRun(&profiler);
+        run.enter();
+        return run;
+    }
+
+    void simulateWork(uint64_t ms) {
+        std::this_thread::sleep_for(std::chrono::microseconds(ms));
+    }
+
+    void SetUp() override {
+        profiler.reset();
+    }
+
+    TestPerformanceProfiler profiler;
+};
+
+TEST_F(PerformanceProfilerVoidTest, Init) {
+    const auto totalPerf = profiler.perf();
+    EXPECT_EQ(0, totalPerf.count);
+    EXPECT_EQ(0, totalPerf.time);
+}
+
+TEST_F(PerformanceProfilerVoidTest, ProfilerRunDisabled) {
+    const auto runTime = 1000;
+    auto run = makeProfileRun<void>(nullptr);
+    run.enter();
+
+    simulateWork(runTime);
+    run.exit();
+
+    const auto perf = profiler.perf();
+    EXPECT_EQ(0, perf.count);
+    EXPECT_EQ(0, perf.time);
+}
+
+TEST_F(PerformanceProfilerVoidTest, ProfilerRun) {
+    const auto runTime = 10000;
+
+    auto p = getProfilerRun();
+    simulateWork(runTime);
+    p.exit();
+
+    const auto perf = profiler.perf();
+
+    EXPECT_EQ(1, perf.count);
+    EXPECT_GE(perf.time, runTime);
 }

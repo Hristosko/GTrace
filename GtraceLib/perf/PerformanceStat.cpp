@@ -13,7 +13,7 @@ std::string Performance::toString() const {
     const std::string res =
     "\ncount: " + std::to_string(count) +
     "\nime: " + std::to_string(time) +
-    "\naverage: " + std::to_string(average);
+    "\naverage: " + std::to_string(average) + '\n';
     return res;
 }
 
