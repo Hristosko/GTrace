@@ -41,11 +41,17 @@ def compile():
 def run_tests(filter, repeat):
     gtest_filter = '--gtest_filter=*' + filter + '*'
     gtest_repeat = '--gtest_repeat=' + str(repeat)
-    subprocess.run([build_directory() + '/unit_tests/GTaceUnitTests', gtest_filter, gtest_repeat])
+    bin_path = os.path.join(build_directory(), 'unit_tests', 'GTaceUnitTests')
+    subprocess.run([bin_path, gtest_filter, gtest_repeat])
+
+def render(scene):
+    bin_path = os.path.join(build_directory(), 'GtraceConsole', 'GTaceConsole')
+    output_file = "script.grt"
+    subprocess.run([bin_path, scene, output_file])
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('action', choices=['clean', 'make', 'rebuild', 'test'])
+    parser.add_argument('action', choices=['clean', 'make', 'rebuild', 'test', 'render'])
     parser.add_argument('--target', default='*')
     parser.add_argument('--repeat', default=1)
     args = parser.parse_args()
@@ -55,5 +61,6 @@ if __name__ == "__main__":
         'make' : compile,
         'rebuild': lambda: [shutil.rmtree(build_directory()), compile()],
         'test' : lambda: run_tests(args.target, args.repeat),
+        'render': lambda: render(args.target)
     }
     actions[args.action]()
