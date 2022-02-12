@@ -1,9 +1,12 @@
 #pragma once
+#include "gtest/gtest.h"
 
 #include "math/Vector3f.h"
 #include "math/Matrix4x4.h"
 #include "math/Transform.h"
 #define EPS 0.001
+
+using Test = ::testing::Test;
 
 namespace gtrace {
 
