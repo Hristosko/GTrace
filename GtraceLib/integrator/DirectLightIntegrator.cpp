@@ -4,17 +4,17 @@
 
 namespace gtrace {
 
-Color3f DirectLightIntegrator::Li(SecondaryRaysStat& stat, const World& w, const Ray& ray, RandomGenerator& rng, int depth) const {
-	HitRecord hr;
-	bool hitsGeometry = w.intersect(ray, hr);
-	if (hitsGeometry == false) return Vector3f(0.f);
-	if (hr.mat == nullptr)
-	{
-		LOGWARNING("Ray hits the geometry but there is no material.");
-		return Vector3f(0.f);
-	}
-	BSDF bsdf = hr.mat->getBSDF(ray, hr);
-	return estimateAllLightSources(stat, w, hr, ray.direction, bsdf, rng);
+Color3f DirectLightIntegrator::Li(RayTracingStat& stat, const Ray& ray, RandomGenerator& rng, int depth) const {
+    HitRecord hr;
+    bool hitsGeometry = world.intersect(ray, hr);
+    if (hitsGeometry == false) return Vector3f(0.f);
+    if (hr.mat == nullptr)
+    {
+        LOGWARNING("Ray hits the geometry but there is no material.");
+        return Vector3f(0.f);
+    }
+    BSDF bsdf = hr.mat->getBSDF(ray, hr);
+    return estimateAllLightSources(stat, hr, ray.direction, bsdf, rng);
 }
 
 /**
@@ -29,39 +29,42 @@ Color3f DirectLightIntegrator::Li(SecondaryRaysStat& stat, const World& w, const
  * @return The contribution of the light source
  */
 Color3f DirectLightIntegrator::estimateFromLightSource(
-	SecondaryRaysStat& stat,
-	const World& world, const Light* light, const HitRecord& hr,
-	const Vector3f& wo, const BSDF& bsdf, RandomGenerator& rng) {
+    RayTracingStat& stat,
+    const Light* light,
+    const HitRecord& hr,
+    const Vector3f& wo,
+    const BSDF& bsdf,
+    RandomGenerator& rng) const {
 
-	assert(light != nullptr);
-	Vector3f res(0.f);
-	bool canHitLight = light->canBeHit();
+    assert(light != nullptr);
+    Color3f res(0.f);
+    bool canHitLight = light->canBeHit();
 
-	Vector3f wi;
-	float pdfLight;
-	const Point2f uLight(rng.get(), rng.get());
-	const Color3f li = light->sample(hr, uLight, wi, pdfLight);
-	stat.addLightSample();
+    Vector3f wi;
+    float pdfLight;
+    const Point2f uLight(rng.get(), rng.get());
+    const Color3f li = light->sample(hr, uLight, wi, pdfLight);
+    stat.addLightSample();
 
-	// make new record for the next interation
-	// inherite some data from the old record
-	HitRecord rec = HitRecord::make(hr);
-	if (pdfLight > 0.f /*&& !li.isBlack()*/
-		&& !world.intersect(Ray(hr.position, wi), rec)) {
-		const Color3f f = bsdf.f(wo, wi, BxDFType::All);
-		if (canHitLight == false) {
-			res += f * fabsf(dot(wi, hr.normal)) * li / pdfLight;
-		}
-		else {
-			assert(false); // not implemented yet
-		}
-	}
+    // make new record for the next interation
+    // inherite some data from the old record
+    HitRecord rec = HitRecord::make(hr);
+    if (pdfLight > 0.f /*&& !li.isBlack()*/
+        && !world.intersect(Ray(hr.position, wi), rec)) {
+        const Color3f f = bsdf.f(wo, wi, BxDFType::All);
+        if (canHitLight == false) {
+            res += f * fabsf(dot(wi, hr.normal)) * li / pdfLight;
+        }
+        else {
+            assert(false); // not implemented yet
+        }
+    }
 
-	if (canHitLight) {
-		assert(false); // Sample the bsdf
-	}
+    if (canHitLight) {
+        assert(false); // Sample the bsdf
+    }
 
-	return res;
+    return res;
 }
 
 /**
@@ -75,17 +78,19 @@ Color3f DirectLightIntegrator::estimateFromLightSource(
  * @return The contribution of the light sources
  */
 Color3f DirectLightIntegrator::estimateAllLightSources(
-	SecondaryRaysStat& stat,
-	const World& world, const HitRecord& hr, const Vector3f& wo,
-	const BSDF& bsdf, RandomGenerator& rng) {
+    RayTracingStat& stat,
+    const HitRecord& hr,
+    const Vector3f& wo,
+    const BSDF& bsdf,
+    RandomGenerator& rng) const {
 
-	Vector3f res(0.f);
-	const auto& lights = world.getLights();
+    Vector3f res(0.f);
+    const auto& lights = world.getLights();
 
-	for (const auto& light : lights) {
-		res += estimateFromLightSource(stat, world, light.get(), hr, wo, bsdf, rng);
-	}
+    for (const auto& light : lights) {
+        res += estimateFromLightSource(stat, light.get(), hr, wo, bsdf, rng);
+    }
 
-	return res;
+    return res;
 }
 }

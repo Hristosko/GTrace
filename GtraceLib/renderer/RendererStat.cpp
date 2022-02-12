@@ -4,12 +4,12 @@
 
 namespace gtrace {
 
-SecondaryRaysStat::SecondaryRaysStat():
+RayTracingStat::RayTracingStat():
 	ligthSamples(0) {}
 
 void RendererStat::renderBegin() {
 	this->mainSamples = this->rayCasts = 0;
-	this->totalSecondaryRays = SecondaryRaysStat();
+	this->totalSecondaryRays = RayTracingStat();
 }
 
 void RendererStat::updateStat(uint32_t samples, uint32_t rays) {
@@ -18,7 +18,7 @@ void RendererStat::updateStat(uint32_t samples, uint32_t rays) {
 	this->rayCasts += rays;
 }
 
-void RendererStat::updateStat(const SecondaryRaysStat& sr) {
+void RendererStat::updateStat(const RayTracingStat& sr) {
 	std::lock_guard<std::mutex> lock(this->mut);
 	this->totalSecondaryRays.ligthSamples += sr.ligthSamples;
 }

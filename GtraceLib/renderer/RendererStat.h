@@ -7,24 +7,24 @@ namespace gtrace {
 
 class World;
 
-struct SecondaryRaysStat {
-	uint32_t ligthSamples;
+struct RayTracingStat {
+    uint32_t ligthSamples;
 
-	SecondaryRaysStat();
+    RayTracingStat();
 
-	void addLightSample() { ++ligthSamples; }
+    void addLightSample() { ++ligthSamples; }
 };
 
 class RendererStat {
 public:
-	void renderBegin();
-	void updateStat(uint32_t samples, uint32_t rays);
-	void updateStat(const SecondaryRaysStat& sr);
-	void renderFinish(const World& w) const;
+    void renderBegin();
+    void updateStat(uint32_t samples, uint32_t rays);
+    void updateStat(const RayTracingStat& sr);
+    void renderFinish(const World& w) const;
 private:
-	std::mutex mut;
-	uint32_t mainSamples;
-	uint32_t rayCasts;
-	SecondaryRaysStat totalSecondaryRays;
+    std::mutex mut;
+    uint32_t mainSamples;
+    uint32_t rayCasts;
+    RayTracingStat totalSecondaryRays;
 };
 }

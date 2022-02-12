@@ -54,7 +54,7 @@ void Renderer::rayTrace(uint32_t realix, uint32_t realiy,
     Vector3f sum(0.f);
     Vector3f sumSqr(0.f);
     uint32_t totalSamples = 0;
-    SecondaryRaysStat srs;
+    RayTracingStat srs;
 
     const uint32_t maxSubdivs = this->world.getSettings().maxSubdivs;
     float tresh = this->world.getSettings().stdTreshhold;
@@ -92,7 +92,7 @@ void Renderer::rayTrace(uint32_t realix, uint32_t realiy,
 void Renderer::rayTraceWithSamples(
     uint32_t ix, uint32_t iy, uint32_t samples,
     Vector3f& sum, Vector3f& sumSqr, uint32_t& totalSamples,
-    SecondaryRaysStat& stat) {
+    RayTracingStat& stat) {
 
     const int64_t camx = (int64_t)ix - this->world.getSettings().width / 2;
     const int64_t camy = (int64_t)iy - this->world.getSettings().height / 2;
@@ -108,7 +108,7 @@ void Renderer::rayTraceWithSamples(
             ray.px = ix;
             ray.py = iy;
             ray.renderer = this;
-            const Vector3f color = this->integrator->Li(stat, this->world, ray, this->rng, 0);
+            const Vector3f color = this->integrator->Li(stat, ray, this->rng, 0);
             sum += color;
             sumSqr += (color * color);
         }
