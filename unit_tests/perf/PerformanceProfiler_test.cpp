@@ -9,10 +9,12 @@ using namespace gtrace;
 class PerformanceProfilerTest : public Test {
 public:
     using TestPerformanceProfiler = PerformanceProfiler<int8_t>;
-    using TestProfiler = ScopeProfiler<TestPerformanceProfiler>;
+    using TestProfilerRun = ProfilerRun<TestPerformanceProfiler>;
 
-    TestProfiler getProfiler() {
-        return TestProfiler(profiler);
+    TestProfilerRun getProfilerRun() {
+        auto run = TestProfilerRun(profiler, TestProfilerRun::State::Enabled);
+        run.enter();
+        return run;
     }
 
     void simulateWork(uint64_t ms) {
@@ -36,11 +38,25 @@ TEST_F(PerformanceProfilerTest, Init) {
     EXPECT_EQ(0, totalPerf.time);
 }
 
-TEST_F(PerformanceProfilerTest, FunctionProfiler) {
+TEST_F(PerformanceProfilerTest, ProfilerRunDisabled) {
+    const auto expectedResult = 26;
+    const auto runTime = 1000;
+    auto run = TestProfilerRun(profiler, TestProfilerRun::State::Disabled);
+    run.enter();
+
+    simulateWork(runTime);
+    auto res = run.exit(expectedResult);
+
+    EXPECT_EQ(expectedResult, res);
+    const auto perf = profiler.perf(res);
+    EXPECT_EQ(0, perf.count);
+    EXPECT_EQ(0, perf.time);
+}
+TEST_F(PerformanceProfilerTest, ProfilerRun) {
     const auto expectedResult = 26;
     const auto runTime = 10000;
 
-    auto p = getProfiler();
+    auto p = getProfilerRun();
     simulateWork(runTime);
     const auto result = p.exit(expectedResult);
 
@@ -73,7 +89,7 @@ TEST_F(PerformanceProfilerTest, MultiThreaded) {
         const uint64_t runTime;
 
         void run(unsigned threadIdx, unsigned numThreads) override {
-            auto p = test->getProfiler();
+            auto p = test->getProfilerRun();
             test->simulateWork(runTime);
             p.exit(result);
         }

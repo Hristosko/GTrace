@@ -86,21 +86,55 @@ private:
         return getIndex(std::numeric_limits<Type>::max()) + 1;
     }
 
-    std::string name;
     std::array<PerformanceStat, size()> stats;
 };
 
 template<typename Profiler>
-class ScopeProfiler {
+class ProfilerRun {
 public:
-    ScopeProfiler(Profiler& p) : profiler(p), start(Profiler::Clock::now()) {}
+    using EnterHandler = void(*)(ProfilerRun& run);
+    using ExitHandler = void(*)(ProfilerRun& run, typename Profiler::Type value);
 
-    typename Profiler::Type exit(typename Profiler::Type value) {
+    enum State : bool {
+        Disabled,
+        Enabled
+    };
+
+    static void enterEnabled(ProfilerRun& run) {
+        run.start = Profiler::Clock::now();
+    }
+
+    static void exitEnabled(ProfilerRun& run, typename Profiler::Type value) {
         typename Profiler::TimePoint end = Profiler::Clock::now();
-        profiler.update(value, start, end);
+        run.profiler.update(value, run.start, end);
+    }
+
+    static void enterDisabled(ProfilerRun& run) {}
+
+    static void exitDisabled(ProfilerRun& run, typename Profiler::Type value) {}
+
+    ProfilerRun(Profiler& p, State state) : profiler(p)
+    {
+        if (state == State::Disabled)
+        {
+            onEnter = enterDisabled;
+            onExit = exitDisabled;
+        }
+        else
+        {
+            onEnter = enterEnabled;
+            onExit = exitEnabled;
+        }
+    }
+
+    void enter() { onEnter(*this); }
+    typename Profiler::Type exit(typename Profiler::Type value) {
+        onExit(*this, value);
         return value;
     }
 private:
+    EnterHandler onEnter;
+    ExitHandler onExit;
     Profiler& profiler;
     typename Profiler::TimePoint start;
 };
