@@ -9,6 +9,7 @@ file(GLOB files
     "light/*.cpp"
     "material/*.cpp"
     "math/*.cpp"
+	"perf.*.cpp"
     "reflection/*.cpp"
     "renderer/*.cpp"
     "scene/*.cpp"

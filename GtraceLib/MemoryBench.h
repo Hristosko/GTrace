@@ -9,12 +9,12 @@ namespace MemoryBench {
 
 using Counter = uint64_t;
 struct Data {
-	Counter totalAllocatedMemory;
-	Counter peakMemoryUsage;
-	Counter allocationCount;
-	Counter freeCount;
+    Counter totalAllocatedMemory;
+    Counter peakMemoryUsage;
+    Counter allocationCount;
+    Counter freeCount;
 #ifdef __unix__
-	Counter totalRequestedMemory;
+    Counter totalRequestedMemory;
 #endif // __unix__
 };
 
