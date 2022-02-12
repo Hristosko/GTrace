@@ -9,7 +9,7 @@ using namespace gtrace;
 class PerformanceProfilerTest : public Test {
 public:
     using TestPerformanceProfiler = PerformanceProfiler<int8_t>;
-    using TestProfiler = FunctionProfiler<TestPerformanceProfiler>;
+    using TestProfiler = ScopeProfiler<TestPerformanceProfiler>;
 
     TestProfiler getProfiler() {
         return TestProfiler(profiler);
@@ -54,7 +54,7 @@ TEST_F(PerformanceProfilerTest, FunctionProfiler) {
     EXPECT_GE(totalPerf.time, runTime);
     EXPECT_GE(perf.time, runTime);
 
-    const auto errorTreshold = 1100;
+    const auto errorTreshold = 1200;
     EXPECT_LT(totalPerf.time, runTime + errorTreshold);
     EXPECT_LT(perf.time, runTime + errorTreshold);
 }
@@ -87,5 +87,6 @@ TEST_F(PerformanceProfilerTest, MultiThreaded) {
     const auto perf = profiler.perf(result);
     EXPECT_EQ(numThreads, perf.count);
     EXPECT_GE(perf.time, runTime * numThreads);
-}
 
+    //std::cout << profiler.toString();
+}

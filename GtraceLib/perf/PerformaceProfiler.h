@@ -1,78 +1,99 @@
 #pragma once
 
 #include <array>
-#include <atomic>
 #include <limits>
 #include <chrono>
 
+#include "PerformanceStat.h"
+
 namespace gtrace {
 
-struct Performance {
-    uint64_t count;
-    uint64_t time;
+template<typename T>
+std::string asString(T x) { return std::to_string(x); }
 
-    Performance& operator+=(const Performance& rhs) {
-        count += rhs.count;
-        time += rhs.time;
-        return *this;
-    }
+template<>
+std::string asString<bool>(bool x) {
+    return x ? "True" : "False";
+}
+
+class PerformanceProfilerBase {
+public:
+    PerformanceProfilerBase(const char* name) : name(name) {}
+
+    const std::string& getName() const { return name; }
+protected:
+    static constexpr const char* defaultName = "DefaultPerformanceProfiler";
+    std::string name;
 };
 
 template<typename ReturnType>
-class PerformanceProfiler {
+class PerformanceProfiler : PerformanceProfilerBase {
 public:
     using Type = ReturnType;
     using Clock = std::chrono::high_resolution_clock;
     using TimePoint = std::chrono::time_point<Clock>;
 
+    PerformanceProfiler(const char* name = defaultName) : PerformanceProfilerBase(name) {}
+
     void update(Type value, const TimePoint& start, const TimePoint& end) {
         const auto time = std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
-        auto& stat = stats[value];
-        stat.count.fetch_add(1, std::memory_order::memory_order_relaxed);
-        stat.time.fetch_add(time, std::memory_order::memory_order_relaxed);
+        auto& stat = stats[getIndex(value)];
+        stat.add(1, time);
     }
 
     Performance perf(Type value) const {
-        const auto& stat = stats[value];
-        return Performance{
-            stat.count.load(std::memory_order::memory_order_relaxed),
-            stat.time.load(std::memory_order::memory_order_relaxed)
-        };
+        const auto& stat = stats[getIndex(value)];
+        return stat.perf();
     }
 
     Performance perf() const {
-        Performance p {0, 0};
+        Performance p;
 
-        for (size_t i = 0; i < stats.size(); ++i)
+        for (Type i = std::numeric_limits<Type>::min();; ++i)
+        {
             p += perf(i);
-
+            if (i == std::numeric_limits<Type>::max()) break;
+        }
         return p;
     }
 
     void reset() {
         for (auto& stat : stats) {
-            stat.count.store(0, std::memory_order::memory_order_relaxed);
-            stat.time.store(0, std::memory_order::memory_order_relaxed);
+            stat.reset();
         }
     }
 
-private:
-    struct PerfStat {
-        std::atomic<uint64_t> count;
-        std::atomic<uint64_t> time;
-    };
+    std::string toString() const {
+        std::string res = name;
 
-    static constexpr size_t size() {
-        return std::numeric_limits<Type>::max() - std::numeric_limits<Type>::min();
+        res += '\n';
+        res += "Total: {" + perf().toString() + "}\n";
+        for (Type i = std::numeric_limits<Type>::min();; ++i)
+        {
+            res += asString<Type>(i) + ": {" + perf(i).toString() + "}\n";
+            if (i == std::numeric_limits<Type>::max()) break;
+        }
+
+        return res;
     }
 
-    std::array<PerfStat, std::numeric_limits<Type>::max()> stats;
+private:
+    static constexpr size_t getIndex(Type x) {
+        return static_cast<size_t>(x) - std::numeric_limits<Type>::min();
+    }
+
+    static constexpr size_t size() {
+        return getIndex(std::numeric_limits<Type>::max()) + 1;
+    }
+
+    std::string name;
+    std::array<PerformanceStat, size()> stats;
 };
 
 template<typename Profiler>
-class FunctionProfiler {
+class ScopeProfiler {
 public:
-    FunctionProfiler(Profiler& p) : profiler(p), start(Profiler::Clock::now()) {}
+    ScopeProfiler(Profiler& p) : profiler(p), start(Profiler::Clock::now()) {}
 
     typename Profiler::Type exit(typename Profiler::Type value) {
         typename Profiler::TimePoint end = Profiler::Clock::now();
