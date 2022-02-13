@@ -34,7 +34,10 @@ def build_directory():
 
 def compile():
     build_dir = build_directory()
-    subprocess.run(['cmake', '-H.', '-B' + build_dir])
+    compiler = []
+    if platform == 'lin':
+        compiler = ['-D' ,'CMAKE_CXX_COMPILER=gcc-9']
+    subprocess.run(['cmake', '-H.', '-B' + build_dir] + compiler)
     with cd(build_dir):
         subprocess.run(['make'])
 

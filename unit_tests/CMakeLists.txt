@@ -15,6 +15,7 @@ enable_testing()
 file(GLOB files
     "*.cpp"
     "math/*.cpp"
+    "parser/*.cpp"
 )
 
 add_executable(GTaceUnitTests ${files})
