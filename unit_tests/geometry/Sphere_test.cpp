@@ -31,7 +31,7 @@ TEST_F(SphereTest, intersect_axis)
     Intersection intersection;
     ASSERT_TRUE(s.bbox().intersect(ray, 0.f, 1000.f));
     ASSERT_TRUE(s.hit(ray, 0.f, 1000.f, 0.f, &intersection));
-    ASSERT_EQ(intersection.normal, Vector3f(1.f, 0.f, 0.f)); // outwards
+    ASSERT_EQ(intersection.normal, Vector3f(1.f, 0.f, 0.f));  // outwards
     ASSERT_NEAR(intersection.time, 1.f, EPS);
 }
 

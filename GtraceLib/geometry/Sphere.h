@@ -2,9 +2,10 @@
 
 #include "Shape.h"
 
-namespace gtrace {
-
-class Sphere : public Shape {
+namespace gtrace
+{
+class Sphere : public Shape
+{
 public:
     Sphere(const ParsedParams& params);
 
@@ -14,4 +15,4 @@ public:
 private:
     float radius; /** The radius of the sphere */
 };
-}
+}  // namespace gtrace

@@ -3,7 +3,6 @@
 
 namespace gtrace
 {
-
 class Shape;
 struct Intersection
 {
