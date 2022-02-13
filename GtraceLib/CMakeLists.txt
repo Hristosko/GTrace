@@ -3,6 +3,7 @@ project(GTraceLib)
 
 file(GLOB files
 	"common/*.cpp"
+    "geometry/*.cpp"
     "math/*.cpp"
     "parser/*.cpp"
 )

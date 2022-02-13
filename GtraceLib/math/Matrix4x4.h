@@ -30,6 +30,8 @@ public:
     {
     }
 
+    Matrix4x4& operator*=(const Matrix4x4& rhs);
+
     Vector3f operator[](int i) const { return this->rows[i]; }
     Matrix4x4 transposed() const
     {
@@ -90,6 +92,13 @@ inline Matrix4x4 operator*(const Matrix4x4& a, const Matrix4x4& b)
     __m256 out23 = twoRowsMult(a.m256[1], b);
     return Matrix4x4(out01, out23);
 }
+
+inline Matrix4x4& Matrix4x4::operator*=(const Matrix4x4& rhs)
+{
+    *this = *this * rhs;
+    return *this;
+}
+
 /// a*b
 inline __m128 mult2x2(const __m128& a, const __m128& b)
 {

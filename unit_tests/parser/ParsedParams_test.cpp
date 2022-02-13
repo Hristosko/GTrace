@@ -1,5 +1,5 @@
 #include "TestUtils.h"
-#include "parser/ParesedParams.h"
+#include "parser/ParsedParams.h"
 #include "common/Errors.h"
 
 using namespace gtrace;

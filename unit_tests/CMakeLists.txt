@@ -14,6 +14,7 @@ enable_testing()
 # Add a testing executable
 file(GLOB files
     "*.cpp"
+    "geometry/*.cpp"
     "math/*.cpp"
     "parser/*.cpp"
 )
