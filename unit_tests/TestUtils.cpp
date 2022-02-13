@@ -1,5 +1,5 @@
 #include "TestUtils.h"
-#include "Random.h"
+#include "common/Random.h"
 
 namespace gtrace {
 

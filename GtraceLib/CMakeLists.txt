@@ -2,18 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 project(GTraceLib)
 
 file(GLOB files
-    "*.cpp"
-    "camera/*.cpp"
-    "geometry/*.cpp"
-    "integrator/*.cpp"
-    "light/*.cpp"
-    "material/*.cpp"
+	"common/*.cpp"
     "math/*.cpp"
-	"perf/*.cpp"
-    "reflection/*.cpp"
-    "renderer/*.cpp"
-    "scene/*.cpp"
-    "texture/*.cpp"
 )
 
 add_library(${PROJECT_NAME}
