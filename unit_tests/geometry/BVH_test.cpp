@@ -7,53 +7,51 @@
 
 using namespace gtrace;
 
-class TestShape : public Shape {
+class TestShape : public Shape
+{
 public:
     static int hitCallsCount;
-    TestShape(float R, const Vector3f& pos) {
+    TestShape(float R, const Vector3f& pos)
+    {
         World w;
         const SceneParser parser(w);
         std::unordered_map<std::string, std::string> settings;
         settings["radius"] = std::to_string(R);
-        settings["position"] = std::string("(") +
-            std::to_string(pos.x()) + ", " +
-            std::to_string(pos.y()) + ", " +
-            std::to_string(pos.z()) + ')';
+        settings["position"] = std::string("(") + std::to_string(pos.x()) + ", " + std::to_string(pos.y()) + ", " +
+                               std::to_string(pos.z()) + ')';
         this->parse(parser, settings);
     }
 
-    virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const override {
+    virtual bool hit(const Ray& ray, float tmin, float tmax, float time, HitRecord& rec) const override
+    {
         ++hitCallsCount;
         return sphere.hit(ray, tmin, tmax, time, rec);
     }
-    virtual BBox bbox() const override {
-        return sphere.bbox();
-    }
+    virtual BBox bbox() const override { return sphere.bbox(); }
+
 private:
-    virtual void parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) override {
+    virtual void parse(const SceneParser& parser, std::unordered_map<std::string, std::string>& map) override
+    {
         sphere.parse(parser, map);
     }
+
 private:
     Sphere sphere;
 };
 
 int TestShape::hitCallsCount = 0;
 
-class BVHTest : public Test {
+class BVHTest : public Test
+{
 public:
-    void SetUp() override {
+    void SetUp() override
+    {
         TestShape::hitCallsCount = 0;
 
         std::vector<std::unique_ptr<Shape>> shapes;
         std::vector<Vector3f> positions = {
-            Vector3f(1.f, 1.f, 1.f),
-            Vector3f(1.f, 1.f, -1.f),
-            Vector3f(1.f, -1.f, 1.f),
-            Vector3f(1.f, -1.f, -1.f),
-            Vector3f(-1.f, 1.f, 1.f),
-            Vector3f(-1.f, 1.f, -1.f),
-            Vector3f(-1.f, -1.f, 1.f),
-            Vector3f(-1.f, -1.f, -1.f),
+            Vector3f(1.f, 1.f, 1.f),  Vector3f(1.f, 1.f, -1.f),  Vector3f(1.f, -1.f, 1.f),  Vector3f(1.f, -1.f, -1.f),
+            Vector3f(-1.f, 1.f, 1.f), Vector3f(-1.f, 1.f, -1.f), Vector3f(-1.f, -1.f, 1.f), Vector3f(-1.f, -1.f, -1.f),
         };
 
         shapes.reserve(positions.size());

@@ -4,7 +4,8 @@
 
 using namespace gtrace;
 
-TEST(Vector3f, maxElement) {
+TEST(Vector3f, maxElement)
+{
     {
         const Vector3f v(1, 2, 3);
         const float f = 4;
@@ -19,7 +20,8 @@ TEST(Vector3f, maxElement) {
     }
 }
 
-TEST(Vector3f, minElement) {
+TEST(Vector3f, minElement)
+{
     {
         const Vector3f v(1, 2, 3);
         const float f = -1;
@@ -34,7 +36,8 @@ TEST(Vector3f, minElement) {
     }
 }
 
-TEST(Vector3f, comparing) {
+TEST(Vector3f, comparing)
+{
     {
         const Vector3f a(0.f);
         const Vector3f b(1.f);
@@ -52,7 +55,8 @@ TEST(Vector3f, comparing) {
     }
 }
 
-TEST(Vector3f, isAtLeastOneGreaterThan) {
+TEST(Vector3f, isAtLeastOneGreaterThan)
+{
     {
         const Vector3f v(0.f, 2.f, 0.f);
         bool res = v.isAtLeastOneGreaterThan(1.f);
@@ -60,7 +64,8 @@ TEST(Vector3f, isAtLeastOneGreaterThan) {
     }
 }
 
-TEST(Vector3f, sqrt) {
+TEST(Vector3f, sqrt)
+{
     const Vector3f v(0.25f, 10.f, 625.f);
     const Vector3f expected(sqrtf(0.25f), sqrtf(10.f), sqrtf(625.f));
     const Vector3f res = sqrt(v);

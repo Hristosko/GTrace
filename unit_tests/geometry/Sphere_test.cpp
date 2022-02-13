@@ -13,7 +13,7 @@ TEST(Sphere, intersect_axis)
     HitRecord rec;
     ASSERT_TRUE(s.bbox().intersect(ray, 0.f, 1000.f));
     ASSERT_TRUE(s.hit(ray, 0.f, 1000.f, 0.f, rec));
-    ASSERT_EQ(rec.normal, Vector3f(1.f, 0.f, 0.f)); // outwards
+    ASSERT_EQ(rec.normal, Vector3f(1.f, 0.f, 0.f));  // outwards
     ASSERT_NEAR(rec.t, 1.f, EPS);
 }
 

@@ -4,6 +4,7 @@ project(GTraceLib)
 file(GLOB files
 	"common/*.cpp"
     "math/*.cpp"
+    "parser/*.cpp"
 )
 
 add_library(${PROJECT_NAME}

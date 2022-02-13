@@ -4,7 +4,8 @@
 
 using namespace gtrace;
 
-TEST(SphericalCoordinates, Theta) {
+TEST(SphericalCoordinates, Theta)
+{
     // The spherical coordinates are: (r=1, theta = 30, phi = 60)
     Vector3f vec(0.25f, 0.4330127019f, 0.8660254038f);
     vec = normalize(vec);
@@ -12,7 +13,7 @@ TEST(SphericalCoordinates, Theta) {
     float theta = degToRad(30);
     ASSERT_TRUE(compare(cosf(theta), cosTheta(vec)));
     ASSERT_TRUE(compare(sinf(theta), sinTheta(vec)));
-    ASSERT_TRUE(compare(sinf(theta)*sinf(theta), sin2Theta(vec)));
+    ASSERT_TRUE(compare(sinf(theta) * sinf(theta), sin2Theta(vec)));
 
     // The spherical coordinates are: (r=1, theta = 30, phi = 120)
     vec = normalize(Vector3f(-0.25f, 0.4330127019f, 0.8660254038f));
@@ -22,7 +23,8 @@ TEST(SphericalCoordinates, Theta) {
     ASSERT_TRUE(compare(sinf(theta) * sinf(theta), sin2Theta(vec)));
 }
 
-TEST(SphericalCoordinates, Theta2ndQuad) {
+TEST(SphericalCoordinates, Theta2ndQuad)
+{
     // The spherical coordinates are: (r=1, theta = 150, phi = 60)
     Vector3f vec(0.25f, 0.4330127019f, -0.8660254038f);
     vec = normalize(vec);
@@ -33,7 +35,8 @@ TEST(SphericalCoordinates, Theta2ndQuad) {
     ASSERT_TRUE(compare(sinf(theta) * sinf(theta), sin2Theta(vec)));
 }
 
-TEST(SphericalCoordinates, Phi) {
+TEST(SphericalCoordinates, Phi)
+{
     // The spherical coordinates are: (r=1, theta = 30, phi = 60)
     Vector3f vec(0.25f, 0.4330127019f, 0.8660254038f);
     vec = normalize(vec);
@@ -43,7 +46,8 @@ TEST(SphericalCoordinates, Phi) {
     ASSERT_TRUE(compare(sinf(theta), sinPhi(vec)));
 }
 
-TEST(SphericalCoordinates, Phi2ndQuad) {
+TEST(SphericalCoordinates, Phi2ndQuad)
+{
     // The spherical coordinates are: (r=1, theta = 30, phi = 120)
     Vector3f vec(-0.25f, 0.4330127019f, 0.8660254038f);
     vec = normalize(vec);
@@ -53,7 +57,8 @@ TEST(SphericalCoordinates, Phi2ndQuad) {
     ASSERT_TRUE(compare(sinf(theta), sinPhi(vec)));
 }
 
-TEST(SphericalCoordinates, Phi3rdQuad) {
+TEST(SphericalCoordinates, Phi3rdQuad)
+{
     // The spherical coordinates are: (r=1, theta = 30, phi = 240)
     Vector3f vec(-0.25f, -0.4330127019f, 0.8660254038f);
     vec = normalize(vec);
@@ -63,7 +68,8 @@ TEST(SphericalCoordinates, Phi3rdQuad) {
     ASSERT_TRUE(compare(sinf(theta), sinPhi(vec)));
 }
 
-TEST(SphericalCoordinates, Phi4rdQuad) {
+TEST(SphericalCoordinates, Phi4rdQuad)
+{
     // The spherical coordinates are: (r=1, theta = 30, phi = 300)
     Vector3f vec(0.25f, -0.4330127019f, 0.8660254038f);
     vec = normalize(vec);

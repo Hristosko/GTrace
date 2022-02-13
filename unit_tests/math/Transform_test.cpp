@@ -4,13 +4,14 @@
 
 using namespace gtrace;
 
-TEST(Transform, transform) {
+TEST(Transform, transform)
+{
     const Vector3f init(1, 2, 3);
-    const float mf[] = { 1,0,0,1,0,2,1,2,2,1,0,1,2,0,1,4 };
+    const float mf[] = {1, 0, 0, 1, 0, 2, 1, 2, 2, 1, 0, 1, 2, 0, 1, 4};
     const Matrix4x4 m(mf);
     Transform tr(m);
     auto res = tr.transform(init);
-    auto expRes = _mm_setr_ps(2.f/9, 1, 5.f/9, 1);
+    auto expRes = _mm_setr_ps(2.f / 9, 1, 5.f / 9, 1);
     EXPECT_TRUE(compare(expRes, res, true));
 
     res = tr.invTransform(init);
@@ -21,8 +22,8 @@ TEST(Transform, transform) {
     EXPECT_TRUE(compare(init, res, false));
 }
 
-
-TEST(Transform, translation) {
+TEST(Transform, translation)
+{
     const Vector3f init(1, 2, 3);
     const Vector3f trans(1, 1, 1);
     const Matrix4x4 m = Transform::makeTranslation(trans);
@@ -31,7 +32,8 @@ TEST(Transform, translation) {
     EXPECT_TRUE(compare(init + trans, res));
 }
 
-TEST(Transform, rotation) {
+TEST(Transform, rotation)
+{
     const Vector3f init(1, 1, 1);
     {
         const Matrix4x4 m = Transform::makeRotationX(180.f);
@@ -59,7 +61,8 @@ TEST(Transform, rotation) {
     }
 }
 
-TEST(Transform, scale) {
+TEST(Transform, scale)
+{
     const Vector3f init(1, 2, 3);
     const Matrix4x4 m = Transform::makeScale(2.f);
     Transform tr(m);
@@ -69,13 +72,11 @@ TEST(Transform, scale) {
     EXPECT_TRUE(compare(init * 0.5f, res));
 }
 
-TEST(Transform, changeBasis) {
+TEST(Transform, changeBasis)
+{
     const Vector3f init(1, 2, 3);
-    const Matrix4x4 m = Transform::makeBasisChange(
-        Vector3f(1.f, 1.f, 1.f),
-        Vector3f(3.f, 2.f, 2.f),
-        Vector3f(1.f, 1.f, -10.f)
-    );
+    const Matrix4x4 m =
+        Transform::makeBasisChange(Vector3f(1.f, 1.f, 1.f), Vector3f(3.f, 2.f, 2.f), Vector3f(1.f, 1.f, -10.f));
     Transform tr(m);
     const Vector3f res = tr.transform(init);
     const Vector3f expected(6.f, 13.f, -27.f);
