@@ -14,6 +14,11 @@ struct ParserError : GTraceError
     ParserError(const std::string& message) : GTraceError(message) {}
 };
 
+struct FileError : GTraceError
+{
+    FileError(const std::string& message) : GTraceError(message) {}
+};
+
 #define Raise(error)            \
     {                           \
         LOGERROR(error.what()); \

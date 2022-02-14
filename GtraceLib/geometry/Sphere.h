@@ -7,7 +7,7 @@ namespace gtrace
 class Sphere : public Shape
 {
 public:
-    Sphere(const ParsedParams& params);
+    explicit Sphere(const ParsedParams& params);
 
     bool hit(const Ray& ray, float tmin, float tmax, float time, Intersection* interection) const override;
     BBox bbox() const override;

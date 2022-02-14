@@ -12,7 +12,7 @@ class Shape : public HeapAlignedType<Vector3f>
 {
 public:
     Shape() = default;
-    Shape(const ParsedParams& params) : objectToWorld(params.getTransform()) {}
+    explicit Shape(const ParsedParams& params) : objectToWorld(params.getTransform()) {}
     Shape(const std::shared_ptr<Transform>& tr) : objectToWorld(tr) {}
     virtual ~Shape() = default;
 
