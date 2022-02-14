@@ -27,8 +27,12 @@ bool FileReader::readLine(std::string* res)
         if (res->back() == '\n')
         {
             res->pop_back();
+            if (res->back() == '\r')
+                res->pop_back();
             return true;
         }
+        else
+            extraData = true;
     }
 
     assert(false);

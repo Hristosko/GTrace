@@ -17,8 +17,23 @@ public:
     void TearDown() { remove(filePath); }
 
     static const char* filePath;
+    static const std::string testFilesDirPath;
 };
 const char* FileTest::filePath = "test_file";
+const std::string FileTest::testFilesDirPath = "unit_tests/parser/test_files/";
+
+static void testFile(const std::string& path)
+{
+    FileReader reader(path.c_str());
+    int cur = 1;
+    std::string read;
+    while (reader.readLine(&read))
+    {
+        ASSERT_EQ(cur, atoi(read.c_str()));
+        ASSERT_EQ(read, std::to_string(cur));
+        ++cur;
+    }
+}
 
 TEST_F(FileTest, IsOpen)
 {
@@ -64,14 +79,7 @@ TEST_F(FileTest, WriteAdReadMultipleLines)
             writer.writeLine(std::to_string(i).c_str());
     }
 
-    FileReader reader(filePath);
-    std::string read;
-    auto cur = 1;
-    while (reader.readLine(&read))
-    {
-        ASSERT_EQ(cur, atoi(read.c_str()));
-        ++cur;
-    }
+    testFile(filePath);
 }
 
 TEST_F(FileTest, LongLine)
@@ -88,3 +96,17 @@ TEST_F(FileTest, LongLine)
     EXPECT_TRUE(reader.readLine(&read));
     EXPECT_EQ(line, read);
 }
+
+#ifndef WIN32
+
+TEST_F(FileTest, LF_File)
+{
+    testFile(testFilesDirPath + "lf_file.txt");
+}
+
+TEST_F(FileTest, CRLF_File)
+{
+    testFile(testFilesDirPath + "crlf_file.txt");
+}
+
+#endif  // !WIN32
