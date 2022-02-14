@@ -33,7 +33,6 @@ public:
 
     friend Vector3f min(const Vector3f& a, const Vector3f& b);
     friend Vector3f max(const Vector3f& a, const Vector3f& b);
-    friend Vector3f clamp(const Vector3f& a, const Vector3f& low, const Vector3f up);
 
     friend float maxElement(const Vector3f& a, float b);
     friend float minElement(const Vector3f& a, float b);

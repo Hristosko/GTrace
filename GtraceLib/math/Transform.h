@@ -9,9 +9,9 @@ namespace gtrace
 class Transform : public HeapAlignedType<Matrix4x4>
 {
 public:
-    Transform(const Matrix4x4& mat = Transform::makeIdentity())
-        : T(mat.transposed()),  // we store the transposed matrix so that we can eff. transform vectors
-          iT(mat.inversed().transposed())
+    Transform(const Matrix4x4& mat = Transform::makeIdentity()) :
+        T(mat.transposed()),  // we store the transposed matrix so that we can eff. transform vectors
+        iT(mat.inversed().transposed())
     {
     }
 

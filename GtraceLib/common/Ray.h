@@ -5,8 +5,10 @@ namespace gtrace
 {
 struct Ray
 {
-    Ray(const Vector3f origin, const Vector3f direction)
-        : origin(origin), direction(direction), invDirection(Vector3f(1.f) / direction)
+    Ray(const Vector3f origin, const Vector3f direction) :
+        origin(origin),
+        direction(direction),
+        invDirection(Vector3f(1.f) / direction)
     {
     }
 

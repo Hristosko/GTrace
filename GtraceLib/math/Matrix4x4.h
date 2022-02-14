@@ -18,15 +18,15 @@ private:
     explicit Matrix4x4(const __m256& x, const __m256& y) : m256{x, y} {}
 
 public:
-    Matrix4x4()
-        : rows{_mm_setr_ps(1.f, 0.f, 0.f, 0.f), _mm_setr_ps(0.f, 1.f, 0.f, 0.f), _mm_setr_ps(0.f, 0.f, 1.f, 0.f),
-               _mm_setr_ps(0.f, 0.f, 0.f, 1.f)}
+    Matrix4x4() :
+        rows{_mm_setr_ps(1.f, 0.f, 0.f, 0.f), _mm_setr_ps(0.f, 1.f, 0.f, 0.f), _mm_setr_ps(0.f, 0.f, 1.f, 0.f),
+             _mm_setr_ps(0.f, 0.f, 0.f, 1.f)}
     {
     }
-    Matrix4x4(const float* elems)
-        : rows{_mm_setr_ps(elems[0], elems[1], elems[2], elems[3]), _mm_setr_ps(elems[4], elems[5], elems[6], elems[7]),
-               _mm_setr_ps(elems[8], elems[9], elems[10], elems[11]),
-               _mm_setr_ps(elems[12], elems[13], elems[14], elems[15])}
+    Matrix4x4(const float* elems) :
+        rows{_mm_setr_ps(elems[0], elems[1], elems[2], elems[3]), _mm_setr_ps(elems[4], elems[5], elems[6], elems[7]),
+             _mm_setr_ps(elems[8], elems[9], elems[10], elems[11]),
+             _mm_setr_ps(elems[12], elems[13], elems[14], elems[15])}
     {
     }
 
