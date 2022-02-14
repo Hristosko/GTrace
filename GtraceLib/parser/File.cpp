@@ -22,7 +22,7 @@ File& File::operator=(File&& rhs)
 
 bool File::isAtEnd() const
 {
-    return /*!isOpen() || */ feof(fp);
+    return !isOpen() || feof(fp);
 }
 
 bool File::isOpen() const

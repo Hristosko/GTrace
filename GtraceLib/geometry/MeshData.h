@@ -1,10 +1,20 @@
 #pragma once
 
 #include <vector>
+#include <stdint.h>
 
 namespace gtrace
 {
 class Vector3f;
+
+/**
+ * Stores the indexes of the nodes of the mesh.
+ */
+struct MeshTriangle
+{
+    uint32_t i, j, k;
+};
+
 class MeshData
 {
 public:
@@ -21,4 +31,5 @@ private:
     std::vector<Vector3f> vertices;
     std::vector<Vector3f> normals;
 };
+
 }  // namespace gtrace

@@ -6,6 +6,7 @@ project (GTaceUnitTests)
 #############################################
 # Unit tests
 
+set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(google-test)
 
 # enable CTest testing
@@ -43,7 +44,7 @@ else()
       set(CMAKE_BUILD_TYPE Release)
     endif()
 
-    set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter -march=native -std=c++17 -I../GtraceLib")
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter -march=native -I../GtraceLib -std=c++17 -std=gnu++17")
     set(CMAKE_CXX_FLAGS_DEBUG "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 endif()
