@@ -44,7 +44,7 @@ else()
       set(CMAKE_BUILD_TYPE Release)
     endif()
 
-    set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter -march=native -I../GtraceLib -std=c++17 -std=gnu++17")
+    set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-parameter -march=native -I../GtraceLib -std=c++17")
     set(CMAKE_CXX_FLAGS_DEBUG "-g")
     set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 endif()

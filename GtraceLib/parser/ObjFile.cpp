@@ -1,29 +1,22 @@
-#include <cstdlib>
 #include "ObjFile.h"
 #include "FileReader.h"
-#include "StringUtils.h"
+#include "ParsingStrings.h"
 #include "common/Errors.h"
 #include "common/Logger.h"
 #include "math/Vector3f.h"
 
 namespace gtrace
 {
-static float parseFloat(std::string_view str)
+static Vector3f parseVector3f(const std::vector<std::string_view>& fields, const ParserContext& context)
 {
-    char* end;
-    float res = std::strtof(str.data(), &end);
-    if (end != str.data() + str.size())
-        Raise(ParserError(std::string("Unable to parse float from: ") + str.data()));
-    return res;
-}
-
-static Vector3f parseVector3f(const std::vector<std::string_view>& fields)
-{
-    return Vector3f(parseFloat(fields[1]), parseFloat(fields[2]), parseFloat(fields[3]));
+    return Vector3f(
+        ParsingStrings::parseFloat(fields[1], context), ParsingStrings::parseFloat(fields[2], context),
+        ParsingStrings::parseFloat(fields[3], context));
 }
 
 ObjFile::RawMesh ObjFile::parse(const char* filePath)
 {
+    ParserContext context {filePath, 0};
     FileReader reader(filePath);
     LOGINFO("Start parsing obj file: ", filePath);
 
@@ -31,12 +24,14 @@ ObjFile::RawMesh ObjFile::parse(const char* filePath)
     std::string line;
     while (reader.readLine(&line))
     {
-        if (line.empty() || startsWith(line, comment))
+        ++context.line;
+
+        if (line.empty() || ParsingStrings::startsWith(line, comment))
             continue;
 
-        const auto fields = split(line, delimer);
+        const auto fields = ParsingStrings::split(line, delimer);
         if (fields[0] == vertex)
-            mesh.vertices.emplace_back(parseVector3f(fields));
+            mesh.vertices.emplace_back(parseVector3f(fields, context));
     }
 
     return mesh;
