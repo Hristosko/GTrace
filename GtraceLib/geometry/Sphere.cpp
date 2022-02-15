@@ -38,7 +38,7 @@ bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, Intersectio
     return false;
 }
 
-BBox Sphere::bbox() const
+BBox Sphere::bound() const
 {
     const Vector3f rad(this->radius);
     const Vector3f center = this->objectToWorld->transform(Vector3f(0.f));

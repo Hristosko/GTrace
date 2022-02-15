@@ -61,7 +61,7 @@ bool Triangle::hit(const Ray& ray, float tmin, float tmax, float* beta, float* g
     return *tval >= tmin && *tval <= tmax;
 }
 
-BBox Triangle::bbox() const
+BBox Triangle::bound() const
 {
     const Vector3f A = objectToWorld->transform(a);
     const Vector3f B = objectToWorld->transform(b);

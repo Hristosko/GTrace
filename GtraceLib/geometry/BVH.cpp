@@ -25,7 +25,7 @@ static size_t split(std::unique_ptr<Shape>* shapes, size_t cnt, float pivot, int
     size_t lesser = 0;
     for (size_t i = 0; i < cnt; ++i)
     {
-        const BBox bb = shapes[i]->bbox();
+        const BBox bb = shapes[i]->bound();
         const float center = (bb.max() + bb.min())[axis] * 0.5f;
         if (center < pivot)
         {
@@ -54,9 +54,9 @@ static std::unique_ptr<Shape> build(std::unique_ptr<Shape>* shapes, size_t cnt, 
         return std::make_unique<BVH>(std::move(shapes[0]), std::move(shapes[1]));
 
     // find the midpoint of the bounding box according the given axis
-    BBox box = shapes[0]->bbox();
+    BBox box = shapes[0]->bound();
     for (uint32_t i = 0; i < cnt; ++i)
-        box = BBox::bound(box, shapes[i]->bbox());
+        box = BBox::bound(box, shapes[i]->bound());
 
     const Vector3f pivot = (box.max() - box.min()) * 0.5f;
     size_t middle = split(shapes, cnt, pivot[axis], axis);

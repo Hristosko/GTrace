@@ -25,7 +25,7 @@ public:
         ++hitCallsCount;
         return sphere.hit(ray, tmin, tmax, time, intersection);
     }
-    BBox bbox() const override { return sphere.bbox(); }
+    BBox bound() const override { return sphere.bound(); }
 
 private:
     Sphere sphere;

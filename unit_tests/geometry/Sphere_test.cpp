@@ -29,7 +29,7 @@ TEST_F(SphereTest, intersect_axis)
     const Sphere s = makeSphere(1.f);
     const Ray ray(Vector3f(2.f, 0.f, 0.f), Vector3f(-1.f, 0.f, 0.f));
     Intersection intersection;
-    ASSERT_TRUE(s.bbox().intersect(ray, 0.f, 1000.f));
+    ASSERT_TRUE(s.bound().intersect(ray, 0.f, 1000.f));
     ASSERT_TRUE(s.hit(ray, 0.f, 1000.f, 0.f, &intersection));
     ASSERT_EQ(intersection.normal, Vector3f(1.f, 0.f, 0.f));  // outwards
     ASSERT_NEAR(intersection.time, 1.f, EPS);
@@ -53,7 +53,7 @@ TEST_F(SphereTest, random_ray_towards_the_center)
     const Ray ray(origin, normalize(direction));
 
     Intersection intersection;
-    ASSERT_TRUE(s.bbox().intersect(ray, 0.f, 1000.f));
+    ASSERT_TRUE(s.bound().intersect(ray, 0.f, 1000.f));
     ASSERT_TRUE(s.hit(ray, 0.f, 1000.f, 0.f, &intersection));
     ASSERT_NEAR(intersection.normal.length(), 1.f, EPS);
 
@@ -70,10 +70,10 @@ TEST_F(SphereTest, position)
     Ray ray(Vector3f(2.f, 0.f, 0.f), Vector3f(-1.f, 0.f, 0.f));
 
     Intersection intersection;
-    ASSERT_FALSE(s.bbox().intersect(ray, 0.f, 1000.f));
+    ASSERT_FALSE(s.bound().intersect(ray, 0.f, 1000.f));
     ASSERT_FALSE(s.hit(ray, 0.f, 1000.f, 0.f, &intersection));
 
     ray.origin += center;
-    ASSERT_TRUE(s.bbox().intersect(ray, 0.f, 1000.f));
+    ASSERT_TRUE(s.bound().intersect(ray, 0.f, 1000.f));
     ASSERT_TRUE(s.hit(ray, 0.f, 1000.f, 0.f, &intersection));
 }

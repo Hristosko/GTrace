@@ -15,7 +15,7 @@ public:
     BVH(std::unique_ptr<Shape>&& l, std::unique_ptr<Shape>&& r) :
         left(std::move(l)),
         right(std::move(r)),
-        box(BBox::bound(left->bbox(), right->bbox()))
+        box(BBox::bound(left->bound(), right->bound()))
     {
     }
     BVH(std::unique_ptr<Shape>&& l, std::unique_ptr<Shape>&& r, const BBox& box) :
@@ -28,11 +28,11 @@ public:
     static std::unique_ptr<Shape> build(std::unique_ptr<Shape>* shapes, size_t cnt);
 
     bool hit(const Ray& ray, float tmin, float tmax, float time, Intersection* intersection) const override;
-    BBox bbox() const override { return this->box; }
+    BBox bound() const override { return this->box; }
 
 private:
     std::unique_ptr<Shape> left;  /** The left subtree */
     std::unique_ptr<Shape> right; /** The right subtree */
-    BBox box;                     /** The bbox of the current node */
+    BBox box;                     /** The bound of the current node */
 };
 }  // namespace gtrace
