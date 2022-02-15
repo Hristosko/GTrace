@@ -39,7 +39,7 @@ def compile():
         compiler = ['-D' ,'CMAKE_CXX_COMPILER=gcc-9']
     subprocess.run(['cmake', '-H.', '-B' + build_dir] + compiler)
     with cd(build_dir):
-        subprocess.run(['make'])
+        subprocess.run(['make', '-j', '16'])
 
 def run_tests(filter, repeat):
     gtest_filter = '--gtest_filter=*' + filter + '*'
@@ -61,6 +61,7 @@ def format_dir(dir):
             if is_sorce_file(file):
                 file_path = os.path.join(root, file)
                 subprocess.run(['clang-format', '-i', file_path])
+
 def format():
     format_dir(os.path.join('.', 'GtraceLib'))
     format_dir(os.path.join('.', 'unit_tests'))
