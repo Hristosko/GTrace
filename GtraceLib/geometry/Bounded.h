@@ -9,4 +9,4 @@ public:
     virtual BoundingVolume bound() const = 0;
 };
 
-}
+}  // namespace gtrace
