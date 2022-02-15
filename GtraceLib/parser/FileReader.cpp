@@ -10,7 +10,7 @@ FileReader::FileReader(const char* path) : File(fopen(path, "r"))
         Raise(FileError(std::string("Cannot open file: ") + path));
 }
 
-bool FileReader::readLine(std::string* res)
+bool FileReader::readLine(std::string* res) const
 {
     if (!isOpen())
         Raise(FileError("Read to unopen file."));

@@ -27,6 +27,14 @@ public:
     FileWriter writer;
 };
 
+namespace gtrace
+{
+bool operator!=(const ObjFile::Indices& a, const ObjFile::Indices& b)
+{
+    return a.i != b.i || a.j != b.j || a.k != b.k;
+}
+}  // namespace gtrace
+
 #ifndef WIN32
 
 TEST_F(ObjFileTest, SimpleObjFileParse)
@@ -53,6 +61,19 @@ TEST_F(ObjFileTest, SimpleObjFileParse)
     ASSERT_EQ(1, res.facesNormals[0].i);
     ASSERT_EQ(1, res.facesNormals[0].j);
     ASSERT_EQ(1, res.facesNormals[0].k);
+}
+
+TEST_F(ObjFileTest, ParseAndDumpObjFile)
+{
+    writer.close();
+    const auto parsed = ObjFile::parse((testFilesDirPath + "obj_file.obj").c_str());
+    ObjFile::dump(parsed, file);
+    const auto mesh = ObjFile::parse(file);
+
+    ASSERT_TRUE(compare(parsed.vertices, mesh.vertices));
+    ASSERT_TRUE(compare(parsed.normals, mesh.normals));
+    ASSERT_TRUE(compare(parsed.faces, mesh.faces));
+    ASSERT_TRUE(compare(parsed.facesNormals, mesh.facesNormals));
 }
 
 #endif  // !WIN32

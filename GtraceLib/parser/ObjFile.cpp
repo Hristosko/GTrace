@@ -1,5 +1,6 @@
 #include "ObjFile.h"
 #include "FileReader.h"
+#include "FileWriter.h"
 #include "ParsingStrings.h"
 #include "common/Errors.h"
 #include "common/Logger.h"
@@ -102,6 +103,54 @@ ObjFile::RawMesh ObjFile::parse(const char* filePath)
     LOGINFO("Faces: ", mesh.faces.size());
     LOGINFO("Faces Normals: ", mesh.facesNormals.size());
     return mesh;
+}
+
+static std::string toString(const Vector3f& v)
+{
+    std::string res;
+    for (auto i = 0; i < 3; ++i)
+    {
+        res += std::to_string(v[i]);
+        if (i != 2)
+            res += ' ';
+    }
+    return res;
+}
+
+static std::string toString(uint32_t face, uint32_t normal, bool hasNormal, const std::string& delimer)
+{
+    auto res = std::to_string(face);
+    if (hasNormal)
+        res += delimer + std::to_string(normal);
+    return res;
+}
+
+void ObjFile::dump(const RawMesh& mesh, const char* filePath)
+{
+    FileWriter writer(filePath);
+    LOGINFO("Writing obj file: ", filePath);
+
+    for (const auto& v : mesh.vertices)
+        writer.writeLine(vertex + delimer + toString(v));
+
+    for (const auto& n : mesh.normals)
+        writer.writeLine(normal + delimer + toString(n));
+
+    for (std::vector<Indices>::size_type i = 0; i < mesh.faces.size(); ++i)
+    {
+        const auto faces = mesh.faces[i];
+        const auto hasNormal = i < mesh.facesNormals.size();
+        const auto normals = hasNormal ? mesh.facesNormals[i] : Indices();
+
+        const auto indexToString = [hasNormal](uint32_t face, uint32_t normal) {
+            return toString(face, normal, hasNormal, faceNormalDelimer);
+        };
+
+        const std::string res = face + delimer + indexToString(faces.i, normals.i) + delimer +
+                                indexToString(faces.j, normals.j) + delimer + indexToString(faces.k, normals.k);
+        writer.writeLine(res);
+    }
+    LOGINFO("Finish writing obj file: ", filePath);
 }
 
 }  // namespace gtrace

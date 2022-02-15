@@ -23,6 +23,7 @@ public:
     };
 
     static RawMesh parse(const char* filePath);
+    static void dump(const RawMesh& mesh, const char* filePath);
 
 protected:
     static void parseFace(RawMesh* mesh, const std::vector<std::string_view>& fields, const ParserContext& context);

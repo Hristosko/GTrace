@@ -9,10 +9,10 @@ class FileReader : public File
 public:
     FileReader(const char* path);
 
-    bool readLine(std::string* res);
+    bool readLine(std::string* res) const;
 
 protected:
     static constexpr int maxLineLength = 128;
-    char buffer[maxLineLength];
+    mutable char buffer[maxLineLength];
 };
 }  // namespace gtrace

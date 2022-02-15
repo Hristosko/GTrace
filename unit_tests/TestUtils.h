@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "gtest/gtest.h"
 
 #include "math/Vector3f.h"
@@ -23,5 +24,23 @@ inline bool operator==(const Vector3f& a, const Vector3f& b)
     return compare(a, b);
 }
 
+inline bool operator!=(const Vector3f& a, const Vector3f& b)
+{
+    return !(a == b);
+}
+
 Vector3f randomVector3f();
+
+template<typename T>
+bool compare(const std::vector<T>& a, const std::vector<T>& b)
+{
+    if (a.size() != b.size())
+        return false;
+
+    for (typename std::vector<T>::size_type i = 0; i < a.size(); ++i)
+        if (a[i] != b[i])
+            return false;
+
+    return true;
+}
 }  // namespace gtrace
