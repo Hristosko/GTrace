@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 project(GTraceLib)
 
 file(GLOB files
-	"common/*.cpp"
+    "common/*.cpp"
+    "data_structures/*.cpp"
     "geometry/*.cpp"
     "math/*.cpp"
     "parser/*.cpp"
