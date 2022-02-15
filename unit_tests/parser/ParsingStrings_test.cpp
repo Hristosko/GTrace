@@ -62,6 +62,27 @@ TEST(ParsingStrings, splitEndsWithDelimer)
     ASSERT_EQ(chunk, chunks[0]);
 }
 
+TEST(ParsingStrings, splitString)
+{
+    constexpr int count = 10;
+    const std::string chunk = "AAA";
+    const std::string delimer = "BBB";
+
+    std::string testString;
+    testString.reserve(count * (chunk.size() + delimer.size()));
+    for (int i = 0; i < count; ++i)
+    {
+        testString += chunk;
+        testString += delimer;
+    }
+
+    const auto chunks = ParsingStrings::split(testString, delimer);
+
+    EXPECT_EQ(count, chunks.size());
+    for (const auto& x : chunks)
+        ASSERT_EQ(chunk, x);
+}
+
 TEST(ParsingStrings, parseFloat)
 {
     const float v = 227.4226;
@@ -71,4 +92,30 @@ TEST(ParsingStrings, parseFloat)
 
     floatStr += "f";
     EXPECT_THROW(ParsingStrings::parseFloat(floatStr, testContext), ParserError);
+}
+
+TEST(ParsingStrings, parseNumber)
+{
+    const int v = -227;
+    std::string str = std::to_string(v);
+
+    EXPECT_EQ(v, ParsingStrings::parseNumber(str, testContext));
+
+    str += "f";
+    EXPECT_THROW(ParsingStrings::parseNumber(str, testContext), ParserError);
+}
+
+TEST(ParsingStrings, parseNumberFromFloat)
+{
+    const float v = 227.4226;
+    const auto str = std::to_string(v);
+    EXPECT_THROW(ParsingStrings::parseNumber(str, testContext), ParserError);
+}
+
+TEST(ParsingStrings, parseNumberBase16)
+{
+    const int v = 0xFA26;
+    const auto str = "0xFA26";
+
+    EXPECT_EQ(v, ParsingStrings::parseNumber(str, testContext, 16));
 }

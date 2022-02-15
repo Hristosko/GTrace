@@ -11,6 +11,8 @@ struct ParserContext
 {
     const char* filePath;
     uint64_t line;
+
+    std::string message() const;
 };
 
 class ParsingStrings
@@ -26,8 +28,10 @@ public:
         return std::equal(start.begin(), start.end(), str.begin());
     }
 
-    static std::vector<std::string_view> split(const std::string& str, char delimer);
+    static std::vector<std::string_view> split(std::string_view str, char delimer);
+    static std::vector<std::string_view> split(std::string_view str, const std::string& delimer);
 
     static float parseFloat(std::string_view str, const ParserContext& context);
+    static long long parseNumber(std::string_view str, const ParserContext& context, int base = 10);
 };
 }  // namespace gtrace
