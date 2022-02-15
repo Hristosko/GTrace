@@ -9,7 +9,7 @@ FileWriter::FileWriter(const char* path) : File(fopen(path, "w"))
         Raise(FileError(std::string("Cannot open file: ") + path));
 }
 
-void FileWriter::writeLine(const char* data)
+void FileWriter::writeLine(const char* data) const
 {
     if (!isOpen())
         Raise(FileError("Write to unopen file."));

@@ -14,13 +14,11 @@ public:
 class FileTest : public Test
 {
 public:
-    void TearDown() { remove(filePath); }
+    void TearDown() override { remove(filePath); }
 
-    static const char* filePath;
-    static const std::string testFilesDirPath;
+    static constexpr auto* filePath = "test_file";
+    static inline const std::string testFilesDirPath = "unit_tests/parser/test_files/";
 };
-const char* FileTest::filePath = "test_file";
-const std::string FileTest::testFilesDirPath = "unit_tests/parser/test_files/";
 
 static void testFile(const std::string& path)
 {
