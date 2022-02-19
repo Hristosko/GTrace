@@ -2,37 +2,29 @@
 
 #include "Shape.h"
 #include "BBox.h"
-
+#include "data_structures/KDTree.h"
 namespace gtrace
 {
 /**
  * Bounding volume hierarchie. Used to accelerate the  intersection of the rays
  * with the geometry. Uses a KD Tree.
  */
-class BVH : public Shape
+class BVH
 {
 public:
-    BVH(std::unique_ptr<Shape>&& l, std::unique_ptr<Shape>&& r) :
-        left(std::move(l)),
-        right(std::move(r)),
-        box(BBox::bound(left->bound(), right->bound()))
+    struct Node : KDTreeNode<BBox, Shape>
     {
-    }
-    BVH(std::unique_ptr<Shape>&& l, std::unique_ptr<Shape>&& r, const BBox& box) :
-        left(std::move(l)),
-        right(std::move(r)),
-        box(box)
-    {
-    }
+        using InternalNode = KDTreeNode<BBox, Shape>;
+        Node(BoundedPtr&& left, BoundedPtr&& right) : InternalNode(move(left), move(right)) {}
+        bool hit(const Ray& ray, float tmin, float tmax, float time, Intersection* intersection) const final;
+    };
 
-    static std::unique_ptr<Shape> build(std::unique_ptr<Shape>* shapes, size_t cnt);
+    bool hit(const Ray& ray, float tmin, float tmax, float time, Intersection* intersection) const;
 
-    bool hit(const Ray& ray, float tmin, float tmax, float time, Intersection* intersection) const override;
-    BBox bound() const override { return this->box; }
+    void build();
+    void insert(std::unique_ptr<Shape>&& shape);
 
 private:
-    std::unique_ptr<Shape> left;  /** The left subtree */
-    std::unique_ptr<Shape> right; /** The right subtree */
-    BBox box;                     /** The bound of the current node */
+    KDTree<BBox, Node> tree;
 };
 }  // namespace gtrace

@@ -40,27 +40,25 @@ public:
     {
         TestShape::hitCallsCount = 0;
 
-        std::vector<std::unique_ptr<Shape>> shapes;
         std::vector<Vector3f> positions = {
             Vector3f(1.f, 1.f, 1.f),  Vector3f(1.f, 1.f, -1.f),  Vector3f(1.f, -1.f, 1.f),  Vector3f(1.f, -1.f, -1.f),
             Vector3f(-1.f, 1.f, 1.f), Vector3f(-1.f, 1.f, -1.f), Vector3f(-1.f, -1.f, 1.f), Vector3f(-1.f, -1.f, -1.f),
         };
 
-        shapes.reserve(positions.size());
         for (const auto& p : positions)
-            shapes.emplace_back(new TestShape(R, p));
+            bvh.insert(std::make_unique<TestShape>(R, p));
 
-        bvh = BVH::build(shapes.data(), shapes.size());
+        bvh.build();
     }
 
     static constexpr float R = 2.f;
-    std::unique_ptr<Shape> bvh;
+    BVH bvh;
 };
 
 TEST_F(BVHTest, intersect_axis)
 {
     const Ray ray(Vector3f(R, R, R * 10.f), Vector3f(0.f, 0.f, -1.f));
     Intersection intersection;
-    bvh->hit(ray, 0.f, 1000.f, 0.f, &intersection);
+    bvh.hit(ray, 0.f, 1000.f, 0.f, &intersection);
     ASSERT_EQ(2, TestShape::hitCallsCount);
 }

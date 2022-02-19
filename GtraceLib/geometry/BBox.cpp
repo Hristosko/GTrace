@@ -18,4 +18,10 @@ bool BBox::intersect(const Ray& ray, float tmin, float tmax) const
     tmax = minElement(tbigger, tmax);
     return tmin <= tmax;
 }
+
+float BBox::center(int axis) const
+{
+    return (max() + min())[axis] * 0.5f;
+}
+
 }  // namespace gtrace

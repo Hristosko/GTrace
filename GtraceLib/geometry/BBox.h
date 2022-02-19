@@ -15,6 +15,7 @@ public:
     BBox(const Vector3f& bottom, const Vector3f& top) : bottom(bottom), top(top) {}
 
     static BBox bound(const BBox& a, const BBox& b);
+    float center(int axis) const;
     Vector3f min() const { return bottom; }
     Vector3f max() const { return top; }
 

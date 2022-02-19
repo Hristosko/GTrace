@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include <assert.h>
 #include <type_traits>
 #include <vector>
 #include <common/Common.h>

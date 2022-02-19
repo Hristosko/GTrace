@@ -1,5 +1,6 @@
 #include "TestUtils.h"
 #include "data_structures/KDTree.h"
+#include "geometry/BBox.h"
 
 using namespace gtrace;
 
@@ -112,4 +113,101 @@ TEST_F(KDTree1DTest, Balanced)
     const auto* l = tree.data();
     ASSERT_EQ(numElements, l->length());
     ASSERT_EQ(depth + 1, l->depth());
+}
+
+struct Point;
+struct PointsInRange
+{
+    virtual ~PointsInRange() = default;
+    virtual void pointsInRange(const Point& point, float range, int axis, std::vector<Point>* points) const = 0;
+};
+
+static float distance(const Vector3f& a, const Vector3f&b)
+{
+    return (a-b).length();
+}
+
+struct PointInterface : Bounded<BBox>, PointsInRange
+{
+};
+
+struct Point : PointInterface
+{
+    Vector3f p;
+
+    explicit Point(const Vector3f& p) : p(p) {}
+    BBox bound() const override { return BBox(p, p); }
+    void pointsInRange(const Point& point, float range, int axis, std::vector<Point>* points) const override
+    {
+        if (range >= distance(p, point.p))
+            points->emplace_back(*this);
+    }
+
+    bool operator==(const Point& rhs) const { return p == rhs.p; }
+};
+
+struct PointNode : KDTreeNode<BBox, PointInterface>
+{
+    using KDTreePointNode = KDTreeNode<BBox, PointInterface>;
+
+    static int skipped;
+    PointNode(BoundedPtr&& left, BoundedPtr&& right) : KDTreePointNode(move(left), move(right)) {}
+
+    void pointsInRange(const Point& point, float range, int axis, std::vector<Point>* points) const override
+    {
+        const float start = bounding.min()[axis];
+        const float end = bounding.max()[axis];
+
+        const float pos = point.p[axis];
+        const float d1 = sqrtf(fabsf(start*start - pos*pos));
+        const float d2 = sqrtf(fabsf(end*end - pos*pos));
+
+        if (start > pos && d1 >range)
+        {
+            ++skipped;
+            return;
+        }
+
+        if (pos > end && d2 > range)
+        {
+            ++skipped;
+            return;
+        }
+
+        auto nextAxis = (axis +1 )%3;
+        left->pointsInRange(point, range, nextAxis, points);
+        right->pointsInRange(point, range, nextAxis, points);
+    }
+};
+
+int PointNode::skipped = 0;
+
+class KDTreePointTest : public Test
+{
+public:
+    void SetUp() override { PointNode::skipped = 0; }
+
+    KDTree<BBox, PointNode> tree;
+};
+
+TEST_F(KDTreePointTest, nearestPointFixedPoints)
+{
+    const auto start = -100;
+    const auto end = 100;
+
+    for (auto i = start; i <= end; ++i)
+        tree.insert(std::make_unique<Point>(Vector3f(i)));
+    tree.build();
+
+    const float range = 10;
+    std::vector<Point> result;
+    tree.data()->pointsInRange(Point(Vector3f(0.f)), range, 0, &result);
+
+    const int resStart = static_cast<int>(sqrtf(range*range / 3));
+    std::vector<Point> expectedResult;
+    for (int i = -resStart; i <= resStart; ++i)
+        expectedResult.emplace_back(Point(Vector3f(i)));
+
+    ASSERT_EQ(expectedResult, result);
+    ASSERT_GT(PointNode::skipped, 0);
 }
