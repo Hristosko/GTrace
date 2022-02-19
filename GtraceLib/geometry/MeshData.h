@@ -32,4 +32,12 @@ private:
     std::vector<Vector3f> normals;
 };
 
+struct RawMesh
+{
+    std::vector<Vector3f> vertices;
+    std::vector<Vector3f> normals;
+    std::vector<MeshTriangle> faces;
+    std::vector<MeshTriangle> facesNormals;
+};
+
 }  // namespace gtrace

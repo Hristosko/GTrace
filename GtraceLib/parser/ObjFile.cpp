@@ -61,7 +61,7 @@ void ObjFile::parseFace(RawMesh* mesh, const std::vector<std::string_view>& fiel
     if (fields.size() != 4)
         Raise(ParserError(context.message() + "Unexpected number of values"));
 
-    Indices vers, norms;
+    MeshTriangle vers, norms;
     parseIndices(fields[1], context, *mesh, &vers.i, &norms.i);
     parseIndices(fields[2], context, *mesh, &vers.j, &norms.j);
     parseIndices(fields[3], context, *mesh, &vers.k, &norms.k);
@@ -71,7 +71,7 @@ void ObjFile::parseFace(RawMesh* mesh, const std::vector<std::string_view>& fiel
         mesh->facesNormals.emplace_back(norms);
 }
 
-ObjFile::RawMesh ObjFile::parse(const char* filePath)
+RawMesh ObjFile::parse(const char* filePath)
 {
     ParserContext context{filePath, 0};
     FileReader reader(filePath);
@@ -136,11 +136,11 @@ void ObjFile::dump(const RawMesh& mesh, const char* filePath)
     for (const auto& n : mesh.normals)
         writer.writeLine(normal + delimer + toString(n));
 
-    for (std::vector<Indices>::size_type i = 0; i < mesh.faces.size(); ++i)
+    for (std::vector<MeshTriangle>::size_type i = 0; i < mesh.faces.size(); ++i)
     {
         const auto faces = mesh.faces[i];
         const auto hasNormal = i < mesh.facesNormals.size();
-        const auto normals = hasNormal ? mesh.facesNormals[i] : Indices();
+        const auto normals = hasNormal ? mesh.facesNormals[i] : MeshTriangle();
 
         const auto indexToString = [hasNormal](uint32_t face, uint32_t normal) {
             return toString(face, normal, hasNormal, faceNormalDelimer);

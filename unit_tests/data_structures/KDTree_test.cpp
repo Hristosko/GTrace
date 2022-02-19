@@ -122,9 +122,9 @@ struct PointsInRange
     virtual void pointsInRange(const Point& point, float range, int axis, std::vector<Point>* points) const = 0;
 };
 
-static float distance(const Vector3f& a, const Vector3f&b)
+static float distance(const Vector3f& a, const Vector3f& b)
 {
-    return (a-b).length();
+    return (a - b).length();
 }
 
 struct PointInterface : Bounded<BBox>, PointsInRange
@@ -159,10 +159,10 @@ struct PointNode : KDTreeNode<BBox, PointInterface>
         const float end = bounding.max()[axis];
 
         const float pos = point.p[axis];
-        const float d1 = sqrtf(fabsf(start*start - pos*pos));
-        const float d2 = sqrtf(fabsf(end*end - pos*pos));
+        const float d1 = sqrtf(fabsf(start * start - pos * pos));
+        const float d2 = sqrtf(fabsf(end * end - pos * pos));
 
-        if (start > pos && d1 >range)
+        if (start > pos && d1 > range)
         {
             ++skipped;
             return;
@@ -174,7 +174,7 @@ struct PointNode : KDTreeNode<BBox, PointInterface>
             return;
         }
 
-        auto nextAxis = (axis +1 )%3;
+        auto nextAxis = (axis + 1) % 3;
         left->pointsInRange(point, range, nextAxis, points);
         right->pointsInRange(point, range, nextAxis, points);
     }
@@ -203,7 +203,7 @@ TEST_F(KDTreePointTest, nearestPointFixedPoints)
     std::vector<Point> result;
     tree.data()->pointsInRange(Point(Vector3f(0.f)), range, 0, &result);
 
-    const int resStart = static_cast<int>(sqrtf(range*range / 3));
+    const int resStart = static_cast<int>(sqrtf(range * range / 3));
     std::vector<Point> expectedResult;
     for (int i = -resStart; i <= resStart; ++i)
         expectedResult.emplace_back(Point(Vector3f(i)));

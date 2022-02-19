@@ -21,7 +21,13 @@ bool BVH::hit(const Ray& ray, float tmin, float tmax, float time, Intersection* 
     return tree.data()->hit(ray, tmin, tmax, time, intersection);
 }
 
-void BVH::build() { tree.build(); }
-void BVH::insert(std::unique_ptr<Shape>&& shape) { tree.insert(std::move(shape)); }
+void BVH::build()
+{
+    tree.build();
+}
+void BVH::insert(std::unique_ptr<Shape>&& shape)
+{
+    tree.insert(std::move(shape));
+}
 
 }  // namespace gtrace

@@ -29,7 +29,7 @@ public:
 
 namespace gtrace
 {
-bool operator!=(const ObjFile::Indices& a, const ObjFile::Indices& b)
+bool operator!=(const MeshTriangle& a, const MeshTriangle& b)
 {
     return a.i != b.i || a.j != b.j || a.k != b.k;
 }
