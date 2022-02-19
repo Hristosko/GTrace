@@ -9,7 +9,7 @@
 namespace gtrace
 {
 class BBox;
-class Shape : public Bounded<BBox>, HeapAlignedType<Vector3f>
+class Shape : public Bounded<BBox>, public HeapAlignedType<Vector3f>
 {
 public:
     Shape() = default;

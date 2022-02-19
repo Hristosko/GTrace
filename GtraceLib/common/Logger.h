@@ -3,6 +3,8 @@
 #include <fstream>
 #include <time.h>
 #include <mutex>
+#include <string_view>
+#include "Common.h"
 
 namespace gtrace
 {
@@ -16,7 +18,8 @@ public:
     template<typename T>
     friend Logger& operator<<(Logger& logger, const T& val);
 
-    void flush() { this->file.flush(); }
+    void flush() { file.flush(); }
+    static std::string_view fileName(const char* filePath) { return getFileName(filePath); }
 
 private:
     std::ofstream file;
@@ -44,40 +47,44 @@ void log(const T& val, const Args&... args)
     log(args...);
 }
 
-#define LOGSTAT(...)                                                                                     \
-    {                                                                                                    \
-        std::lock_guard<std::mutex> lock(gtrace::getLogger().mu);                                        \
-        gtrace::log("[STAT]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
-        gtrace::getLogger().flush();                                                                     \
+#define LOGSTAT(...)                                                                                                \
+    {                                                                                                               \
+        std::lock_guard<std::mutex> lock(gtrace::getLogger().mu);                                                   \
+        gtrace::log(                                                                                                \
+            "[STAT]   ", Logger::fileName(__FILE__), ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
+        gtrace::getLogger().flush();                                                                                \
     }
 
-#define LOGINFO(...)                                                                                     \
-    {                                                                                                    \
-        std::lock_guard<std::mutex> lock(gtrace::getLogger().mu);                                        \
-        gtrace::log("[INFO]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
-        gtrace::getLogger().flush();                                                                     \
+#define LOGINFO(...)                                                                                                \
+    {                                                                                                               \
+        std::lock_guard<std::mutex> lock(gtrace::getLogger().mu);                                                   \
+        gtrace::log(                                                                                                \
+            "[INFO]   ", Logger::fileName(__FILE__), ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
+        gtrace::getLogger().flush();                                                                                \
     }
 
-#define LOGWARNING(...)                                                                                  \
-    {                                                                                                    \
-        std::lock_guard<std::mutex> lock(gtrace::getLogger().mu);                                        \
-        gtrace::log("[WARN]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
-        gtrace::getLogger().flush();                                                                     \
+#define LOGWARNING(...)                                                                                             \
+    {                                                                                                               \
+        std::lock_guard<std::mutex> lock(gtrace::getLogger().mu);                                                   \
+        gtrace::log(                                                                                                \
+            "[WARN]   ", Logger::fileName(__FILE__), ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
+        gtrace::getLogger().flush();                                                                                \
     }
 
-#define LOGERROR(...)                                                                                     \
-    {                                                                                                     \
-        std::lock_guard<std::mutex> lock(gtrace::getLogger().mu);                                         \
-        gtrace::log("[ERROR]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
-        gtrace::getLogger().flush();                                                                      \
+#define LOGERROR(...)                                                                                               \
+    {                                                                                                               \
+        std::lock_guard<std::mutex> lock(gtrace::getLogger().mu);                                                   \
+        gtrace::log(                                                                                                \
+            "[ERROR]  ", Logger::fileName(__FILE__), ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
+        gtrace::getLogger().flush();                                                                                \
     }
 
 #ifdef _DEBUG
-#define LOGDEBUG(...)                                                                             \
-    {                                                                                             \
-        std::lock_guard<std::mutex> lock(gtrace::getLogger().mu);                                 \
-        log("[DEBUG]  ", __FILE__, ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
-        gtrace::getLogger().flush();                                                              \
+#define LOGDEBUG(...)                                                                                           \
+    {                                                                                                           \
+        std::lock_guard<std::mutex> lock(gtrace::getLogger().mu);                                               \
+        log("[DEBUG]  ", Logger::file(__FILE__), ":", __LINE__, " ", gtrace::getTimestamp(), " ", __VA_ARGS__); \
+        gtrace::getLogger().flush();                                                                            \
     }
 #else
 #define LOGDEBUG(...) ;
