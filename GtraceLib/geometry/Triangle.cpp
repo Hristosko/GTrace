@@ -14,12 +14,12 @@ Triangle::Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c, cons
 
 bool Triangle::hit(const Ray& ray, float tmin, float tmax, float* beta, float* gamma, float* tval) const
 {
-    const Vector3f origin = objectToWorld->invTransform(ray.origin);
-    const Vector3f direction = objectToWorld->invTransformDirection(ray.direction);
+    const Vector3f& origin = ray.origin;
+    const Vector3f& direction = ray.direction;
 
-    Vector3f AB = Vector3f(a) - Vector3f(b);
-    Vector3f AC = Vector3f(a) - Vector3f(c);
-    Vector3f AO = Vector3f(a) - origin;
+    Vector3f AB = objectToWorld->transform(Vector3f(a) - Vector3f(b));
+    Vector3f AC = objectToWorld->transform(Vector3f(a) - Vector3f(c));
+    Vector3f AO = objectToWorld->transform(Vector3f(a)) - origin;
 
     const float E = AC.y();
     const float I = direction.z();

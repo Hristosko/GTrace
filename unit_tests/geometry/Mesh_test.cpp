@@ -126,16 +126,18 @@ TEST_F(MeshTest, translation)
 
 TEST_F(MeshTest, scale)
 {
-    const float R = 20.f;
+    const float R = 10.f;
     params.addScale(R);
     Mesh mesh(params, &bvh);
     bvh.build();
 
     {
-        const Ray ray(Vector3f(R) + Vector3f(2.f, 0.0f, 0.0f), Vector3f(-1.f, 0.f, 0.f));
+        const Vector3f distance = normalize(Vector3f(1.f));
+        const Ray ray(Vector3f(R) + distance, -distance);
         Intersection intersection;
         ASSERT_TRUE(bvh.hit(ray, 0.f, 1000.f, 0.f, &intersection));
-        EXPECT_NEAR(intersection.time, 1.f, EPS);
-        EXPECT_NEAR(intersection.normal.x(), 1.f, EPS);
+        EXPECT_EQ(intersection.normal, distance);
+        intersection.point = ray.origin + intersection.time * ray.direction;
+        ASSERT_NEAR(intersection.point.length(), R, 0.005f);
     }
 }

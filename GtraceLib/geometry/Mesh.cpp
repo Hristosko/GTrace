@@ -4,7 +4,7 @@
 #include "Triangle.h"
 #include "math/Transform.h"
 #include "parser/ObjFile.h"
-#include <iostream>
+
 namespace gtrace
 {
 Mesh::Mesh(const ParsedParams& params, BVH* bvh)
@@ -36,8 +36,6 @@ bool MeshElement::hit(const Ray& ray, float tmin, float tmax, float time, Inters
     if (tr.hit(ray, tmin, tmax, &beta, &gamma, &tval))
     {
         interection->normal = objectToWorld->transformDirection(normalize(cross((tr.b - tr.a), (tr.a - tr.c))));
-        // if (dot(interection->normal, ray.origin) < 0.f)
-        //    interection->normal *= -1.f;
         interection->set(tval, this);
         return true;
     }
