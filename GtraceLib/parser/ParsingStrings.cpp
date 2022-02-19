@@ -5,7 +5,7 @@ namespace gtrace
 {
 std::string ParserContext::message() const
 {
-    return (filePath == nullptr) ? "" : filePath + std::to_string(line) + ": ";
+    return (filePath == nullptr) ? "" : filePath + (':' + std::to_string(line)) + ": ";
 }
 
 static std::string::size_type getSize(char x)

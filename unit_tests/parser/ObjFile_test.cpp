@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "TestUtils.h"
+#include "MeshGenerator.h"
 #include "common/Errors.h"
 #include "parser/FileWriter.h"
 #include "parser/ObjFile.h"
@@ -29,9 +30,19 @@ public:
 
 namespace gtrace
 {
+bool operator==(const MeshTriangle& a, const MeshTriangle& b)
+{
+    return a.i == b.i && a.j == b.j && a.k == b.k;
+}
+
 bool operator!=(const MeshTriangle& a, const MeshTriangle& b)
 {
-    return a.i != b.i || a.j != b.j || a.k != b.k;
+    return !(a == b);
+}
+
+bool operator==(const RawMesh& a, const RawMesh& b)
+{
+    return a.vertices == b.vertices && a.faces == b.faces && a.normals == b.normals && a.facesNormals == b.facesNormals;
 }
 }  // namespace gtrace
 
@@ -50,17 +61,17 @@ TEST_F(ObjFileTest, SimpleObjFileParse)
     ASSERT_EQ(2, res.faces.size());
     ASSERT_EQ(1, res.facesNormals.size());
 
-    ASSERT_EQ(1, res.faces[0].i);
-    ASSERT_EQ(1, res.faces[0].j);
-    ASSERT_EQ(1, res.faces[0].k);
+    ASSERT_EQ(0, res.faces[0].i);
+    ASSERT_EQ(0, res.faces[0].j);
+    ASSERT_EQ(0, res.faces[0].k);
 
-    ASSERT_EQ(1, res.faces[1].i);
-    ASSERT_EQ(1, res.faces[1].j);
-    ASSERT_EQ(1, res.faces[1].k);
+    ASSERT_EQ(0, res.faces[1].i);
+    ASSERT_EQ(0, res.faces[1].j);
+    ASSERT_EQ(0, res.faces[1].k);
 
-    ASSERT_EQ(1, res.facesNormals[0].i);
-    ASSERT_EQ(1, res.facesNormals[0].j);
-    ASSERT_EQ(1, res.facesNormals[0].k);
+    ASSERT_EQ(0, res.facesNormals[0].i);
+    ASSERT_EQ(0, res.facesNormals[0].j);
+    ASSERT_EQ(0, res.facesNormals[0].k);
 }
 
 TEST_F(ObjFileTest, ParseAndDumpObjFile)
@@ -158,4 +169,13 @@ TEST_F(ObjFileTest, TooManyArgumentsPerIndex)
     writer.writeLine("f 1//1 1//1 1//1//1");
     writer.close();
     EXPECT_THROW(ObjFile::parse(file), ParserError);
+}
+
+TEST_F(ObjFileTest, SphereMeshsDumpAndParse)
+{
+    writer.close();
+    const RawMesh mesh = generateMeshSphere(3);
+    ObjFile::dump(mesh, file);
+    const RawMesh parsedMesh = ObjFile::parse(file);
+    ASSERT_EQ(mesh, parsedMesh);
 }

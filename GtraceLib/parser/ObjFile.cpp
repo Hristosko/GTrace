@@ -44,7 +44,7 @@ void ObjFile::parseIndices(
     if (vv <= 0 || vv > mesh.vertices.size())
         Raise(ParserError(context.message() + "Invalid face index: " + str.data()));
 
-    *v = static_cast<uint32_t>(vv);
+    *v = static_cast<uint32_t>(vv - 1);
 
     if (tokens.size() == 1)
         return;
@@ -53,7 +53,7 @@ void ObjFile::parseIndices(
     if (nn <= 0 || nn > mesh.normals.size())
         Raise(ParserError(context.message() + "Invalid normal index: " + str.data()));
 
-    *n = static_cast<uint32_t>(nn);
+    *n = static_cast<uint32_t>(nn - 1);
 }
 
 void ObjFile::parseFace(RawMesh* mesh, const std::vector<std::string_view>& fields, const ParserContext& context)
@@ -143,7 +143,7 @@ void ObjFile::dump(const RawMesh& mesh, const char* filePath)
         const auto normals = hasNormal ? mesh.facesNormals[i] : MeshTriangle();
 
         const auto indexToString = [hasNormal](uint32_t face, uint32_t normal) {
-            return toString(face, normal, hasNormal, faceNormalDelimer);
+            return toString(face + 1, normal + 1, hasNormal, faceNormalDelimer);
         };
 
         const std::string res = face + delimer + indexToString(faces.i, normals.i) + delimer +
