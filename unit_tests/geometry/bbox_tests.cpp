@@ -34,3 +34,10 @@ TEST(BBox, intersect)
         EXPECT_TRUE(box.intersect(ray, 0.f, 1.f));
     }
 }
+
+TEST(BBox, nan_inf_rayInvDirection)
+{
+    BBox box(Vector3f(0.f), Vector3f(1.f));
+    Ray ray(Vector3f(0.f, 0.f, -0.5f), Vector3f(0.f, 0.f, 1.f));
+    EXPECT_TRUE(box.intersect(ray, 0.f, 1.f));
+}

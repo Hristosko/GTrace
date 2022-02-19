@@ -36,8 +36,7 @@ bool Triangle::hit(const Ray& ray, float tmin, float tmax, float* beta, float* g
     Vector3f temp(EIHF, GFDI, DHEG);
     const float denom = dot(AB, temp);
     *beta = dot(AO, temp) / denom;
-
-    if (*beta <= 0.f || *beta >= 1.f)
+    if (*beta < 0.f || *beta > 1.f)
         return false;
 
     const float A = AB.x();
@@ -54,7 +53,7 @@ bool Triangle::hit(const Ray& ray, float tmin, float tmax, float* beta, float* g
 
     temp = Vector3f(BLKC, JCAL, AKJB);
     *gamma = dot(temp, direction) / denom;
-    if (*gamma <= 0.f || *beta + *gamma >= 1.f)
+    if (*gamma < 0.f || *beta + *gamma > 1.f)
         return false;
 
     *tval = -dot(temp, AC) / denom;

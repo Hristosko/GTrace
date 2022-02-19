@@ -43,4 +43,10 @@ bool compare(const std::vector<T>& a, const std::vector<T>& b)
 
     return true;
 }
+
+inline std::ostream& operator<<(std::ostream& out, const Vector3f& v)
+{
+    return out << v.x() << ", " << v.y() << ", " << v.z();
+}
+
 }  // namespace gtrace

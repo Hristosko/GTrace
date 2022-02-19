@@ -32,8 +32,15 @@ Vector3f ParsedParams::getVector3f(const std::string& name) const
     const auto it = vector3fs.find(name);
     if (it == vector3fs.end())
         Raise(ParserError("Parameter not found: " + name));
-    const auto& vec = it->second;
-    return Vector3f(vec.x, vec.y, vec.z);
+    return it->second;
+}
+
+const std::string& ParsedParams::getString(const std::string& name) const
+{
+    const auto it = strings.find(name);
+    if (it == strings.end())
+        Raise(ParserError("Parameter not found: " + name));
+    return it->second;
 }
 
 void ParsedParams::addFloat(const std::string& name, float value)
@@ -50,13 +57,19 @@ void ParsedParams::addInt(const std::string& name, int value)
 
 void ParsedParams::addVector3f(const std::string& name, float x, float y, float z)
 {
-    const auto [_, inserted] = vector3fs.insert_or_assign(name, Vector3fStorage{x, y, z});
-    logOverwritten(inserted, name);
+    addVector3f(name, Vector3f(x, y, z));
 }
 
 void ParsedParams::addVector3f(const std::string& name, const Vector3f& vec)
 {
-    addVector3f(name, vec.x(), vec.y(), vec.z());
+    const auto [_, inserted] = vector3fs.insert_or_assign(name, vec);
+    logOverwritten(inserted, name);
+}
+
+void ParsedParams::addString(const std::string& name, const std::string& value)
+{
+    const auto [_, inserted] = strings.insert_or_assign(name, value);
+    logOverwritten(inserted, name);
 }
 
 std::shared_ptr<Transform> ParsedParams::getTransform() const

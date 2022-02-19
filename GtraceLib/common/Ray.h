@@ -1,4 +1,5 @@
 #pragma once
+#include <limits>
 #include "math/Vector3f.h"
 
 namespace gtrace
@@ -8,7 +9,7 @@ struct Ray
     Ray(const Vector3f origin, const Vector3f direction) :
         origin(origin),
         direction(direction),
-        invDirection(Vector3f(1.f) / direction)
+        invDirection(gtrace::min(Vector3f(1.f) / direction, Vector3f(std::numeric_limits<float>::max())))
     {
     }
 
