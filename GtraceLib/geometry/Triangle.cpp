@@ -15,49 +15,32 @@ Triangle::Triangle(const Vector3f& a, const Vector3f& b, const Vector3f& c, cons
 bool Triangle::hit(const Ray& ray, float tmin, float tmax, float* beta, float* gamma, float* tval) const
 {
     const Vector3f& origin = ray.origin;
-    const Vector3f& direction = ray.direction;
+    const Vector3f& dir = ray.direction;
 
-    Vector3f AB = objectToWorld->transform(Vector3f(a) - Vector3f(b));
-    Vector3f AC = objectToWorld->transform(Vector3f(a) - Vector3f(c));
-    Vector3f AO = objectToWorld->transform(Vector3f(a)) - origin;
+    const Vector3f v0 = objectToWorld->transform(a);
+    const Vector3f v1 = objectToWorld->transform(b);
+    const Vector3f v2 = objectToWorld->transform(c);
 
-    const float E = AC.y();
-    const float I = direction.z();
-    const float H = direction.y();
-    const float F = AC.z();
-    const float EIHF = E * I - H * F;
+    const Vector3f v0v1 = v1 - v0;
+    const Vector3f v0v2 = v2 - v0;
 
-    const float G = direction.x();
-    const float D = AC.x();
-    const float GFDI = G * F - D * I;
+    const Vector3f pvec = cross(dir, v0v2);
+    const float det = dot(v0v1, pvec);
 
-    const float DHEG = D * H - E * G;
+    const float invDet = 1.f / det;
 
-    Vector3f temp(EIHF, GFDI, DHEG);
-    const float denom = dot(AB, temp);
-    *beta = dot(AO, temp) / denom;
+    const Vector3f tvec = origin - v0;
+    *beta = dot(tvec, pvec) * invDet;
     if (*beta < 0.f || *beta > 1.f)
         return false;
 
-    const float A = AB.x();
-    const float B = AB.y();
-    const float C = AB.z();
-
-    const float J = AO.x();
-    const float K = AO.y();
-    const float L = AO.z();
-
-    const float AKJB = A * K - J * B;
-    const float JCAL = J * C - A * L;
-    const float BLKC = B * L - K * C;
-
-    temp = Vector3f(BLKC, JCAL, AKJB);
-    *gamma = dot(temp, direction) / denom;
+    const Vector3f qvec = cross(tvec, v0v1);
+    *gamma = dot(dir, qvec) * invDet;
     if (*gamma < 0.f || *beta + *gamma > 1.f)
         return false;
 
-    *tval = -dot(temp, AC) / denom;
-    return *tval >= tmin && *tval <= tmax;
+    *tval = dot(v0v2, qvec) * invDet;
+    return *tval > tmin && *tval < tmax;
 }
 
 BBox Triangle::bound() const

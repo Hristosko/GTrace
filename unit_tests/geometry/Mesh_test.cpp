@@ -8,29 +8,32 @@
 
 using namespace gtrace;
 
-class MeshTest : public Test
+class MeshTest : public ::testing::TestWithParam<int>
 {
 public:
-    static inline const char* model = "model.obj";
+    static inline const char* modelWithoutNormals = "model_without_normals.obj";
 
     static void SetUpTestCase()
     {
         const auto rawMesh = generateMeshSphere(5);
-        ObjFile::dump(rawMesh, model);
+        ObjFile::dump(rawMesh, modelWithoutNormals);
     }
 
     static void TearDownTestCase()
     {
-        remove(model);
+        remove(modelWithoutNormals);
     }
 
-    void SetUp() override { params.addString("model", model); }
+    void SetUp() override
+    {
+        params.addString("model", modelWithoutNormals);
+    }
 
     ParsedParams params;
     BVH bvh;
 };
 
-TEST_F(MeshTest, noTransform)
+TEST_P(MeshTest, noTransform)
 {
     Mesh mesh(params, &bvh);
     bvh.build();
@@ -82,7 +85,7 @@ TEST_F(MeshTest, noTransform)
     }
 }
 
-TEST_F(MeshTest, translation)
+TEST_P(MeshTest, translation)
 {
     const Vector3f center(100.f);
     params.addTranslation(center);
@@ -111,8 +114,8 @@ TEST_F(MeshTest, translation)
         EXPECT_NEAR(intersection.normal.y(), -1.f, EPS);
     }
     {
-        const Vector3f origin = center + Vector3f(1.f) + randomVector3f();
-        const Vector3f target = Vector3f(0.f);
+        const Vector3f origin = center + Vector3f(2.f) + randomVector3f();
+        const Vector3f target = center;
         const Ray ray(origin, normalize(target - origin));
         Intersection intersection;
         ASSERT_TRUE(bvh.hit(ray, 0.f, 1000.f, 0.f, &intersection));
@@ -124,7 +127,7 @@ TEST_F(MeshTest, translation)
     }
 }
 
-TEST_F(MeshTest, scale)
+TEST_P(MeshTest, scale)
 {
     const float R = 10.f;
     params.addScale(R);
@@ -141,3 +144,5 @@ TEST_F(MeshTest, scale)
         ASSERT_NEAR(intersection.point.length(), R, 0.005f);
     }
 }
+
+INSTANTIATE_TEST_CASE_P(MeshTests, MeshTest, ::testing::Range(0, 2));

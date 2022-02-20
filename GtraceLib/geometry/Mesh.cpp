@@ -2,6 +2,7 @@
 #include "BBox.h"
 #include "BVH.h"
 #include "Triangle.h"
+#include "common/Logger.h"
 #include "math/Transform.h"
 #include "parser/ObjFile.h"
 
@@ -15,6 +16,11 @@ Mesh::Mesh(const ParsedParams& params, BVH* bvh)
     normals = std::move(rawMesh.normals);
     vertices.shrink_to_fit();
     normals.shrink_to_fit();
+
+    if (rawMesh.facesNormals.size() > 0)
+        LOGINFO("Crating mesh with normals.")
+    else
+        LOGINFO("Crating mesh without normals.")
 
     for (size_t i = 0; i < rawMesh.faces.size(); ++i)
     {

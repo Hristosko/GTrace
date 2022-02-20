@@ -1,10 +1,11 @@
 #include "Sphere.h"
 #include "BBox.h"
 #include "math/Transform.h"
+#include "parser/ParamNames.h"
 
 namespace gtrace
 {
-Sphere::Sphere(const ParsedParams& params) : Shape(params), radius(params.getFloat("radius")) {}
+Sphere::Sphere(const ParsedParams& params) : Shape(params), radius(params.getFloat(PARAM_RADIUS)) {}
 
 bool Sphere::hit(const Ray& ray, float tmin, float tmax, float time, Intersection* interection) const
 {

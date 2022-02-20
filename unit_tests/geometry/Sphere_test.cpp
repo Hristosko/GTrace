@@ -4,6 +4,7 @@
 #include "geometry/Sphere.h"
 #include "geometry/BBox.h"
 #include "parser/ParsedParams.h"
+#include "parser/ParamNames.h"
 
 using namespace gtrace;
 
@@ -13,7 +14,7 @@ public:
     static ParsedParams makeParams(float radius, const Vector3f position)
     {
         ParsedParams params;
-        params.addFloat("radius", radius);
+        params.addFloat(PARAM_RADIUS, radius);
         params.addTranslation(position);
         return params;
     }
