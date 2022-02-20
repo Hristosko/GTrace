@@ -19,6 +19,16 @@ struct FileError : GTraceError
     FileError(const std::string& message) : GTraceError(message) {}
 };
 
+struct NotFoundError : GTraceError
+{
+    NotFoundError(const std::string& message) : GTraceError(message) {}
+};
+
+struct DuplicatedError : GTraceError
+{
+    DuplicatedError(const std::string& message) : GTraceError(message) {}
+};
+
 #define Raise(error)            \
     {                           \
         LOGERROR(error.what()); \

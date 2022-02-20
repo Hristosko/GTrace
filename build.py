@@ -56,11 +56,14 @@ def is_sorce_file(file):
     return file.endswith('.h') or file.endswith('.cpp')
 
 def format_dir(dir):
+    formated_files_count = 0
     for root, _, files in os.walk(dir):
         for file in files:
             if is_sorce_file(file):
+                formated_files_count += 1
                 file_path = os.path.join(root, file)
                 subprocess.run(['clang-format', '-i', file_path])
+    print(f'Formated {formated_files_count} files in {dir}.')
 
 def format():
     format_dir(os.path.join('.', 'GtraceLib'))

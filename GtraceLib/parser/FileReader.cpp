@@ -13,7 +13,7 @@ FileReader::FileReader(const char* path) : File(fopen(path, "r"))
 bool FileReader::readLine(std::string* res) const
 {
     if (!isOpen())
-        Raise(FileError("Read to unopen file."));
+        Raise(FileError("Read from unopen file."));
 
     bool extraData = false;
 
@@ -38,4 +38,22 @@ bool FileReader::readLine(std::string* res) const
     assert(false);
     return false;
 }
+
+BinFileReader::BinFileReader(const char* path) : File(fopen(path, "rb"))
+{
+    if (!isOpen())
+        Raise(FileError(std::string("Cannot open file: ") + path));
+}
+
+void BinFileReader::read(void* buffer, size_t size, size_t count) const
+{
+    if (!isOpen())
+        Raise(FileError("Read from unopen file."));
+
+    const auto res = fread(buffer, size, count, fp);
+    if (res != count)
+        Raise(FileError(
+            "Unable to read all requested data from file: " + std::to_string(res) + " from " + std::to_string(count)));
+}
+
 }  // namespace gtrace

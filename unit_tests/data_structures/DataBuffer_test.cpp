@@ -81,3 +81,11 @@ TEST_F(DataBufferTest, putAt)
             EXPECT_EQ(2, res[i]);
     }
 }
+
+TEST_F(DataBufferTest, size)
+{
+    constexpr int N = 30;
+    buffer.init<int>(N);
+    EXPECT_EQ(sizeof(int), buffer.getElementSize());
+    EXPECT_EQ(N, buffer.getSize());
+}

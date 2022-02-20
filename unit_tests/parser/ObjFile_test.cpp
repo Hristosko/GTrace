@@ -81,10 +81,10 @@ TEST_F(ObjFileTest, ParseAndDumpObjFile)
     ObjFile::dump(parsed, file);
     const auto mesh = ObjFile::parse(file);
 
-    ASSERT_TRUE(compare(parsed.vertices, mesh.vertices));
-    ASSERT_TRUE(compare(parsed.normals, mesh.normals));
-    ASSERT_TRUE(compare(parsed.faces, mesh.faces));
-    ASSERT_TRUE(compare(parsed.facesNormals, mesh.facesNormals));
+    ASSERT_EQ(parsed.vertices, mesh.vertices);
+    ASSERT_EQ(parsed.normals, mesh.normals);
+    ASSERT_EQ(parsed.faces, mesh.faces);
+    ASSERT_EQ(parsed.facesNormals, mesh.facesNormals);
 }
 
 #endif  // !WIN32

@@ -19,6 +19,7 @@ file(GLOB files
     "geometry/*.cpp"
     "math/*.cpp"
     "parser/*.cpp"
+    "renderer/*.cpp"
 )
 
 add_executable(GTaceUnitTests ${files})

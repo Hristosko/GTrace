@@ -108,3 +108,58 @@ TEST_F(FileTest, CRLF_File)
 }
 
 #endif  // !WIN32
+
+TEST_F(FileTest, WriteAndReadBinBasic)
+{
+    const int count = 10;
+    std::vector<int> data;
+    data.reserve(count);
+    for (int i = 0; i < count; ++i)
+        data.emplace_back(i);
+
+    {
+        BinFileWriter writer(filePath);
+        writer.write(data.data(), sizeof(int), count);
+    }
+    std::vector<int> result(count, 0);
+    BinFileReader reader(filePath);
+    reader.read(result.data(), sizeof(int), count);
+    EXPECT_EQ(data, result);
+}
+
+TEST_F(FileTest, WriteAndReadBinComplexObjectes)
+{
+    const int count = 10;
+    std::vector<Vector3f> data;
+    data.reserve(count);
+    for (int i = 0; i < count; ++i)
+        data.emplace_back(Vector3f(i));
+
+    {
+        BinFileWriter writer(filePath);
+        writer.write(data.data(), sizeof(Vector3f), count);
+    }
+    std::vector<Vector3f> result(count, Vector3f(0.f));
+    BinFileReader reader(filePath);
+    reader.read(result.data(), sizeof(Vector3f), count);
+    EXPECT_EQ(data, result);
+}
+
+TEST_F(FileTest, WriteAndReadBinNotEnoughElementsInFile)
+{
+    const int count = 10;
+    std::vector<int> data;
+    data.reserve(count);
+    for (int i = 0; i < count; ++i)
+        data.emplace_back(i);
+
+    {
+        BinFileWriter writer(filePath);
+        writer.write(data.data(), sizeof(int), count);
+    }
+
+    const auto readCount = 2 * count;
+    std::vector<int> result(readCount, 0);
+    BinFileReader reader(filePath);
+    EXPECT_THROW(reader.read(result.data(), sizeof(int), readCount), FileError);
+}

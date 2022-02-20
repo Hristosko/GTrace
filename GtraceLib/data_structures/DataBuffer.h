@@ -1,4 +1,5 @@
 #pragma once
+#include <assert.h>
 #include <memory>
 #include <stdint.h>
 
@@ -25,7 +26,8 @@ public:
     void putAt(uint64_t idx, const void* data, uint64_t dataSize);
 
     bool isInitialized() const;
-
+    uint64_t getElementSize() const { return typeSize; }
+    uint64_t getSize() const { return size; }
 private:
     uint16_t typeSize;
     uint64_t size;

@@ -31,19 +31,6 @@ inline bool operator!=(const Vector3f& a, const Vector3f& b)
 
 Vector3f randomVector3f();
 
-template<typename T>
-bool compare(const std::vector<T>& a, const std::vector<T>& b)
-{
-    if (a.size() != b.size())
-        return false;
-
-    for (typename std::vector<T>::size_type i = 0; i < a.size(); ++i)
-        if (a[i] != b[i])
-            return false;
-
-    return true;
-}
-
 inline std::ostream& operator<<(std::ostream& out, const Vector3f& v)
 {
     return out << v.x() << ", " << v.y() << ", " << v.z();

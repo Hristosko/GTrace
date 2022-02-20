@@ -7,6 +7,7 @@ file(GLOB files
     "geometry/*.cpp"
     "math/*.cpp"
     "parser/*.cpp"
+    "renderer/*.cpp"
 )
 
 add_library(${PROJECT_NAME}
