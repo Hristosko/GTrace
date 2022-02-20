@@ -8,25 +8,35 @@
 
 using namespace gtrace;
 
-class MeshTest : public ::testing::TestWithParam<int>
+static inline const auto meshNormalsTestParams = ::testing::Values(UseNormals::False, UseNormals::True);
+
+class MeshTest : public ::testing::TestWithParam<UseNormals>
 {
 public:
     static inline const char* modelWithoutNormals = "model_without_normals.obj";
+    static inline const char* modelWithNormals = "model_with_normals.obj";
 
     static void SetUpTestCase()
     {
-        const auto rawMesh = generateMeshSphere(5);
+        auto rawMesh = generateMeshSphere(5, UseNormals::False);
         ObjFile::dump(rawMesh, modelWithoutNormals);
+
+        generateMeshSohereNormals(&rawMesh);
+        ObjFile::dump(rawMesh, modelWithNormals);
     }
 
     static void TearDownTestCase()
     {
         remove(modelWithoutNormals);
+        remove(modelWithNormals);
     }
 
     void SetUp() override
     {
-        params.addString("model", modelWithoutNormals);
+        if (GetParam() == UseNormals::False)
+            params.addString("model", modelWithoutNormals);
+        else
+            params.addString("model", modelWithNormals);
     }
 
     ParsedParams params;
@@ -145,4 +155,4 @@ TEST_P(MeshTest, scale)
     }
 }
 
-INSTANTIATE_TEST_CASE_P(MeshTests, MeshTest, ::testing::Range(0, 2));
+INSTANTIATE_TEST_CASE_P(MeshTests, MeshTest, meshNormalsTestParams);

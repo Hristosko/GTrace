@@ -5,6 +5,12 @@
 
 namespace gtrace
 {
+enum class Bool : bool
+{
+    False = 0,
+    True = 1
+};
+
 template<typename To, typename From>
 std::unique_ptr<To> staticCastPointer(std::unique_ptr<From>&& from)
 {

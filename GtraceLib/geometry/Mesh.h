@@ -36,4 +36,19 @@ protected:
     MeshTriangle faces;
 };
 
+class MeshElementWithNormal : public MeshElement
+{
+public:
+    MeshElementWithNormal(
+        const ParsedParams& params,
+        const Mesh* mesh,
+        const MeshTriangle& faces,
+        const MeshTriangle& normals);
+
+    bool hit(const Ray& ray, float tmin, float tmax, float time, Intersection* interection) const override;
+
+protected:
+    MeshTriangle normals;
+};
+
 }  // namespace gtrace

@@ -174,7 +174,16 @@ TEST_F(ObjFileTest, TooManyArgumentsPerIndex)
 TEST_F(ObjFileTest, SphereMeshsDumpAndParse)
 {
     writer.close();
-    const RawMesh mesh = generateMeshSphere(3);
+    const RawMesh mesh = generateMeshSphere(3, UseNormals::False);
+    ObjFile::dump(mesh, file);
+    const RawMesh parsedMesh = ObjFile::parse(file);
+    ASSERT_EQ(mesh, parsedMesh);
+}
+
+TEST_F(ObjFileTest, SphereMeshsDumpAndParseWithNormals)
+{
+    writer.close();
+    const RawMesh mesh = generateMeshSphere(3, UseNormals::True);
     ObjFile::dump(mesh, file);
     const RawMesh parsedMesh = ObjFile::parse(file);
     ASSERT_EQ(mesh, parsedMesh);

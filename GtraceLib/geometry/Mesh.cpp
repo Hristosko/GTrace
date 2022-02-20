@@ -24,7 +24,11 @@ Mesh::Mesh(const ParsedParams& params, BVH* bvh)
 
     for (size_t i = 0; i < rawMesh.faces.size(); ++i)
     {
-        bvh->insert(std::make_unique<MeshElement>(params, this, rawMesh.faces[i]));
+        if (i < rawMesh.facesNormals.size())
+            bvh->insert(
+                std::make_unique<MeshElementWithNormal>(params, this, rawMesh.faces[i], rawMesh.facesNormals[i]));
+        else
+            bvh->insert(std::make_unique<MeshElement>(params, this, rawMesh.faces[i]));
     }
 }
 
@@ -56,6 +60,31 @@ BBox MeshElement::bound() const
 Triangle MeshElement::makeTriangle() const
 {
     return Triangle(mesh->vertices[faces.i], mesh->vertices[faces.j], mesh->vertices[faces.k], objectToWorld.get());
+}
+
+MeshElementWithNormal::MeshElementWithNormal(
+    const ParsedParams& params,
+    const Mesh* mesh,
+    const MeshTriangle& faces,
+    const MeshTriangle& normals) :
+    MeshElement(params, mesh, faces),
+    normals(normals)
+{
+}
+
+bool MeshElementWithNormal::hit(const Ray& ray, float tmin, float tmax, float time, Intersection* interection) const
+{
+    float beta, gamma, tval;
+    const auto tr = makeTriangle();
+    if (tr.hit(ray, tmin, tmax, &beta, &gamma, &tval))
+    {
+        const float alpha = 1.f - beta - gamma;
+        interection->normal =
+            alpha * mesh->normals[normals.i] + beta * mesh->normals[normals.j] + gamma * mesh->normals[normals.k];
+        interection->set(tval, this);
+        return true;
+    }
+    return false;
 }
 
 }  // namespace gtrace

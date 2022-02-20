@@ -96,10 +96,20 @@ static RawMesh subdivideMesh(const RawMesh& mesh)
     return res;
 }
 
-RawMesh generateMeshSphere(int subdiveCount)
+RawMesh generateMeshSphere(int subdiveCount, UseNormals genNormals)
 {
-    RawMesh res = icosahedron();
+    RawMesh mesh = icosahedron();
     for (int i = 0; i < subdiveCount; ++i)
-        res = subdivideMesh(res);
-    return res;
+        mesh = subdivideMesh(mesh);
+
+    if (genNormals == UseNormals::True)
+        generateMeshSohereNormals(&mesh);
+
+    return mesh;
+}
+
+void generateMeshSohereNormals(RawMesh* mesh)
+{
+    mesh->normals = mesh->vertices;
+    mesh->facesNormals = mesh->faces;
 }
