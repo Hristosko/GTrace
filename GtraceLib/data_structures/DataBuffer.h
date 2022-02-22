@@ -13,12 +13,11 @@ public:
     {
         init(sizeof(T), bufSize);
     }
-    void init(uint16_t tSize, uint64_t bufSize);
+    void init(uint64_t tSize, uint64_t bufSize);
 
     template<typename T>
     T* getAt(uint64_t idx) const
     {
-        assert(sizeof(T) == typeSize);
         return reinterpret_cast<T*>(getAt(idx));
     }
     void* getAt(uint64_t idx) const;
@@ -28,8 +27,11 @@ public:
     bool isInitialized() const;
     uint64_t getElementSize() const { return typeSize; }
     uint64_t getSize() const { return size; }
+
+    bool operator==(const DataBuffer& rhs) const;
+
 private:
-    uint16_t typeSize;
+    uint64_t typeSize;
     uint64_t size;
     std::unique_ptr<uint8_t[]> buffer;
 };

@@ -4,7 +4,7 @@
 
 namespace gtrace
 {
-void DataBuffer::init(uint16_t tSize, uint64_t bufSize)
+void DataBuffer::init(uint64_t tSize, uint64_t bufSize)
 {
     typeSize = tSize;
     size = bufSize;
@@ -27,6 +27,14 @@ void DataBuffer::putAt(uint64_t idx, const void* data, uint64_t dataSize)
     assert(idx + dataSize <= size);
     void* dest = getAt(idx);
     memcpy(dest, data, dataSize * typeSize);
+}
+
+bool DataBuffer::operator==(const DataBuffer& rhs) const
+{
+    if (typeSize != rhs.typeSize || size != rhs.size)
+        return false;
+
+    return memcmp(buffer.get(), rhs.buffer.get(), typeSize * size) == 0;
 }
 
 }  // namespace gtrace

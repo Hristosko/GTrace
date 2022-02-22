@@ -20,6 +20,12 @@ public:
     BinFileWriter() = default;
     BinFileWriter(const char* path);
 
+    template<typename T>
+    void write(const T* data, size_t count) const
+    {
+        write(data, sizeof(T), count);
+    }
+
     void write(const void* data, size_t size, size_t count) const;
 };
 }  // namespace gtrace

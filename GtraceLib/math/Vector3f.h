@@ -18,8 +18,8 @@ public:
     friend class Transform;
     Vector3f(__m128 v) { this->vec = v; }
     Vector3f() { this->vec = _mm_setzero_ps(); }
-    explicit Vector3f(float v) { this->vec = _mm_setr_ps(v, v, v, 0.f); }
-    Vector3f(float x, float y, float z) { this->vec = _mm_setr_ps(x, y, z, 0.f); }
+    explicit Vector3f(float v) { this->vec = _mm_setr_ps(v, v, v, 1.f); }
+    Vector3f(float x, float y, float z) { this->vec = _mm_setr_ps(x, y, z, 1.f); }
 
     float x() const { return (*this)[0]; }
     float y() const { return (*this)[1]; }

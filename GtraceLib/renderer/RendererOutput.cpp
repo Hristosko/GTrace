@@ -5,7 +5,7 @@ namespace gtrace
 {
 void RendererOutput::addOutput(const std::string& name, DataBuffer&& data)
 {
-    const auto[_, inserted] = outputs.insert(std::make_pair(name, std::move(data)));
+    const auto [_, inserted] = outputs.insert(std::make_pair(name, std::move(data)));
     if (!inserted)
         Raise(DuplicatedError("Rederer output " + name + " allready exists."));
 }
