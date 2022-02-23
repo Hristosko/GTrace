@@ -3,7 +3,7 @@
 #include <assert.h>
 #include <type_traits>
 #include <vector>
-#include <common/Common.h>
+#include "common/Common.h"
 #include "geometry/Bounded.h"
 
 namespace gtrace

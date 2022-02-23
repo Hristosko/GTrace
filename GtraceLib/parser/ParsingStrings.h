@@ -20,16 +20,20 @@ class ParsingStrings
 public:
     static bool endsWith(const std::string& str, const std::string& ending)
     {
+        if (str.size() < ending.size())
+            return false;
         return std::equal(ending.rbegin(), ending.rend(), str.rbegin());
     }
 
     static bool startsWith(const std::string& str, const std::string& start)
     {
+        if (str.size() < start.size())
+            return false;
         return std::equal(start.begin(), start.end(), str.begin());
     }
 
-    static std::vector<std::string_view> split(std::string_view str, char delimer);
-    static std::vector<std::string_view> split(std::string_view str, const std::string& delimer);
+    static std::vector<std::string_view> split(const std::string_view str, char delimer);
+    static std::vector<std::string_view> split(const std::string_view str, const std::string& delimer);
 
     static float parseFloat(std::string_view str, const ParserContext& context);
     static long long parseNumber(std::string_view str, const ParserContext& context, int base = 10);

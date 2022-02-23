@@ -18,7 +18,7 @@ static std::string::size_type getSize(const std::string& x)
 };
 
 template<typename Delimer>
-std::vector<std::string_view> splitImpl(std::string_view str, const Delimer& delimer)
+std::vector<std::string_view> splitImpl(const std::string_view str, const Delimer& delimer)
 {
     std::vector<std::string_view> res;
     const auto addSubstring = [&str, &res](std::string::size_type start, std::string::size_type end) {
@@ -43,12 +43,12 @@ std::vector<std::string_view> splitImpl(std::string_view str, const Delimer& del
     return res;
 }
 
-std::vector<std::string_view> ParsingStrings::split(std::string_view str, char delimer)
+std::vector<std::string_view> ParsingStrings::split(const std::string_view str, char delimer)
 {
     return splitImpl(str, delimer);
 }
 
-std::vector<std::string_view> ParsingStrings::split(std::string_view str, const std::string& delimer)
+std::vector<std::string_view> ParsingStrings::split(const std::string_view str, const std::string& delimer)
 {
     return splitImpl(str, delimer);
 }

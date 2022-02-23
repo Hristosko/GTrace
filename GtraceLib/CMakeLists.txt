@@ -39,7 +39,7 @@ else()
 endif()
 
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC GTRACE_MEMORY_BENCH)
+target_compile_definitions(${PROJECT_NAME} PUBLIC GTRACE_MEMORY_TRACKING)
 
 if(NOT MSVC)
     target_link_libraries(${PROJECT_NAME} pthread stdc++)
