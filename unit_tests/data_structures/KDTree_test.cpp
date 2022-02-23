@@ -1,5 +1,5 @@
 #include "TestUtils.h"
-#include "data_structures/KDTree.h"
+#include "data_structures/KDtree.h"
 #include "geometry/BBox.h"
 
 using namespace gtrace;
@@ -66,29 +66,41 @@ struct LineNode : KDTreeNode<Line, LineInterface>
 class KDTree1DTest : public Test
 {
 public:
-    KDTree<Line, LineNode, 1> tree;
+    void SetUp() override
+    {
+        MemoryTracker::reset();
+        tree = std::make_unique<KDTree<Line, LineNode, 1>>();
+    }
+
+    void TearDown() override
+    {
+        tree.reset();
+        checkMemoryLeaks();
+    }
+
+    std::unique_ptr<KDTree<Line, LineNode, 1>> tree;
 };
 
 TEST_F(KDTree1DTest, EmptyOnCreation)
 {
-    ASSERT_TRUE(tree.isEmpty());
-    ASSERT_FALSE(tree.isBuilt());
+    ASSERT_TRUE(tree->isEmpty());
+    ASSERT_FALSE(tree->isBuilt());
 }
 
 TEST_F(KDTree1DTest, Build)
 {
-    tree.insert(std::make_unique<Line>(0, 1));
-    tree.insert(std::make_unique<Line>(1, 2));
-    tree.insert(std::make_unique<Line>(2, 3));
-    tree.insert(std::make_unique<Line>(3, 4));
-    ASSERT_FALSE(tree.isEmpty());
-    ASSERT_FALSE(tree.isBuilt());
+    tree->insert(std::make_unique<Line>(0, 1));
+    tree->insert(std::make_unique<Line>(1, 2));
+    tree->insert(std::make_unique<Line>(2, 3));
+    tree->insert(std::make_unique<Line>(3, 4));
+    ASSERT_FALSE(tree->isEmpty());
+    ASSERT_FALSE(tree->isBuilt());
 
-    tree.build();
-    ASSERT_FALSE(tree.isEmpty());
-    ASSERT_TRUE(tree.isBuilt());
+    tree->build();
+    ASSERT_FALSE(tree->isEmpty());
+    ASSERT_TRUE(tree->isBuilt());
 
-    const auto* l = tree.data();
+    const auto* l = tree->data();
     ASSERT_EQ(4, l->length());
 
     std::vector<Line> expectedTreeDump = {Line(0, 4), Line(0, 2), Line(0, 1), Line(1, 2),
@@ -106,11 +118,11 @@ TEST_F(KDTree1DTest, Balanced)
     const auto depth = 10;
     const auto numElements = 1 << 10;
     for (auto i = 0; i < numElements; ++i)
-        tree.insert(std::make_unique<Line>(i, i + 1));
+        tree->insert(std::make_unique<Line>(i, i + 1));
 
-    tree.build();
+    tree->build();
 
-    const auto* l = tree.data();
+    const auto* l = tree->data();
     ASSERT_EQ(numElements, l->length());
     ASSERT_EQ(depth + 1, l->depth());
 }
@@ -185,9 +197,20 @@ int PointNode::skipped = 0;
 class KDTreePointTest : public Test
 {
 public:
-    void SetUp() override { PointNode::skipped = 0; }
+    void SetUp() override
+    {
+        MemoryTracker::reset();
+        tree = std::make_unique<KDTree<BBox, PointNode>>();
+        PointNode::skipped = 0;
+    }
 
-    KDTree<BBox, PointNode> tree;
+    void TearDown() override
+    {
+        tree.reset();
+        checkMemoryLeaks();
+    }
+
+    std::unique_ptr<KDTree<BBox, PointNode>> tree;
 };
 
 TEST_F(KDTreePointTest, nearestPointFixedPoints)
@@ -196,12 +219,12 @@ TEST_F(KDTreePointTest, nearestPointFixedPoints)
     const auto end = 100;
 
     for (auto i = start; i <= end; ++i)
-        tree.insert(std::make_unique<Point>(Vector3f(i)));
-    tree.build();
+        tree->insert(std::make_unique<Point>(Vector3f(i)));
+    tree->build();
 
     const float range = 10;
     std::vector<Point> result;
-    tree.data()->pointsInRange(Point(Vector3f(0.f)), range, 0, &result);
+    tree->data()->pointsInRange(Point(Vector3f(0.f)), range, 0, &result);
 
     const int resStart = static_cast<int>(sqrtf(range * range / 3));
     std::vector<Point> expectedResult;

@@ -8,7 +8,7 @@
 
 namespace gtrace
 {
-Mesh::Mesh(const ParsedParams& params, BVH* bvh)
+void Mesh::build(const ParsedParams& params, BVH* bvh)
 {
     const auto& modelFilePath = params.getString("model");
     const RawMesh rawMesh = ObjFile::parse(modelFilePath.c_str());
@@ -25,16 +25,16 @@ Mesh::Mesh(const ParsedParams& params, BVH* bvh)
     for (size_t i = 0; i < rawMesh.faces.size(); ++i)
     {
         if (i < rawMesh.facesNormals.size())
-            bvh->insert(
-                std::make_unique<MeshElementWithNormal>(params, this, rawMesh.faces[i], rawMesh.facesNormals[i]));
+            bvh->insert(std::make_unique<MeshElementWithNormal>(
+                params, shared_from_this(), rawMesh.faces[i], rawMesh.facesNormals[i]));
         else
-            bvh->insert(std::make_unique<MeshElement>(params, this, rawMesh.faces[i]));
+            bvh->insert(std::make_unique<MeshElement>(params, shared_from_this(), rawMesh.faces[i]));
     }
 }
 
-MeshElement::MeshElement(const ParsedParams& params, const Mesh* mesh, const MeshTriangle& faces) :
+MeshElement::MeshElement(const ParsedParams& params, std::shared_ptr<const Mesh> mesh, const MeshTriangle& faces) :
     Shape(params),
-    mesh(mesh),
+    mesh(std::move(mesh)),
     faces(faces)
 {
 }
@@ -64,10 +64,10 @@ Triangle MeshElement::makeTriangle() const
 
 MeshElementWithNormal::MeshElementWithNormal(
     const ParsedParams& params,
-    const Mesh* mesh,
+    std::shared_ptr<const Mesh> mesh,
     const MeshTriangle& faces,
     const MeshTriangle& normals) :
-    MeshElement(params, mesh, faces),
+    MeshElement(params, std::move(mesh), faces),
     normals(normals)
 {
 }

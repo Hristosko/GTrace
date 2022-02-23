@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "gtest/gtest.h"
-
+#include "common/MemoryTracker.h"
 #include "math/Vector3f.h"
 #include "math/Matrix4x4.h"
 #include "math/Transform.h"
@@ -11,6 +11,12 @@ using Test = ::testing::Test;
 
 namespace gtrace
 {
+inline void checkMemoryLeaks()
+{
+    const auto stats = MemoryTracker::getStatistic();
+    ASSERT_EQ(stats.allocationCount, stats.freeCount);
+}
+
 inline bool compare(float a, float b)
 {
     return fabsf(a - b) < EPS;

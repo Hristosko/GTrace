@@ -62,6 +62,12 @@ public:
     bool isEmpty() const { return root == nullptr && buildBuffer.empty(); }
     bool isBuilt() const { return root != nullptr; }
 
+    void clear()
+    {
+        root.reset();
+        buildBuffer.clear();
+    }
+
     void insert(BoundedPtr&& element)
     {
         assert(!isBuilt());
