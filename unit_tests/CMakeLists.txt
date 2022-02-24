@@ -15,6 +15,7 @@ enable_testing()
 # Add a testing executable
 file(GLOB files
     "*.cpp"
+    "camera/*.cpp"
     "common/*.cpp"
     "data_structures/*.cpp"
     "geometry/*.cpp"

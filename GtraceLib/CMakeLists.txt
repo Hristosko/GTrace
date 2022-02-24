@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(GTraceLib)
 
 file(GLOB files
+    "camera/*.cpp"
     "common/*.cpp"
     "data_structures/*.cpp"
     "geometry/*.cpp"

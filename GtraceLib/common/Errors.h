@@ -29,6 +29,11 @@ struct DuplicatedError : GTraceError
     DuplicatedError(const std::string& message) : GTraceError(message) {}
 };
 
+struct InvalidValue : GTraceError
+{
+    InvalidValue(const std::string& message) : GTraceError(message) {}
+};
+
 #define Raise(error)            \
     {                           \
         LOGERROR(error.what()); \
