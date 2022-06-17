@@ -67,6 +67,7 @@ def format_dir(dir):
 
 def format():
     format_dir(os.path.join('.', 'GtraceLib'))
+    format_dir(os.path.join('.', 'GtraceApp'))
     format_dir(os.path.join('.', 'unit_tests'))
 
 if __name__ == "__main__":

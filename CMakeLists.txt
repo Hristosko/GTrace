@@ -4,3 +4,8 @@ project(GTrace)
 
 add_subdirectory(GtraceLib)
 add_subdirectory(unit_tests)
+
+if(MSVC)
+    # only supported for windows for now
+    add_subdirectory(GtraceApp)
+endif()

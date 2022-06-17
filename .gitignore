@@ -4,3 +4,4 @@ gtrace.log
 *.grt
 scenes/*.obj
 *.exe
+*.gtr

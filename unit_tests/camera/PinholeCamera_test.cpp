@@ -9,7 +9,6 @@ using namespace gtrace;
 class PinholeCameraTest : public Test
 {
 public:
-
     static ParsedParams defaultParams()
     {
         ParsedParams params;
@@ -110,7 +109,7 @@ TEST_F(PinholeCameraTest, zoom)
     EXPECT_EQ(params.getVector3f(CAMERA_EYE), ray.origin);
     ASSERT_NEAR(1.f, ray.direction.lengthSqr(), EPS);
 
-    const auto expectedDirection = normalize(Vector3f(k*x, params.getFloat(CAMERA_VIEW_PLANE_DISTANCE), k*y));
+    const auto expectedDirection = normalize(Vector3f(k * x, params.getFloat(CAMERA_VIEW_PLANE_DISTANCE), k * y));
     EXPECT_EQ(expectedDirection, ray.direction);
 }
 
@@ -127,7 +126,7 @@ TEST_F(PinholeCameraTest, stroll)
     EXPECT_EQ(params.getVector3f(CAMERA_EYE), ray.origin);
     ASSERT_NEAR(1.f, ray.direction.lengthSqr(), EPS);
 
-    const auto expectedDirection = normalize(Vector3f(k*x, params.getFloat(CAMERA_VIEW_PLANE_DISTANCE), k*y));
+    const auto expectedDirection = normalize(Vector3f(k * x, params.getFloat(CAMERA_VIEW_PLANE_DISTANCE), k * y));
     EXPECT_EQ(expectedDirection, ray.direction);
 }
 

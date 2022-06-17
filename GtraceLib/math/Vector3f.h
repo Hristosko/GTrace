@@ -241,6 +241,4 @@ inline float minElement(const Vector3f& a, float b)
     return _mm_cvtss_f32(vecMin);
 }
 
-using Color3f = Vector3f;
-
 }  // namespace gtrace

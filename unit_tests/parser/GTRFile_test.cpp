@@ -63,3 +63,17 @@ TEST_F(GTRFileTest, DumpAndParseFileVector3f)
         EXPECT_EQ(data, parsedData);
     }
 }
+
+TEST_F(GTRFileTest, Size)
+{
+    const auto width = 1;
+    const auto height = 2;
+    auto output = RendererOutput();
+    output.setSize(width, height);
+
+    GTRFile::dump(output, file);
+    const auto parsedOutput = GTRFile::parse(file);
+
+    EXPECT_EQ(width, parsedOutput.getWidth());
+    EXPECT_EQ(height, parsedOutput.getHeight());
+}
