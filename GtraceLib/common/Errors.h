@@ -1,5 +1,6 @@
 #pragma once
 #include <stdexcept>
+#include <string>
 #include "Logger.h"
 
 namespace gtrace
@@ -36,6 +37,11 @@ struct DuplicatedError : GTraceError
 struct InvalidValue : GTraceError
 {
     InvalidValue(const std::string& message) : GTraceError(message) {}
+};
+
+struct InvalidDataBuffer : GTraceError
+{
+    InvalidDataBuffer(const std::string& message) : GTraceError(message) {}
 };
 
 #define Raise(error)            \

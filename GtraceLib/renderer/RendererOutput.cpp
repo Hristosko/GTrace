@@ -1,6 +1,6 @@
 #include "RendererOutput.h"
 #include "common/Errors.h"
-
+#include <iostream>
 namespace gtrace
 {
 void RendererOutput::addOutput(const std::string& name, DataBuffer&& data)

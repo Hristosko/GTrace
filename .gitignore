@@ -5,3 +5,4 @@ gtrace.log
 scenes/*.obj
 *.exe
 *.gtr
+*.ppm

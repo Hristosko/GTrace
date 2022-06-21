@@ -8,6 +8,11 @@ namespace gtrace
 class DataBuffer
 {
 public:
+    DataBuffer() = default;
+    DataBuffer(const DataBuffer& rhs);
+    DataBuffer(DataBuffer&&) = default;
+    DataBuffer& operator=(DataBuffer&&) = default;
+
     template<typename T>
     void init(uint64_t bufSize)
     {

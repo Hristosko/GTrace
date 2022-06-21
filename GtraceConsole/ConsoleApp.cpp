@@ -3,6 +3,8 @@
 #include "common/MemoryTracker.h"
 #include "renderer/Renderer.h"
 #include "parser/GTRFile.h"
+#include "parser/PPMFile.h"
+#include "data_processing/ColorToPixelProcessor.h"
 
 #include <stdio.h>
 #include <vector>
@@ -45,8 +47,6 @@ struct RenderOperation : Operation
         outputFile(outputFile)
     {
     }
-    std::string inputFile;
-    std::string outputFile;
 
     virtual void excecute() const
     {
@@ -54,13 +54,39 @@ struct RenderOperation : Operation
         RendererOutput output;
         Scene scene;
         scene.sceneSettings = {DEFAULT_WIDTH, DEFAULT_HEIGHT};
-		totalBucketsCount = scene.sceneSettings.height;
+        totalBucketsCount = scene.sceneSettings.height;
         Renderer renderer(std::move(scene), &output, updateProgress);
         renderer.render();
 
         printf("Storing ouput...\n");
         GTRFile::dump(output, outputFile.c_str());
     }
+
+    std::string inputFile;
+    std::string outputFile;
+};
+
+struct ImageOperation : Operation
+{
+    ImageOperation(const std::string& inputFile, const std::string& outputName, const std::string& outputFile) :
+        inputFile(inputFile),
+        outputName(outputName),
+        outputFile(outputFile)
+    {
+    }
+
+    virtual void excecute() const
+    {
+        RendererOutput output = GTRFile::parse(inputFile.c_str());
+
+        DataBuffer outputData = output.getOutput(outputName);
+        ColorToPixelProcessor().process(&outputData);
+        PPMFile::dump(outputData, output.getWidth(), output.getHeight(), outputFile.c_str());
+    }
+
+    std::string inputFile;
+    std::string outputName;
+    std::string outputFile;
 };
 
 std::unique_ptr<Operation> parse(const std::vector<std::string>& arguments)
@@ -73,6 +99,13 @@ std::unique_ptr<Operation> parse(const std::vector<std::string>& arguments)
         if (arguments.size() != 3)
             Raise(InalidArgument("To render a scene specify input and output file"));
         return std::make_unique<RenderOperation>(arguments[1], arguments[2]);
+    }
+
+    if (arguments[0] == "--image")
+    {
+        if (arguments.size() != 4)
+            Raise(InalidArgument("Specify render ouput and image file"));
+        return std::make_unique<ImageOperation>(arguments[1], arguments[2], arguments[3]);
     }
 
     Raise(InalidArgument("Unknown argument " + arguments[0]));
