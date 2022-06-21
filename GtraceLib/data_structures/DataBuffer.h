@@ -46,6 +46,7 @@ public:
     uint64_t getSize() const { return size; }
 
     bool operator==(const DataBuffer& rhs) const;
+    bool operator!=(const DataBuffer& rhs) const { return !(*this == rhs); }
 
 private:
     uint64_t typeSize;

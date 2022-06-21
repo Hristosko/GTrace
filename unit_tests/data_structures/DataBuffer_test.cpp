@@ -97,7 +97,7 @@ TEST_F(DataBufferTest, CompareDifferentSize)
     DataBuffer other;
     other.init<int>(N + 1);
 
-    EXPECT_FALSE(buffer == other);
+    EXPECT_NE(buffer, other);
 }
 
 TEST_F(DataBufferTest, CompareDifferentTypes)
@@ -107,7 +107,7 @@ TEST_F(DataBufferTest, CompareDifferentTypes)
     DataBuffer other;
     other.init<uint64_t>(N);
 
-    EXPECT_FALSE(buffer == other);
+    EXPECT_NE(buffer, other);
 }
 
 TEST_F(DataBufferTest, CompareDifferentEqual)
@@ -123,7 +123,7 @@ TEST_F(DataBufferTest, CompareDifferentEqual)
         *other.getAt<int>(i) = i;
     }
 
-    EXPECT_TRUE(buffer == other);
+    EXPECT_EQ(buffer, other);
 }
 
 TEST_F(DataBufferTest, CompareDifferentDifferentData)
@@ -140,7 +140,7 @@ TEST_F(DataBufferTest, CompareDifferentDifferentData)
     }
     *other.getAt<int>(N - 1) = N;
 
-    EXPECT_FALSE(buffer == other);
+    EXPECT_NE(buffer, other);
 }
 
 TEST_F(DataBufferTest, CompareDifferentSameSizedTypesSameData)
@@ -156,5 +156,17 @@ TEST_F(DataBufferTest, CompareDifferentSameSizedTypesSameData)
         *other.getAt<int>(i) = i;
     }
 
-    EXPECT_TRUE(buffer == other);
+    EXPECT_EQ(buffer, other);
+}
+
+TEST_F(DataBufferTest, Copy)
+{
+    constexpr int N = 30;
+    buffer.init<int>(N);
+
+    for (int i = 0; i < N; ++i)
+        *buffer.getAt<int>(i) = i;
+
+    DataBuffer other = buffer;
+    EXPECT_EQ(buffer, other);
 }
