@@ -2,9 +2,9 @@
 #include "common/Errors.h"
 #include "common/MemoryTracker.h"
 #include "renderer/Renderer.h"
+#include "renderer/RendererDisplay.h"
 #include "parser/GTRFile.h"
 #include "parser/PPMFile.h"
-#include "data_processing/ColorToPixelProcessor.h"
 
 #include <stdio.h>
 #include <vector>
@@ -78,10 +78,12 @@ struct ImageOperation : Operation
     virtual void excecute() const
     {
         RendererOutput output = GTRFile::parse(inputFile.c_str());
+        RendererDisplay display;
+        display.setOutput(&output);
+        display.setDisplayType(outputName);
+        display.updateDisplay();
 
-        DataBuffer outputData = output.getOutput(outputName);
-        ColorToPixelProcessor().process(&outputData);
-        PPMFile::dump(outputData, output.getWidth(), output.getHeight(), outputFile.c_str());
+        PPMFile::dump(display.getPixels(), output.getWidth(), output.getHeight(), outputFile.c_str());
     }
 
     std::string inputFile;

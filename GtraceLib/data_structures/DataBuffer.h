@@ -11,6 +11,7 @@ public:
     DataBuffer() = default;
     DataBuffer(const DataBuffer& rhs);
     DataBuffer(DataBuffer&&) = default;
+    DataBuffer& operator=(const DataBuffer& rhs);
     DataBuffer& operator=(DataBuffer&&) = default;
 
     template<typename T>

@@ -1,3 +1,4 @@
+#pragma once
 #include <algorithm>
 #include <math/Vector3f.h>
 #include "DataProcessor.h"

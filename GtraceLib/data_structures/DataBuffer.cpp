@@ -6,8 +6,14 @@ namespace gtrace
 {
 DataBuffer::DataBuffer(const DataBuffer& rhs)
 {
+    *this = rhs;
+}
+
+DataBuffer& DataBuffer::operator=(const DataBuffer& rhs)
+{
     init(rhs.typeSize, rhs.size);
     memcpy(getAt(0), rhs.getAt(0), size * typeSize);
+    return *this;
 }
 
 void DataBuffer::init(uint64_t tSize, uint64_t bufSize)

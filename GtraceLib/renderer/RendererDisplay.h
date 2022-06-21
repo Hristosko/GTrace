@@ -11,7 +11,7 @@ public:
     RendererDisplay();
 
     void setOutput(const RendererOutput* output) { this->output = output; }
-    char* getPixels();
+    const DataBuffer& getPixels() const;
 
     void setDisplayType(const RendererOutput::Type& type);
     void updateDisplay();
@@ -19,7 +19,7 @@ public:
 private:
     RendererOutput::Type curDisplayType;
     const RendererOutput* output;
-    std::unique_ptr<char[]> pixels;
+    DataBuffer pixels;
 };
 
 }  // namespace gtrace

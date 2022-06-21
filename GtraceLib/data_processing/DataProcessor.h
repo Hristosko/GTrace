@@ -1,3 +1,4 @@
+#pragma once
 #include "data_structures/DataBuffer.h"
 
 namespace gtrace
