@@ -22,6 +22,18 @@ public:
     }
     void* getAt(uint64_t idx) const;
 
+    template<typename T>
+    T& at(uint64_t idx)
+    {
+        return *getAt<T>(idx);
+    }
+
+    template<typename T>
+    const T& at(uint64_t idx) const
+    {
+        return *getAt<T>(idx);
+    }
+
     void putAt(uint64_t idx, const void* data, uint64_t dataSize);
 
     bool isInitialized() const;

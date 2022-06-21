@@ -18,6 +18,7 @@ file(GLOB files
     "camera/*.cpp"
     "common/*.cpp"
     "data_structures/*.cpp"
+    "data_processing/*.cpp"
     "geometry/*.cpp"
     "math/*.cpp"
     "parser/*.cpp"
