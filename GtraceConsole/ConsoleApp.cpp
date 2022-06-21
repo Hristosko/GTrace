@@ -54,6 +54,7 @@ struct RenderOperation : Operation
         RendererOutput output;
         Scene scene;
         scene.sceneSettings = {DEFAULT_WIDTH, DEFAULT_HEIGHT};
+		totalBucketsCount = scene.sceneSettings.height;
         Renderer renderer(std::move(scene), &output, updateProgress);
         renderer.render();
 
