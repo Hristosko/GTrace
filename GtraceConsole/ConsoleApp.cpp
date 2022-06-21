@@ -1,8 +1,14 @@
 #include "common/Logger.h"
+#include "common/Errors.h"
 #include "common/MemoryTracker.h"
 #include "renderer/Renderer.h"
+#include "parser/GTRFile.h"
 
 #include <stdio.h>
+#include <vector>
+#include <string.h>
+
+using namespace gtrace;
 
 #define DEFAULT_WIDTH 800
 #define DEFAULT_HEIGHT 600
@@ -27,21 +33,60 @@ static void updateProgress()
         printf("\n");
 }
 
+struct Operation
+{
+    virtual void excecute() const = 0;
+};
+
+struct RenderOperation : Operation
+{
+    RenderOperation(const std::string& inputFile, const std::string& outputFile) :
+        inputFile(inputFile),
+        outputFile(outputFile)
+    {
+    }
+    std::string inputFile;
+    std::string outputFile;
+
+    virtual void excecute() const
+    {
+        printf("Rendering scene...\n");
+        RendererOutput output;
+        Scene scene;
+        scene.sceneSettings = {DEFAULT_WIDTH, DEFAULT_HEIGHT};
+        Renderer renderer(std::move(scene), &output, updateProgress);
+        renderer.render();
+
+        printf("Storing ouput...\n");
+        GTRFile::dump(output, outputFile.c_str());
+    }
+};
+
+std::unique_ptr<Operation> parse(const std::vector<std::string>& arguments)
+{
+    if (arguments.empty())
+        Raise(InalidArgument("GTrace console app requires at least one argument"));
+
+    if (arguments[0] == "--render")
+    {
+        if (arguments.size() != 3)
+            Raise(InalidArgument("To render a scene specify input and output file"));
+        return std::make_unique<RenderOperation>(arguments[1], arguments[2]);
+    }
+
+    Raise(InalidArgument("Unknown argument " + arguments[0]));
+}
+
 int main(int argc, char** argv)
 {
-    if (argc != 3)
+    MemoryTracker::reset();
     {
-        printf("ARG1 scene, ARG2 output file\n");
-        return 1;
+        std::vector<std::string> arguments;
+        for (int i = 1; i < argc; ++i)
+            arguments.push_back(argv[i]);
+
+        parse(arguments)->excecute();
     }
-    gtrace::MemoryTracker::reset();
-    {
-        gtrace::RendererOutput output;
-        gtrace::Scene scene;
-        scene.sceneSettings = {DEFAULT_WIDTH, DEFAULT_HEIGHT};
-        gtrace::Renderer renderer(std::move(scene), &output, updateProgress);
-        renderer.render();
-    }
-    gtrace::MemoryTracker::logStatistic();
+    MemoryTracker::logStatistic();
     return 0;
 }

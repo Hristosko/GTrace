@@ -9,6 +9,10 @@ struct GTraceError : std::runtime_error
     GTraceError(const std::string& message) : std::runtime_error(message) {}
 };
 
+struct InalidArgument : GTraceError
+{
+    InalidArgument(const std::string& message) : GTraceError(message) {}
+};
 struct ParserError : GTraceError
 {
     ParserError(const std::string& message) : GTraceError(message) {}
