@@ -1,11 +1,11 @@
-#include "renderer/RendererOutput.h"
+#include "common/Logger.h"
+#include "common/MemoryTracker.h"
 #include "renderer/Renderer.h"
-#include "scene/Parser.h"
-#include "scene/World.h"
-#include "MemoryBench.h"
-#include "Logger.h"
 
 #include <stdio.h>
+
+#define DEFAULT_WIDTH 800
+#define DEFAULT_HEIGHT 600
 
 static uint32_t totalBucketsCount = 0;
 
@@ -30,21 +30,14 @@ int main(int argc, char** argv) {
 		printf("ARG1 scene, ARG2 output file\n");
 		return 1;
 	}
-	gtrace::MemoryBench::reset();
+	gtrace::MemoryTracker::reset();
 	{
-		gtrace::World world;
-		const char* inputPath = argv[1];
-		const char* outputPath = argv[2];
-		gtrace::RendererOutput output(world);
-		output.init();
-		gtrace::SceneParser p(world);
-		p.parseFile(inputPath);
-		world.buildBVH();
-		gtrace::Renderer renderer(updateProgress, output, world);
-		totalBucketsCount = renderer.totalBucketsCount();
-		renderer.render();
-		output.save(outputPath);
+		gtrace::RendererOutput output;
+		gtrace::Scene scene;
+        scene.sceneSettings = {DEFAULT_WIDTH, DEFAULT_HEIGHT};
+		gtrace::Renderer renderer(std::move(scene), &output, updateProgress);
+    	renderer.render();
 	}
-	gtrace::MemoryBench::logData();
+	gtrace::MemoryTracker::logStatistic();
 	return 0;
 }
